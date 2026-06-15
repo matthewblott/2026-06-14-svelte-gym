@@ -15,7 +15,7 @@ To recreate this project with the same configuration:
 
 ```sh
 # recreate this project
-bun x sv@0.16.1 create --template minimal --types ts --add drizzle="database:sqlite+sqlite:better-sqlite3" better-auth="demo:none" experimental="versions:kit+features:async,remoteFunctions,explicitEnvironmentVariables,handleRenderingErrors" sveltekit-adapter="adapter:auto" --install bun gym
+bun x sv@0.16.1 create --template minimal --types ts --install bun gym
 ```
 
 ## Developing
