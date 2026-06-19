@@ -1,5 +1,5 @@
 <script lang="ts">
-import { getWorkouts } from './old-workouts.remote';
+import { getWorkouts } from './workouts.remote';
 </script>
 
 <h1>Workouts</h1>

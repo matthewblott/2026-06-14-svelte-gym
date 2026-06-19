@@ -2,7 +2,6 @@ import { SqliteDialect } from 'kysely';
 import { type SqliteDatabase } from 'kysely';
 import { type SqliteStatement } from 'kysely';
 import { Kysely } from 'kysely';
-// import { BunSqliteDialect } from 'kysely-bun-sqlite';
 import { Database as BunDatabase } from 'bun:sqlite';
 import { type DB } from '$lib/schema';
 import { env } from '$env/dynamic/private';
@@ -39,8 +38,6 @@ const adapter: SqliteDatabase = {
 };
 
 export const db = new Kysely<DB>({
-  // dialect: new SqliteDialect({ database: database as unknown as SqliteDatabase }),
-  // dialect: new BunSqliteDialect({ database }),
   dialect: new SqliteDialect({ database: adapter }),
 });
 

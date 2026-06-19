@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getWorkoutById } from "../old-workouts.remote";
+  import { getWorkoutById } from "../workouts.remote";
   import { page } from '$app/state'
 
   const id = parseInt(page.params.id!);
