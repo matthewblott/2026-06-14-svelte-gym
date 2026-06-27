@@ -1,4 +1,4 @@
-import { SqliteDialect } from 'kysely';
+import { CamelCasePlugin, SqliteDialect } from 'kysely';
 import { type SqliteDatabase } from 'kysely';
 import { type SqliteStatement } from 'kysely';
 import { Kysely } from 'kysely';
@@ -39,5 +39,6 @@ const adapter: SqliteDatabase = {
 
 export const db = new Kysely<DB>({
   dialect: new SqliteDialect({ database: adapter }),
+  plugins: [new CamelCasePlugin()],
 });
 

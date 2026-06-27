@@ -10,7 +10,8 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"generate:types": "kysely-codegen"
+		"generate:types": "kysely-codegen",
+    "sql": "sqlite3 storage/local.sqlite3"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^7.0.1",

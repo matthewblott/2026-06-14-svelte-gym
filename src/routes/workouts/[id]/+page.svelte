@@ -1,17 +1,16 @@
 <script lang="ts">
-  import { getWorkoutById } from "../workouts.remote";
-  import { page } from '$app/state'
-
-  const id = parseInt(page.params.id!);
-  const workoutPromise = getWorkoutById(id);
+  import type { PageData } from './$types';
+  let { data }: { data: PageData } = $props();
 </script>
 
-<h1>Workout</h1>
+<h1>{data.workout.name}</h1>
 
-{#await workoutPromise}
-  <p>Loading...</p>
-{:then workout}
-  <form>
-    <input value={workout?.name} name="name">
-  </form>
-{/await}
+<div>
+  <span>{data.workout.createdAt}</span>
+
+</div>
+
+<form method="POST">
+  <input name="name" value={data.workout.name} required>
+  <button type="submit">Save</button>
+</form>

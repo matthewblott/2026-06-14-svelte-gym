@@ -1,11 +1,6 @@
-<script>
-  import { createWorkout } from "../workouts.remote";
-</script>
+<h1>New Workout</h1>
 
-<form {...createWorkout}>
-  <input placeholder="Name" name="name" required>
-  {#each createWorkout.fields.name.issues() as issue}
-    <p>{issue.message}</p>
-  {/each}
+<form method="POST">
+  <input name="name" placeholder="Name" required>
   <button type="submit">Create</button>
 </form>
