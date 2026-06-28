@@ -1,17 +1,24 @@
 import { CamelCasePlugin, SqliteDialect } from 'kysely';
-import { type SqliteDatabase } from 'kysely';
-import { type SqliteStatement } from 'kysely';
 import { Kysely } from 'kysely';
 import { Database as BunDatabase } from 'bun:sqlite';
+import { type SqliteDatabase } from 'kysely';
+import { type SqliteStatement } from 'kysely';
 import { type DB } from '$lib/schema';
+import type { SQLQueryBindings } from 'bun:sqlite';
 import { env } from '$env/dynamic/private';
+
+BunDatabase.setCustomSQLite(`${Bun.env.HOME}/.local/lib/libsqlite3.dylib`);
 
 const database = new BunDatabase(env.DATABASE_URL, { create: true, safeIntegers: true });
 
-import type { SQLQueryBindings } from 'bun:sqlite';
-
 database.prepare('PRAGMA journal_mode = WAL').run();
 database.prepare('PRAGMA foreign_keys = ON').run();
+database.prepare('PRAGMA trusted_schema = 1').run();
+
+const cwd = process.cwd();
+const path = `${cwd}/extensions/regexp.dylib`;
+
+database.loadExtension(path);
 
 const adapter: SqliteDatabase = {
   close() {
