@@ -23,17 +23,6 @@
     {/if}
   </label>
 
-  <!-- <label> -->
-  <!--   Type -->
-  <!--   <select name="exerciseType" aria-invalid={form?.field === 'exerciseType' ? 'true' : undefined}> -->
-  <!--     <option value="weight" selected={form?.exerciseType === 'weight'}>Weight</option> -->
-  <!--     <option value="cardio" selected={form?.exerciseType === 'cardio'}>Cardio</option> -->
-  <!--   </select> -->
-  <!--   {#if form?.field === 'exerciseType'} -->
-  <!--     <span class="field-error">{form.message}</span> -->
-  <!--   {/if} -->
-  <!-- </label> -->
-
   <button type="submit">Create</button>
 </form>
 
