@@ -17,7 +17,7 @@ export const actions: Actions = {
     );
 
     if (!result.success) {
-      return failWith({ name }, result);
+      return failWith({ name, exerciseType }, result);
     }
     redirect(303, `/exercises`);
   },

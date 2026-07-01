@@ -1,37 +1,56 @@
-import type { Actions, PageServerLoad } from './$types';
-import { error, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import type { Insertable } from 'kysely';
-import type { Exercise } from '$lib/schema';
 import { dbAttempt, failWith } from '$lib/server/db-utils';
+import type { Actions, PageServerData } from './$types';
+import type { Insertable, Selectable } from 'kysely';
+import type { WorkoutExercise, Exercise } from '$lib/schema';
 
-// export const load: PageServerLoad = async ({ params }) => {
-//   const id = parseInt(params.id);
-//   const exercise = await db.selectFrom('exercises').selectAll().where('id', '=', id).executeTakeFirst();
-//
-//   if (!exercise) {
-//     error(404, 'Exercise not found');
-//   }
-//
-//   return { exercise };
-//
-// };
+export type ExerciseList = Selectable<Exercise>;
 
-export const actions: Actions = {
-  default: async ({ request }) => {
-    const formData = await request.formData();
-    const name = formData.get('name') as string;
-    const exerciseType = formData.get('exerciseType') as string;
-    const newExercise: Insertable<Exercise> = { name, exerciseType };
+export const load = async (): Promise<PageServerData> => {
+  const exercises: ExerciseList[] = await db
+    .selectFrom('exercises')
+    .selectAll()
+    .execute();
 
-    const result = await dbAttempt(
-      db.insertInto('workout_exercises').values(newExercise).returningAll().executeTakeFirstOrThrow()
-    );
-
-    if (!result.success) {
-      return failWith({ name }, result);
-    }
-    redirect(303, `/workout-exercises/${result.data.id}`);
-  },
+  return { exercises };
 };
 
+export const actions: Actions = {
+  default: async ({ request, params }) => {
+    const formData = await request.formData();
+
+    const exerciseName = formData.get('exerciseName') as string | null;
+    const exerciseType = formData.get('exerciseType') as 'cardio' | 'weights' | null;
+    const workoutId = Number(formData.get('workoutId'));
+    let exerciseId = Number(formData.get('exerciseId'));
+
+    // Create new exercise if no exerciseId was resolved on the client
+    if (!exerciseId && exerciseName && exerciseType) {
+      const result = await dbAttempt(
+        db
+          .insertInto('exercises')
+          .values({ name: exerciseName, exerciseType })
+          .returningAll()
+          .executeTakeFirstOrThrow()
+      );
+
+      if (!result.success) return failWith({ workoutId }, result);
+      exerciseId = result.data.id;
+    }
+
+    const newWorkoutExercise: Insertable<WorkoutExercise> = { workoutId, exerciseId };
+
+    const result = await dbAttempt(
+      db
+        .insertInto('workoutExercises')
+        .values(newWorkoutExercise)
+        .returningAll()
+        .executeTakeFirstOrThrow()
+    );
+
+    if (!result.success) return failWith({ workoutId, exerciseId }, result);
+
+    redirect(303, `/workout-exercises`);
+  },
+};

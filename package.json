@@ -35,6 +35,11 @@
 		"camelCase": true,
 		"outFile": "./src/lib/schema.d.ts",
 		"url": "./storage/local.sqlite3",
-		"excludePattern": "goose_db_version"
+		"excludePattern": "goose_db_version",
+    "overrides": {
+      "columns": {
+        "exercises.exercise_type": "'cardio' | 'weights'"
+      }
+    }
 	}
 }

@@ -1,5 +1,5 @@
 import type { PageServerData, Actions } from './$types';
-import { fail, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import type { Selectable } from 'kysely';
 import type { Insertable } from 'kysely';
