@@ -11,13 +11,24 @@ BunDatabase.setCustomSQLite(`${Bun.env.HOME}/.local/lib/libsqlite3.dylib`);
 
 const database = new BunDatabase(env.DATABASE_URL, { create: true, safeIntegers: true });
 
-database.prepare('PRAGMA journal_mode = WAL').run();
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+export const isProd = process.env.NODE_ENV === 'production';
+
+if(isProd) {
+  database.prepare('PRAGMA journal_mode = WAL').run();
+  console.log('WAL enabled');
+}
+
+if(isDevelopment) {
+  database.prepare('PRAGMA busy_timeout = 5000').run();
+}
+
 database.prepare('PRAGMA foreign_keys = ON').run();
 database.prepare('PRAGMA trusted_schema = 1').run();
 
 const cwd = process.cwd();
 const path = `${cwd}/extensions/regexp.dylib`;
-
 database.loadExtension(path);
 
 const adapter: SqliteDatabase = {

@@ -1,9 +1,21 @@
-import type { Actions } from './$types';
-import { redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
+import { error, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import type { Insertable } from 'kysely';
 import type { Exercise } from '$lib/schema';
 import { dbAttempt, failWith } from '$lib/server/db-utils';
+
+// export const load: PageServerLoad = async ({ params }) => {
+//   const id = parseInt(params.id);
+//   const exercise = await db.selectFrom('exercises').selectAll().where('id', '=', id).executeTakeFirst();
+//
+//   if (!exercise) {
+//     error(404, 'Exercise not found');
+//   }
+//
+//   return { exercise };
+//
+// };
 
 export const actions: Actions = {
   default: async ({ request }) => {
@@ -13,12 +25,13 @@ export const actions: Actions = {
     const newExercise: Insertable<Exercise> = { name, exerciseType };
 
     const result = await dbAttempt(
-      db.insertInto('exercises').values(newExercise).returningAll().executeTakeFirstOrThrow()
+      db.insertInto('workout_exercises').values(newExercise).returningAll().executeTakeFirstOrThrow()
     );
 
     if (!result.success) {
       return failWith({ name }, result);
     }
-    redirect(303, `/exercises`);
+    redirect(303, `/workout-exercises/${result.data.id}`);
   },
 };
+

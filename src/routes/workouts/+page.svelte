@@ -1,18 +1,27 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  let { data }: { data: PageData } = $props();
+  import type { ActionData } from './$types';
+  let { data, form }: { data: PageData, form: ActionData } = $props();
+  import PageHeader from '$lib/components/PageHeader.svelte';
 </script>
 
-<h1>Workouts</h1>
+<PageHeader title="Workouts">
+  <div role="group">
+    <a href="/settings" role="button">Settings</a>
+    <button form="new-workout-form">New</button>
+  </div>
+</PageHeader>
 
-<p><a href="/workouts/new">New Workout</a></p>
+<form method="POST" id="new-workout-form">
+  <input type="hidden" name="locale" value={navigator.language}>
+</form>
 
 {#if data.workouts.length}
-  <ul>
-    {#each data.workouts as workout}
-      <li><a href="/workouts/{workout.id}">{workout.name}</a></li>
-    {/each}
-  </ul>
+  {#each data.workouts as workout}
+    <article>
+      <a href="/workout-exercises?workoutId={workout.id}">{workout.name}</a>
+    </article>
+  {/each}
 {:else}
   <p>No workouts yet.</p>
 {/if}

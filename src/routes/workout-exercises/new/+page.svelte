@@ -1,11 +1,18 @@
 <script lang="ts">
+  import PageHeader from '$lib/components/PageHeader.svelte';
   import type { ActionData } from './$types';
   let { form }: { form: ActionData } = $props();
+  let workoutId = 0;
 </script>
 
-<h1>New Workout</h1>
+<PageHeader title="New Exercise">
+  <div role="group">
+    <a href="/workout-exercises?workoutId={workoutId}" role="button">Exercises</a>
+    <button form="new-exercise-form">Save</button>
+  </div>
+</PageHeader>
 
-<form method="POST">
+<form method="POST" id="new-exercise-form">
   {#if form?.error && !form?.field}
     <p class="form-error">{form.message}</p>
   {/if}
@@ -23,7 +30,17 @@
     {/if}
   </label>
 
-  <button type="submit">Create</button>
+  <label>
+    Type
+    <select name="exerciseType">
+      <option value="" disabled selected>Select a type</option>
+      <option value="weights">Weights</option>
+      <option value="cardio">Cardio</option>
+    </select>
+    {#if form?.field === 'exercise_type'}
+      <span class="field-error">{form.message}</span>
+    {/if}
+  </label>
 </form>
 
 <style>
@@ -39,3 +56,4 @@
     border-color: #b91c1c;
   }
 </style>
+

@@ -16,24 +16,35 @@
 ## Migrations
 - **Goose** (SQL migrations in `migrations/`). Also verify with Kysely types.
 
-## SvelteKit 2.16+ load + Actions
-- Use `+page.server.ts` with `load()` for GET data and `Actions` for POST mutations.
-- `load` receives `{ params, parent, url, request }` — return an object that becomes `data` in the `.svelte` page.
-- `Actions` — export an `actions` object with named or `default` handlers. Return objects on validation errors (re-render page), or `redirect()` for POST-redirect-GET.
-- `.svelte` pages use **Svelte 5 runes**: `let { data } = $props()` — not `export let`.
-- Example: `src/routes/workouts/+page.server.ts`, `src/routes/workouts/[id]/+page.server.ts`, `src/routes/workouts/new/+page.server.ts`.
+## Svelte MCP server
+You are able to use the Svelte MCP server, where you have access to comprehensive Svelte 5 and SvelteKit documentation. Here's how to use the available tools effectively:
+
+### 1. list-sections
+Use this FIRST to discover all available documentation sections. Returns a structured list with titles, use_cases, and paths.
+When asked about Svelte or SvelteKit topics, ALWAYS use this tool at the start of the chat to find relevant sections.
+
+### 2. get-documentation
+Retrieves full documentation content for specific sections. Accepts single or multiple sections.
+After calling the list-sections tool, you MUST analyze the returned documentation sections (especially the use_cases field) and then use the get-documentation tool to fetch ALL documentation sections that are relevant for the user's task.
+
+### 3. svelte-autofixer
+Analyzes Svelte code and returns issues and suggestions.
+You MUST use this tool whenever writing Svelte code before sending it to the user. Keep calling it until no issues or suggestions are returned.
+
+### 4. playground-link
+Generates a Svelte Playground link with the provided code.
+After completing the code, ask the user if they want a playground link. Only call this tool after user confirmation and NEVER if code was written to files in their project.
 
 ## Route structure
 - `src/routes/workouts/` — workout CRUD (list, detail `[id]`, new).
-- `src/routes/exercises/` — exercise CRUD scaffolded. `+page.svelte` is **empty** — exercise listing UI is not yet implemented.
+- `src/routes/exercises/` — exercise CRUD (list with search, detail `[id]`, new).
 
 ## Styles
-- Global styles in `src/lib/styles/site.css`. Imported in `+layout.svelte`.
+- Global styles in `src/lib/assets/styles/index.css`. Imported in `+layout.svelte`.
 
 ## Limitations / known gaps
 - Auth (Better Auth) configured but not wired up.
-- Exercise pages (`+page.svelte`) are empty.
-- `src/app.d.ts` — `App.Locals` empty. `App.PageData` / `App.Platform` commented.
+- `src/app.d.ts` — `App.Locals` is empty. `App.PageData` / `App.Platform` commented out.
 
 ## Code conventions
 - Files: `.ts` (grids), `.svelte` (components + Svelte 5 runes all components).

@@ -2,9 +2,11 @@ import type { PageServerData, Actions } from './$types';
 import { fail, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import type { Selectable } from 'kysely';
-import type { Workout as WorkoutTable } from '$lib/schema';
+import type { Insertable } from 'kysely';
+import type { Workout } from '$lib/schema';
+import { dbAttempt, failWith } from '$lib/server/db-utils';
 
-export type Workout = Selectable<WorkoutTable>
+export type SelectableWorkout = Selectable<Workout>
 
 export const load = async ({ url }: { url: URL }): Promise<PageServerData> => {
   const q = url.searchParams.get('q');
@@ -15,15 +17,28 @@ export const load = async ({ url }: { url: URL }): Promise<PageServerData> => {
     query = query.where('name', 'like', `%${q}%`);
   }
 
-  const workouts: Workout[] = await query.execute();
+  const workouts: SelectableWorkout[] = await query.execute();
 
   return { workouts };
 };
 
 export const actions: Actions = {
-  search: async ({ request }) => {
+  default: async ({ request }) => {
     const formData = await request.formData();
-    const q = formData.get('q') as string;
-    redirect(303, q ? `/workouts?q=${encodeURIComponent(q)}` : '/workouts');
+    const locale = formData.get('locale') as string;
+    const date = new Date();
+    const formatter = new Intl.DateTimeFormat(locale, { dateStyle: 'full', timeStyle: 'short' });
+    const name = formatter.format(date);
+    const newWorkout: Insertable<Workout> = { name };
+
+    const result = await dbAttempt(
+      db.insertInto('workouts').values(newWorkout).returningAll().executeTakeFirstOrThrow()
+    );
+
+    if (!result.success) {
+      return failWith({ name }, result);
+    }
+
+    redirect(303, `/workout-exercises?workoutId=${result.data.id}`);
   },
 };

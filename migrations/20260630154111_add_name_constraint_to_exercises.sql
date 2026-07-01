@@ -3,55 +3,58 @@
 pragma foreign_keys = off;
 
 -- Backup original table
-alter table workouts rename to temp_workouts;
+alter table exercises rename to temp_exercises;
 
 -- Recreate table with new schema
-create table workouts (
+create table exercises (
   id integer primary key autoincrement,
   name text not null
     check (length(name) between 1 and 50),
+  exercise_type text not null check (exercise_type in ('weights', 'cardio')) default 'weights',
   created_at text not null default current_timestamp,
   updated_at text not null default current_timestamp
 ) strict;
 
 -- Restore data (explicit column mapping recommended)
-insert into workouts (
+insert into exercises (
   id,
   name,
+  exercise_type,
   created_at,
   updated_at
 )
 select
   id,
   name,
+  exercise_type,
   created_at,
   updated_at
 from
-  temp_workouts;
+  temp_exercises;
 
 -- Recreate indexes
 
 -- Recreate triggers here
 
 -- +goose StatementBegin
-create trigger workouts_updated_at
-after update on workouts
+create trigger exercises_updated_at
+after update on exercises
 for each row
 when new.updated_at = old.updated_at
 begin
-  update workouts set updated_at = current_timestamp where id = new.id;
+  update exercises set updated_at = current_timestamp where id = new.id;
 end;
 -- +goose StatementEnd
 
 -- Cleanup
-drop table temp_workouts;
+drop table temp_exercises;
 
 -- Update sqlite_sequence to ensure the next id is correct
 update sqlite_sequence
 set seq = (
-  select max(id) from workouts
+  select max(id) from exercises
 )
-where name = 'workouts';
+where name = 'exercises';
 
 pragma foreign_keys = on;
 
@@ -63,44 +66,47 @@ pragma foreign_key_check;
 pragma foreign_keys = off;
 
 -- Backup original table
-alter table workouts rename to temp_workouts;
+alter table exercises rename to temp_exercises;
 
 -- Recreate table with new schema
-create table workouts (
+create table exercises (
   id integer primary key autoincrement,
   name text not null,
+  exercise_type text not null check (exercise_type in ('weights', 'cardio')) default 'weights',
   created_at text not null default current_timestamp,
   updated_at text not null default current_timestamp
 );
 
 -- Restore data (explicit column mapping recommended)
-insert into workouts (
+insert into exercises (
   id,
   name,
+  exercise_type,
   created_at,
   updated_at
 )
 select
   id,
   name,
+  exercise_type,
   created_at,
   updated_at
 from
-  temp_workouts;
+  temp_exercises;
 
 -- Recreate indexes
 
 -- Recreate triggers here
 
 -- Cleanup
-drop table temp_workouts;
+drop table temp_exercises;
 
 -- Update sqlite_sequence to ensure the next id is correct
 update sqlite_sequence
 set seq = (
-  select max(id) from workouts
+  select max(id) from exercises
 )
-where name = 'workouts';
+where name = 'exercises';
 
 pragma foreign_keys = on;
 
