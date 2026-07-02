@@ -1,25 +1,26 @@
-import { redirect } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
+import { redirect } from '@sveltejs/kit'; import { db } from '$lib/server/db';
 import { dbAttempt, failWith } from '$lib/server/db-utils';
 import type { Actions, PageServerData } from './$types';
 import type { Insertable, Selectable } from 'kysely';
 import type { WorkoutExercise, Exercise } from '$lib/schema';
+import type { PageServerLoad } from '../$types';
 
 export type ExerciseList = Selectable<Exercise>;
 
-export const load = async (): Promise<PageServerData> => {
+export const load : PageServerLoad = async ({ params }): Promise<PageServerData> => {
   const exercises: ExerciseList[] = await db
     .selectFrom('exercises')
     .selectAll()
     .execute();
 
-  return { exercises };
+  const workoutId = Number(params.workoutId);
+
+  return { exercises, workoutId };
 };
 
 export const actions: Actions = {
   default: async ({ request, params }) => {
     const formData = await request.formData();
-
     const exerciseName = formData.get('exerciseName') as string | null;
     const exerciseType = formData.get('exerciseType') as 'cardio' | 'weights' | null;
     const workoutId = Number(formData.get('workoutId'));
@@ -36,7 +37,7 @@ export const actions: Actions = {
       );
 
       if (!result.success) return failWith({ workoutId }, result);
-      exerciseId = result.data.id;
+      exerciseId = result.data.id || 0;
     }
 
     const newWorkoutExercise: Insertable<WorkoutExercise> = { workoutId, exerciseId };
@@ -49,7 +50,9 @@ export const actions: Actions = {
         .executeTakeFirstOrThrow()
     );
 
-    if (!result.success) return failWith({ workoutId, exerciseId }, result);
+    if (!result.success) {
+      return failWith({ workoutId, exerciseId }, result);
+    } 
 
     redirect(303, `/workout-exercises`);
   },

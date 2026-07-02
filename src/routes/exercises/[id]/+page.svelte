@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import type { PageData } from './$types';
   import type { ActionData } from './$types';
   import PageHeader from '$lib/components/PageHeader.svelte';
@@ -7,7 +8,7 @@
 
 <PageHeader title={data.exercise.name}>
   <div role="group">
-    <a href="/exercises" role="button">Exercises</a>
+    <a href={resolve('/exercises')} role="button">Exercises</a>
     <button form="exercise-form">Save</button>
   </div>
 </PageHeader>

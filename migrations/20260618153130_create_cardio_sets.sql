@@ -8,7 +8,6 @@ create table cardio_sets (
   updated_at timestamp not null default current_timestamp
 );
 
-
 -- +goose Down
 
 drop table cardio_sets;

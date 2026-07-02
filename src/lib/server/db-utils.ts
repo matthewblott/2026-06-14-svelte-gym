@@ -20,6 +20,8 @@ export async function dbAttempt<T>(query: PromiseLike<T>): Promise<DbResult<T>> 
 }
 
 function describeSqliteError(err: SqliteError): { message: string; field?: string } {
+  console.log(err.message);
+
   const msg = err.message ?? '';
 
   if (err.code === 'SQLITE_CONSTRAINT_NOTNULL') {

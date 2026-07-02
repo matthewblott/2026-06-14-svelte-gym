@@ -1,20 +1,16 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import PageHeader from '$lib/components/PageHeader.svelte';
+  import type { PageData } from './$types';
   import type { ExerciseList } from './+page.server.ts';
+  import { routes } from '$lib/routes'
 
-  interface Props {
-    workoutId: number;
-    exercises: ExerciseList[];
-  }
+  const { data }: { data: PageData } = $props();
 
-  let { workoutId, exercises = $bindable() }: Props = $props();
-
+  let exercises = $state<ExerciseList[]>(data.exercises);
   let exerciseName = $state('');
   let exerciseType = $state<'cardio' | 'weights' | ''>('');
-  let selectedExerciseId = $state<number | null>(null);
   let showSuggestions = $state(false);
-  let saving = $state(false);
-  let error = $state('');
 
   const match = $derived(
     exercises.find(e => e.name.toLowerCase() === exerciseName.toLowerCase())
@@ -35,28 +31,17 @@
   const canSubmit = $derived(
     exerciseName.trim().length > 0 &&
     exerciseType !== '' &&
-    (selectedExerciseId !== null || isNewExercise)
+    (!!match || isNewExercise)
   );
-
-  $effect(() => {
-    if (match) {
-      selectedExerciseId = match.id;
-      exerciseType = match.exerciseType; // camelCase from Kysely
-    } else {
-      selectedExerciseId = null;
-    }
-  });
 
   function selectExercise(exercise: ExerciseList) {
     exerciseName = exercise.name;
-    exerciseType = exercise.exerciseType; // camelCase from Kysely
-    selectedExerciseId = exercise.id;
+    exerciseType = exercise.exerciseType;
     showSuggestions = false;
   }
 
   function handleInput() {
     showSuggestions = true;
-    selectedExerciseId = null;
   }
 
   function handleBlur() {
@@ -64,9 +49,16 @@
   }
 </script>
 
-<form method="POST" use:enhance>
-  <input type="hidden" name="workoutId" value={workoutId} />
-  <input type="hidden" name="exerciseId" value={selectedExerciseId ?? ''} />
+<PageHeader title="Exercises">
+  <div role="group">
+    <a href={routes.workouts.exercises.list(data.workoutId)} role="button">Exercises</a>
+    <button form="new-workout-exercise-form" disabled={!canSubmit}>Save</button>
+  </div>
+</PageHeader>
+
+<form method="POST" use:enhance id="new-workout-exercise-form">
+  <input type="hidden" name="workoutId" value={data.workoutId} />
+  <input type="hidden" name="exerciseId" value={match?.id ?? ''} />
 
   <div class="field">
     <label for="exercise-name">Exercise</label>
@@ -88,7 +80,7 @@
           {#each filteredExercises as exercise (exercise.id)}
             <li
               role="option"
-              aria-selected={exercise.id === selectedExerciseId}
+              aria-selected={exercise.id === match?.id}
               onmousedown={() => selectExercise(exercise)}
             >
               <span class="exercise-name">{exercise.name}</span>
@@ -104,7 +96,7 @@
     {/if}
   </div>
 
-  <fieldset disabled={!isNewExercise && selectedExerciseId !== null}>
+  <fieldset disabled={!isNewExercise && !!match}>
     <legend>
       Type
       {#if isNewExercise}<span class="required">*</span>{/if}
@@ -118,12 +110,4 @@
       Cardio
     </label>
   </fieldset>
-
-  {#if error}
-    <p class="error">{error}</p>
-  {/if}
-
-  <button type="submit" disabled={!canSubmit || saving}>
-    {saving ? 'Saving...' : 'Add to Workout'}
-  </button>
 </form>
