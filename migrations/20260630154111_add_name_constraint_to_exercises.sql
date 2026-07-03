@@ -1,6 +1,13 @@
+-- ==========================================================================
 -- +goose Up
+-- ==========================================================================
 
 pragma foreign_keys = off;
+pragma legacy_alter_table = on;
+
+-- --------------------------------------------------------------------------
+-- exercises 
+-- --------------------------------------------------------------------------
 
 -- Backup original table
 alter table exercises rename to temp_exercises;
@@ -46,9 +53,6 @@ begin
 end;
 -- +goose StatementEnd
 
--- Cleanup
-drop table temp_exercises;
-
 -- Update sqlite_sequence to ensure the next id is correct
 update sqlite_sequence
 set seq = (
@@ -56,14 +60,23 @@ set seq = (
 )
 where name = 'exercises';
 
+-- Cleanup
+drop table temp_exercises;
+
 pragma foreign_keys = on;
 
 -- Optional validation
 pragma foreign_key_check;
 
+-- ==========================================================================
 -- +goose Down
+-- ==========================================================================
 
 pragma foreign_keys = off;
+
+-- --------------------------------------------------------------------------
+-- exercises 
+-- --------------------------------------------------------------------------
 
 -- Backup original table
 alter table exercises rename to temp_exercises;
@@ -98,9 +111,6 @@ from
 
 -- Recreate triggers here
 
--- Cleanup
-drop table temp_exercises;
-
 -- Update sqlite_sequence to ensure the next id is correct
 update sqlite_sequence
 set seq = (
@@ -108,7 +118,11 @@ set seq = (
 )
 where name = 'exercises';
 
+-- Cleanup
+drop table temp_exercises;
+
 pragma foreign_keys = on;
+pragma legacy_alter_table = off;
 
 -- Optional validation
 pragma foreign_key_check;

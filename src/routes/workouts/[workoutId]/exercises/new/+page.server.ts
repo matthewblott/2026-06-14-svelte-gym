@@ -4,6 +4,7 @@ import type { Actions, PageServerData } from './$types';
 import type { Insertable, Selectable } from 'kysely';
 import type { WorkoutExercise, Exercise } from '$lib/schema';
 import type { PageServerLoad } from '../$types';
+import { routes } from '$lib/routes';
 
 export type ExerciseList = Selectable<Exercise>;
 
@@ -54,6 +55,6 @@ export const actions: Actions = {
       return failWith({ workoutId, exerciseId }, result);
     } 
 
-    redirect(303, `/workout-exercises`);
+    redirect(303, routes.workouts.exercises.list(workoutId));
   },
 };

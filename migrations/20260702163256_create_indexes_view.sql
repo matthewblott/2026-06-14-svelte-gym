@@ -1,6 +1,9 @@
 -- +goose Up
 
-create view indexes as
+pragma foreign_keys = off;
+pragma legacy_alter_table = on;
+
+create view indexes_view as
 select
   t.name as table_name,
   il.name as index_name,
@@ -22,4 +25,7 @@ order by
 
 -- +goose Down
 
-drop view indexes;
+drop view indexes_view;
+
+pragma foreign_keys = on;
+pragma legacy_alter_table = off;
