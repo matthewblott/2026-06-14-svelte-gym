@@ -6,62 +6,67 @@ pragma foreign_keys = off;
 pragma legacy_alter_table = on;
 
 -- --------------------------------------------------------------------------
--- workouts
+-- cardio_sets 
 -- --------------------------------------------------------------------------
 
 -- delete triggers
-drop trigger if exists workouts_updated_at;
+drop trigger if exists cardio_sets_updated_at;
 
 -- Backup original table
-alter table workouts rename to temp_workouts;
+alter table cardio_sets rename to temp_cardio_sets;
 
 -- Recreate table with new schema
-create table workouts (
+create table cardio_sets (
   id integer primary key autoincrement,
-  name text not null
-    check (length(name) between 1 and 50),
+  workout_exercise_id integer not null references exercises(id),
+  distance integer not null check (distance > 0),
+  duration integer not null check (duration> 0),
   created_at text not null default current_timestamp,
   updated_at text not null default current_timestamp
 ) strict;
 
--- Restore data
-insert into workouts (
+-- Restore data (explicit column mapping recommended)
+insert into cardio_sets (
   id,
-  name,
+  workout_exercise_id,
+  distance,
+  duration,
   created_at,
   updated_at
 )
 select
   id,
-  name,
+  workout_exercise_id,
+  distance,
+  duration_seconds,
   created_at,
   updated_at
 from
-  temp_workouts;
+  temp_cardio_sets;
 
 -- Recreate indexes
 
 -- Recreate triggers here
 
 -- +goose StatementBegin
-create trigger workouts_updated_at
-after update on workouts
+create trigger cardio_sets_updated_at
+after update on cardio_sets
 for each row
 when new.updated_at = old.updated_at
 begin
-  update workouts set updated_at = current_timestamp where id = new.id;
+  update cardio_sets set updated_at = current_timestamp where id = new.id;
 end;
 -- +goose StatementEnd
 
 -- Update sqlite_sequence to ensure the next id is correct
 update sqlite_sequence
 set seq = (
-  select max(id) from workouts
+  select max(id) from cardio_sets
 )
-where name = 'workouts';
+where name = 'cardio_sets';
 
 -- Cleanup
-drop table temp_workouts;
+drop table temp_cardio_sets;
 
 -- Optional validation
 pragma foreign_key_check;
@@ -74,51 +79,67 @@ pragma foreign_keys = off;
 pragma legacy_alter_table = on;
 
 -- --------------------------------------------------------------------------
--- workouts
+-- cardio_sets 
 -- --------------------------------------------------------------------------
 
 -- delete triggers
-drop trigger if exists workouts_updated_at;
+drop trigger if exists cardio_sets_updated_at;
 
 -- Backup original table
-alter table workouts rename to temp_workouts;
+alter table cardio_sets rename to temp_cardio_sets;
 
 -- Recreate table with old schema
-create table workouts (
-  id integer primary key autoincrement,
-  name text not null,
-  created_at text not null default current_timestamp,
-  updated_at text not null default current_timestamp
+create table cardio_sets (
+  id integer not null primary key autoincrement,
+  workout_exercise_id integer not null references exercises(id),
+  distance integer not null check (distance > 0),
+  duration_seconds integer not null check (duration_seconds > 0),
+  created_at timestamp not null default current_timestamp,
+  updated_at timestamp not null default current_timestamp
 );
 
 -- Restore data (explicit column mapping recommended)
-insert into workouts (
+insert into cardio_sets (
   id,
-  name,
+  workout_exercise_id,
+  distance,
+  duration_seconds,
   created_at,
   updated_at
 )
 select
   id,
-  name,
+  workout_exercise_id,
+  distance,
+  duration,
   created_at,
   updated_at
 from
-  temp_workouts;
+  temp_cardio_sets;
 
 -- Recreate indexes
 
 -- Recreate triggers here
 
+-- +goose StatementBegin
+create trigger cardio_sets_updated_at
+after update on cardio_sets
+for each row
+when new.updated_at = old.updated_at
+begin
+  update cardio_sets set updated_at = current_timestamp where id = new.id;
+end;
+-- +goose StatementEnd
+
 -- Update sqlite_sequence to ensure the next id is correct
 update sqlite_sequence
 set seq = (
-  select max(id) from workouts
+  select max(id) from cardio_sets
 )
-where name = 'workouts';
+where name = 'cardio_sets';
 
 -- Cleanup
-drop table temp_workouts;
+drop table temp_cardio_sets;
 
 -- Optional validation
 pragma foreign_key_check;

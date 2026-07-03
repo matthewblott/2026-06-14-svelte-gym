@@ -12,3 +12,19 @@
   </div>
 </PageHeader>
 
+{#if data.workoutExercises.length}
+  {#each data.workoutExercises as workoutExercise}
+    <article>
+      <a href={
+          routes.workouts.exercises.sets({
+            workoutId: workoutExercise.workoutId, exerciseId: workoutExercise.exerciseId
+          })
+        }
+      >
+        {workoutExercise.exerciseName}
+      </a>
+    </article>
+  {/each}
+{:else}
+  <p>No workouts yet.</p>
+{/if}

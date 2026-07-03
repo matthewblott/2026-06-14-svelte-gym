@@ -7,14 +7,20 @@ export type SelectableWorkout = Selectable<WorkoutExercisesView>
 
 export const load : PageServerLoad = async ({ params }): Promise<PageServerData> => {
   const workoutId = Number(params.workoutId);
+  const exerciseId = Number(params.exerciseId);
 
   let query = db
     .selectFrom('workoutExercisesView')
     .where('workoutId', '=', workoutId)
+    .where('exerciseId', '=', exerciseId)
     .selectAll();
 
-  const workoutExercises: SelectableWorkout[] = await query.execute();
+  const exercise: SelectableWorkout = await query.executeTakeFirstOrThrow();
 
-  return { workoutExercises, workoutId };
+  // Need to get the sets ... 
+
+  return { exercise, workoutId, exerciseId };
 
 };
+
+

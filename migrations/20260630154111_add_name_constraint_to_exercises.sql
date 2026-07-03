@@ -9,6 +9,9 @@ pragma legacy_alter_table = on;
 -- exercises 
 -- --------------------------------------------------------------------------
 
+-- delete triggers
+drop trigger if exists exercises_updated_at;
+
 -- Backup original table
 alter table exercises rename to temp_exercises;
 
@@ -73,15 +76,19 @@ pragma foreign_key_check;
 -- ==========================================================================
 
 pragma foreign_keys = off;
+pragma legacy_alter_table = on;
 
 -- --------------------------------------------------------------------------
 -- exercises 
 -- --------------------------------------------------------------------------
 
+-- delete triggers
+drop trigger if exists exercises_updated_at;
+
 -- Backup original table
 alter table exercises rename to temp_exercises;
 
--- Recreate table with new schema
+-- Recreate table with old schema
 create table exercises (
   id integer primary key autoincrement,
   name text not null,
@@ -120,9 +127,6 @@ where name = 'exercises';
 
 -- Cleanup
 drop table temp_exercises;
-
-pragma foreign_keys = on;
-pragma legacy_alter_table = off;
 
 -- Optional validation
 pragma foreign_key_check;

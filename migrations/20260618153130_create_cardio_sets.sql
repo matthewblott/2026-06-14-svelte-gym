@@ -1,7 +1,6 @@
 -- +goose Up
 
 pragma foreign_keys = off;
-pragma legacy_alter_table = on;
 
 create table cardio_sets (
   id integer not null primary key autoincrement,
@@ -13,8 +12,6 @@ create table cardio_sets (
 
 -- +goose Down
 
+pragma foreign_keys = off;
+
 drop table cardio_sets;
-
-pragma foreign_keys = on;
-pragma legacy_alter_table = off;
-

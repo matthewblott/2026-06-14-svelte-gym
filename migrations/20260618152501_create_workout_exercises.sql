@@ -1,7 +1,6 @@
 -- +goose Up
 
 pragma foreign_keys = off;
-pragma legacy_alter_table = on;
 
 create table workout_exercises (
   id integer not null primary key autoincrement,
@@ -13,7 +12,6 @@ create table workout_exercises (
 
 -- +goose Down
 
-drop table workout_exercises;
+pragma foreign_keys = off;
 
-pragma foreign_keys = on;
-pragma legacy_alter_table = off;
+drop table workout_exercises;

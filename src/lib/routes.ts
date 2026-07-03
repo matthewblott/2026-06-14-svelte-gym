@@ -13,7 +13,7 @@ export const routes = {
         `/workouts/${workoutId}/exercises`,
 
       // detail({ workoutId: 1, exerciseId: 99 })
-      detail: ({ workoutId, exerciseId }: {
+      sets: ({ workoutId, exerciseId }: {
         workoutId: number;
         exerciseId: number;
       }) =>
@@ -21,7 +21,15 @@ export const routes = {
 
       // new(...)
       new: (workoutId: Id) =>
-        `/workouts/${workoutId}/exercises/new`
+        `/workouts/${workoutId}/exercises/new`,
+      
+      // todo: rename this as it's really for a set
+      newSet: ({ workoutId, exerciseId }: {
+          workoutId: number;
+          exerciseId: number;
+        }) =>
+          `/workouts/${workoutId}/exercises/${exerciseId}/new`,
+
     }
   }
 } as const;

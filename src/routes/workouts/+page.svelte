@@ -17,7 +17,6 @@
   <input type="hidden" name="locale" value={navigator.language}>
 </form>
 
-
 {#if data.workouts.length}
   {#each data.workouts as workout}
     <article>

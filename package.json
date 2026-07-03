@@ -35,10 +35,11 @@
 		"camelCase": true,
 		"outFile": "./src/lib/schema.ts",
 		"url": "./storage/local.sqlite3",
-		"excludePattern": "goose_db_version",
+	  "excludePattern": "{goose_db_version,foreign_keys_view,indexes_view}",
     "overrides": {
       "columns": {
-        "exercises.exercise_type": "'cardio' | 'weights'"
+        "exercises.exercise_type": "'cardio' | 'weights'",
+        "workout_exercises_view.exercise_type": "'cardio' | 'weights'"
       }
     }
 	}

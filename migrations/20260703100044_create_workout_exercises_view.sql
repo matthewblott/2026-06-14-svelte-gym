@@ -1,8 +1,5 @@
 -- +goose Up
 
-pragma foreign_keys = off;
-pragma legacy_alter_table = on;
-
 create view workout_exercises_view as
 select
   w.id as workout_id,
@@ -21,6 +18,3 @@ join
 -- +goose Down
 
 drop view workout_exercises_view;
-
-pragma foreign_keys = on;
-pragma legacy_alter_table = off;

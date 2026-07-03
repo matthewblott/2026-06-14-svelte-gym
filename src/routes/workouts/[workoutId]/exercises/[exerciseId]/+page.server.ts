@@ -6,15 +6,13 @@ import { db } from "$lib/server/db";
 export type SelectableWorkout = Selectable<WorkoutExercisesView>
 
 export const load : PageServerLoad = async ({ params }): Promise<PageServerData> => {
+  // let query = db.selectFrom('workoutExercisesView').selectAll();
+
+  // const workoutExercises: SelectableWorkout[] = await query.execute();
   const workoutId = Number(params.workoutId);
+  const exerciseId = Number(params.exerciseId);
 
-  let query = db
-    .selectFrom('workoutExercisesView')
-    .where('workoutId', '=', workoutId)
-    .selectAll();
-
-  const workoutExercises: SelectableWorkout[] = await query.execute();
-
-  return { workoutExercises, workoutId };
+  return { workoutId, exerciseId };
 
 };
+

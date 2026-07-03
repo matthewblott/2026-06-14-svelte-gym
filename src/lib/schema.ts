@@ -42,6 +42,15 @@ export interface WorkoutExercise {
   workoutId: number;
 }
 
+export interface WorkoutExercisesView {
+  exerciseId: number | null;
+  exerciseName: string | null;
+  exerciseType: "cardio" | "weights";
+  workoutExerciseId: number | null;
+  workoutId: number | null;
+  workoutName: string | null;
+}
+
 export interface Workout {
   createdAt: Generated<string>;
   id: Generated<number | null>;
@@ -54,5 +63,6 @@ export interface DB {
   exercises: Exercise;
   weightSets: WeightSet;
   workoutExercises: WorkoutExercise;
+  workoutExercisesView: WorkoutExercisesView;
   workouts: Workout;
 }

@@ -1,8 +1,5 @@
 -- +goose Up
 
-pragma foreign_keys = off;
-pragma legacy_alter_table = on;
-
 create view foreign_keys_view as
 select
   m.name as table_name,
@@ -21,6 +18,3 @@ where m.type = 'table';
 -- +goose Down
 
 drop view foreign_keys_view;
-
-pragma foreign_keys = on;
-pragma legacy_alter_table = off;

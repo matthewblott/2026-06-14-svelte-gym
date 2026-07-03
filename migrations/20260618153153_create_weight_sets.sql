@@ -1,7 +1,6 @@
 -- +goose Up
 
 pragma foreign_keys = off;
-pragma legacy_alter_table = on;
 
 create table weight_sets (
   id integer not null primary key autoincrement,
@@ -14,8 +13,6 @@ create table weight_sets (
 
 -- +goose Down
 
+pragma foreign_keys = off;
+
 drop table weight_sets;
-
-pragma foreign_keys = on;
-pragma legacy_alter_table = off;
-
