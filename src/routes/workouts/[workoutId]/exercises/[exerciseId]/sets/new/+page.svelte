@@ -87,13 +87,12 @@
       Duration 
       <input
         name="duration"
-        type="number"
-        placeholder="Duration"
+        type="time"
+        placeholder="00:00:00"
         value={form?.reps?? ''}
+        step="1"
         aria-invalid={form?.field === 'duration' ? 'true' : undefined}
       >
-
-      <!-- <input type="time" name="duration" step="1"> -->
 
       {#if form?.field === 'duration'}
         <span class="field-error">{form.message}</span>
