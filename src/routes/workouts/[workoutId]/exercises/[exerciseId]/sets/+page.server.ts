@@ -6,13 +6,31 @@ import { db } from "$lib/server/db";
 export type SelectableWorkout = Selectable<WorkoutsView>
 
 export const load : PageServerLoad = async ({ params }): Promise<PageServerData> => {
-  // let query = db.selectFrom('workoutExercisesView').selectAll();
-
-  // const workoutExercises: SelectableWorkout[] = await query.execute();
   const workoutId = Number(params.workoutId);
   const exerciseId = Number(params.exerciseId);
 
-  return { workoutId, exerciseId };
+  // If it's a new exercise then need to navigate to the new set page for that exercise type
+
+  let query = db
+    .selectFrom('workoutExercises')
+    .innerJoin('exercises', 'exercises.id', 'workoutExercises.exerciseId')
+    .leftJoin('cardioSets', 'cardioSets.workoutExerciseId', 'workoutExercises.id') 
+    .leftJoin('weightSets', 'weightSets.workoutExerciseId', 'workoutExercises.id') 
+    .select([
+      'cardioSets.workoutExerciseId',
+      'name',
+      'exerciseType',
+      'duration',
+      'distance',
+      'weight',
+      'reps'
+    ])
+    .where('workoutId', '=', workoutId)
+    .where('exerciseId', '=', exerciseId);
+
+  const exerciseSets = await query.execute();
+
+  return { exerciseSets, workoutId, exerciseId };
 
 };
 

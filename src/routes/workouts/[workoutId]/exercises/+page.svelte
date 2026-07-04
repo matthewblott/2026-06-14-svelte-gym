@@ -13,15 +13,15 @@
 </PageHeader>
 
 {#if data.workoutExercises.length}
-  {#each data.workoutExercises as workoutExercise}
+  {#each data.workoutExercises as exercise}
     <article>
       <a href={
           routes.workouts.exercises.sets.list({
-            workoutId: workoutExercise.workoutId, exerciseId: workoutExercise.exerciseId
+            workoutId: exercise.workoutId, exerciseId: exercise.exerciseId
           })
         }
       >
-        {workoutExercise.exerciseName}
+        {exercise.name}
       </a>
     </article>
   {/each}

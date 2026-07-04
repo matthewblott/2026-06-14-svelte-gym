@@ -28,7 +28,7 @@ export interface Exercise {
 
 export interface WeightSet {
   createdAt: Generated<string>;
-  id: Generated<number>;
+  id: Generated<number | null>;
   reps: number;
   updatedAt: Generated<string>;
   weight: number;
@@ -41,6 +41,26 @@ export interface WorkoutExercise {
   id: Generated<number>;
   updatedAt: Generated<string>;
   workoutId: number;
+}
+
+export interface WorkoutExercisesView {
+  cardioSetCreatedAt: string | null;
+  cardioSetUpdatedAt: string | null;
+  distance: number | null;
+  duration: number | null;
+  exerciseCreatedAt: string | null;
+  exerciseId: number | null;
+  exerciseName: string | null;
+  exerciseType: "cardio" | "weights";
+  exerciseUpdatedAt: string | null;
+  reps: number | null;
+  weight: number | null;
+  weightSetCreatedAt: string | null;
+  weightSetUpdatedAt: string | null;
+  workoutExerciseCreatedAt: string | null;
+  workoutExerciseId: number | null;
+  workoutExerciseUpdatedAt: string | null;
+  workoutId: number | null;
 }
 
 export interface Workout {
@@ -78,6 +98,7 @@ export interface DB {
   exercises: Exercise;
   weightSets: WeightSet;
   workoutExercises: WorkoutExercise;
+  workoutExercisesView: WorkoutExercisesView;
   workouts: Workout;
   workoutsView: WorkoutsView;
 }

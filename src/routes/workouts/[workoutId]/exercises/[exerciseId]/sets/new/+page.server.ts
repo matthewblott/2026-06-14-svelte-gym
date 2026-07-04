@@ -11,12 +11,20 @@ export const load : PageServerLoad = async ({ params }): Promise<PageServerData>
   const workoutId = Number(params.workoutId);
   const exerciseId = Number(params.exerciseId);
 
-  const workoutView = await db
-    .selectFrom('workoutsView')
-    .select(['workoutId', 'exerciseId', 'workoutExerciseId', 'exerciseName', 'exerciseType'])
+  let query = db
+    .selectFrom('workoutExercises')
+    .innerJoin('exercises', 'exercises.id', 'workoutExercises.exerciseId')
+    .select([
+      'workoutExercises.id',
+      'workoutId',
+      'exerciseId',
+      'name',
+      'exerciseType',
+    ])
     .where('workoutId', '=', workoutId)
-    .where('exerciseId', '=', exerciseId) 
-    .executeTakeFirstOrThrow()
+    .where('exerciseId', '=', exerciseId);
+
+  const workoutView = await query.executeTakeFirstOrThrow();
 
   return { workoutView };
 

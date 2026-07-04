@@ -7,10 +7,11 @@
 
   let { form, data }: { form: ActionData, data: PageData } = $props();
 
-  const workoutView : Selectable<WorkoutsView> = data.workoutView;
+  // const workoutView : Selectable<WorkoutsView> = data.workoutView;
+  const workoutView = data.workoutView;
   const workoutId = workoutView.workoutId!;
   const exerciseId = workoutView.exerciseId!;
-  const workoutExerciseId = workoutView.workoutExerciseId!;
+  const workoutExerciseId = workoutView.id!;
 
 </script>
 
@@ -47,7 +48,7 @@
         value={form?.weight ?? ''}
         aria-invalid={form?.field === 'weight' ? 'true' : undefined}
       >
-      {#if form?.field === 'name'}
+      {#if form?.field === 'weight'}
         <span class="field-error">{form.message}</span>
       {/if}
     </label>
@@ -61,7 +62,7 @@
         value={form?.reps ?? ''}
         aria-invalid={form?.field === 'reps' ? 'true' : undefined}
       >
-      {#if form?.field === 'name'}
+      {#if form?.field === 'reps'}
         <span class="field-error">{form.message}</span>
       {/if}
     </label>
@@ -77,7 +78,7 @@
         value={form?.distance ?? ''}
         aria-invalid={form?.field === 'distance' ? 'true' : undefined}
       >
-      {#if form?.field === 'name'}
+      {#if form?.field === 'distance'}
         <span class="field-error">{form.message}</span>
       {/if}
     </label>
@@ -91,7 +92,10 @@
         value={form?.reps?? ''}
         aria-invalid={form?.field === 'duration' ? 'true' : undefined}
       >
-      {#if form?.field === 'name'}
+
+      <!-- <input type="time" name="duration" step="1"> -->
+
+      {#if form?.field === 'duration'}
         <span class="field-error">{form.message}</span>
       {/if}
     </label>

@@ -1,20 +1,18 @@
-import type { Selectable } from "kysely";
 import type { PageServerData, PageServerLoad } from "./$types";
-import type { WorkoutsView } from "$lib/schema";
 import { db } from "$lib/server/db";
-
-export type SelectableWorkout = Selectable<WorkoutsView>
 
 export const load : PageServerLoad = async ({ params }): Promise<PageServerData> => {
   const workoutId = Number(params.workoutId);
 
   let query = db
-    .selectFrom('workoutsView')
-    .where('workoutId', '=', workoutId)
-    .selectAll();
+    .selectFrom('workoutExercises')
+    .innerJoin('exercises', 'exercises.id', 'workoutExercises.exerciseId')
+    .select(['workoutId', 'exerciseId', 'name'])
+    .where('workoutId', '=', workoutId);
 
-  const workoutExercises: SelectableWorkout[] = await query.execute();
-
+  const workoutExercises = await query.execute();
+  
+  console.log(workoutExercises);
   return { workoutExercises, workoutId };
 
 };
