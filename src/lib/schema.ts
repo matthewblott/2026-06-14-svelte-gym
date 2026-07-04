@@ -12,7 +12,7 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 export interface CardioSet {
   createdAt: Generated<string>;
   distance: number;
-  duration: number;
+  duration: string;
   id: Generated<number | null>;
   updatedAt: Generated<string>;
   workoutExerciseId: number;
@@ -47,7 +47,7 @@ export interface WorkoutExercisesView {
   cardioSetCreatedAt: string | null;
   cardioSetUpdatedAt: string | null;
   distance: number | null;
-  duration: number | null;
+  duration: string | null;
   exerciseCreatedAt: string | null;
   exerciseId: number | null;
   exerciseName: string | null;
@@ -74,7 +74,7 @@ export interface WorkoutsView {
   cardioSetCreatedAt: string | null;
   cardioSetUpdatedAt: string | null;
   distance: number | null;
-  duration: number | null;
+  duration: string | null;
   exerciseCreatedAt: string | null;
   exerciseId: number | null;
   exerciseName: string | null;

@@ -58,7 +58,8 @@ export const actions: Actions = {
     }
     else {
       const distance = Number(formData.get('distance') as string);
-      const duration = Number(formData.get('duration') as string);
+      // const duration = Number(formData.get('duration') as string);
+      const duration = formData.get('duration') as string;
       const newCardioSet: Insertable<CardioSet> = { workoutExerciseId, distance, duration };
 
       const result = await dbAttempt(
