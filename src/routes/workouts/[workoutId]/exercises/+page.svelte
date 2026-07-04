@@ -16,7 +16,7 @@
   {#each data.workoutExercises as workoutExercise}
     <article>
       <a href={
-          routes.workouts.exercises.sets({
+          routes.workouts.exercises.sets.list({
             workoutId: workoutExercise.workoutId, exerciseId: workoutExercise.exerciseId
           })
         }

@@ -9,7 +9,7 @@
   <div role="group">
     <a href={routes.workouts.exercises.list(data.workoutId)} role="button">Exercises</a>
     <a href={
-        routes.workouts.exercises.newSet({
+        routes.workouts.exercises.sets.new({
           workoutId: data.workoutId, exerciseId: data.exerciseId
         })
       }

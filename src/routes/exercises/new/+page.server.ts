@@ -9,7 +9,7 @@ export const actions: Actions = {
   default: async ({ request }) => {
     const formData = await request.formData();
     const name = formData.get('name') as string;
-    const exerciseType = formData.get('exerciseType') as string;
+    const exerciseType = formData.get('exerciseType') as "cardio" | "weights";
     const newExercise: Insertable<Exercise> = { name, exerciseType };
 
     const result = await dbAttempt(
@@ -17,7 +17,7 @@ export const actions: Actions = {
     );
 
     if (!result.success) {
-      return failWith({ name, exerciseType }, result);
+      return failWith(newExercise, result);
     }
     redirect(303, `/exercises`);
   },

@@ -1,6 +1,6 @@
 -- +goose Up
 
-create workouts_view as
+create view simple_workouts_view as
 select
   w.id as workout_id,
   w.name as workout_name,
@@ -21,6 +21,8 @@ left join
 left join
   weight_sets ws on we.id = ws.workout_exercise_id
 left join
-  cardio_sets cs on we.id = cs.workout_exercise_id
+  cardio_sets cs on we.id = cs.workout_exercise_id;
 
 -- +goose Down
+
+drop view simple_workouts_view;

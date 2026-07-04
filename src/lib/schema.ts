@@ -11,8 +11,9 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 
 export interface CardioSet {
   createdAt: Generated<string>;
-  durationSeconds: number;
-  id: Generated<number>;
+  distance: number;
+  duration: number;
+  id: Generated<number | null>;
   updatedAt: Generated<string>;
   workoutExerciseId: number;
 }
@@ -42,15 +43,6 @@ export interface WorkoutExercise {
   workoutId: number;
 }
 
-export interface WorkoutExercisesView {
-  exerciseId: number | null;
-  exerciseName: string | null;
-  exerciseType: "cardio" | "weights";
-  workoutExerciseId: number | null;
-  workoutId: number | null;
-  workoutName: string | null;
-}
-
 export interface Workout {
   createdAt: Generated<string>;
   id: Generated<number | null>;
@@ -58,11 +50,34 @@ export interface Workout {
   updatedAt: Generated<string>;
 }
 
+export interface WorkoutsView {
+  cardioSetCreatedAt: string | null;
+  cardioSetUpdatedAt: string | null;
+  distance: number | null;
+  duration: number | null;
+  exerciseCreatedAt: string | null;
+  exerciseId: number | null;
+  exerciseName: string | null;
+  exerciseType: string | null;
+  exerciseUpdatedAt: string | null;
+  reps: number | null;
+  weight: number | null;
+  weightSetCreatedAt: string | null;
+  weightSetUpdatedAt: string | null;
+  workoutCreatedAt: string | null;
+  workoutExerciseCreatedAt: string | null;
+  workoutExerciseId: number | null;
+  workoutExerciseUpdatedAt: string | null;
+  workoutId: number | null;
+  workoutName: string | null;
+  workoutUpdatedAt: string | null;
+}
+
 export interface DB {
   cardioSets: CardioSet;
   exercises: Exercise;
   weightSets: WeightSet;
   workoutExercises: WorkoutExercise;
-  workoutExercisesView: WorkoutExercisesView;
   workouts: Workout;
+  workoutsView: WorkoutsView;
 }
