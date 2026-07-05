@@ -33,10 +33,9 @@ export const load : PageServerLoad = async ({ params }): Promise<PageServerData>
     .where('exerciseId', '=', exerciseId)
     .executeTakeFirstOrThrow();
 
-  const isFirstSet = Number(numberOfSets.count) === 0;
-
   // Need to check if this request is the first set, if so then the Sets link needs to change to an Exercises link
   // otherwise there will be a redirect back to this page when it is clicked.
+  const isFirstSet = Number(numberOfSets.count) === 0;
 
   return { workoutView, isFirstSet };
 
@@ -70,7 +69,6 @@ export const actions: Actions = {
     }
     else {
       const distance = Number(formData.get('distance') as string);
-      // const duration = Number(formData.get('duration') as string);
       const duration = formData.get('duration') as string;
       const newCardioSet: Insertable<CardioSet> = { workoutExerciseId, distance, duration };
 
