@@ -19,13 +19,13 @@
   </div>
 </PageHeader>
 
-{#if data.exerciseSets.length}
-  {#each data.exerciseSets as set}
+{#if data.sets.length}
+  {#each data.sets as set}
     <article>
       {#if set.exerciseType === 'weights'}
-        {set.reps} x {set.weight} 
+        {set.distanceOrReps} x {set.durationOrWeight} 
       {:else}
-        {set.distance} in {set.duration}
+        {set.distanceOrReps} in {set.durationOrWeight} 
       {/if}
     </article>
   {/each}

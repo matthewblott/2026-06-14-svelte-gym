@@ -26,7 +26,19 @@ export const load : PageServerLoad = async ({ params }): Promise<PageServerData>
 
   const workoutView = await query.executeTakeFirstOrThrow();
 
-  return { workoutView };
+  const numberOfSets = await db
+    .selectFrom('setsView')
+    .select(eb => eb.fn.countAll().as('count'))
+    .where('workoutId', '=', workoutId)
+    .where('exerciseId', '=', exerciseId)
+    .executeTakeFirstOrThrow();
+
+  const isFirstSet = Number(numberOfSets.count) === 0;
+
+  // Need to check if this request is the first set, if so then the Sets link needs to change to an Exercises link
+  // otherwise there will be a redirect back to this page when it is clicked.
+
+  return { workoutView, isFirstSet };
 
 };
 

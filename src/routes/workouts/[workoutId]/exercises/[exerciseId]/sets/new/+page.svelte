@@ -2,27 +2,27 @@
   import PageHeader from '$lib/components/PageHeader.svelte';
   import type { ActionData, PageData } from './$types';
   import { routes } from '$lib/routes';
-  import type { Selectable } from 'kysely';
-  import type { WorkoutsView } from '$lib/schema';
 
   let { form, data }: { form: ActionData, data: PageData } = $props();
 
-  // const workoutView : Selectable<WorkoutsView> = data.workoutView;
   const workoutView = data.workoutView;
   const workoutId = workoutView.workoutId!;
   const exerciseId = workoutView.exerciseId!;
   const workoutExerciseId = workoutView.id!;
 
+  let backRoute = routes.workouts.exercises.sets.list({ workoutId, exerciseId });
+  let backRouteText = 'Sets'; 
+
+  if(data.isFirstSet) {
+    backRoute = routes.workouts.exercises.list(workoutId);
+    backRouteText = 'Exercises';
+  }
+
 </script>
 
 <PageHeader title="New Set">
   <div role="group">
-    <a href={
-        routes.workouts.exercises.sets.list({ workoutId, exerciseId })
-      }
-      role="button">
-      Sets
-    </a>
+    <a href={backRoute} role="button">{backRouteText}</a>
     <button form="new-set-form">Save</button>
   </div>
 </PageHeader>
