@@ -24,8 +24,8 @@ export const load = async ({ url }: { url: URL }): Promise<PageServerData> => {
 
 export const actions: Actions = {
   default: async ({ request }) => {
-    const formData = await request.formData();
-    const locale = formData.get('locale') as string;
+    const form = await request.formData();
+    const locale = form.get('locale') as string;
     const date = new Date();
     const formatter = new Intl.DateTimeFormat(locale, { dateStyle: 'full', timeStyle: 'short' });
     const name = formatter.format(date);
