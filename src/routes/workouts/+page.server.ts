@@ -39,6 +39,9 @@ export const actions: Actions = {
       return failWith({ name }, result);
     }
 
-    redirect(303, `/workout-exercises?workoutId=${result.data.id}`);
+    const workoutId = result.data.id;
+    const route = `/workouts/${workoutId}/exercises/new`;
+
+    redirect(303, route); 
   },
 };
