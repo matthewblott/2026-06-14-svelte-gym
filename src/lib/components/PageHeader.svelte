@@ -5,7 +5,7 @@
 	}>();
 </script>
 
-<header class="page-header">
+<header>
 	<h1>{title}</h1>
 
 	{#if children}
@@ -14,3 +14,4 @@
 		</div>
 	{/if}
 </header>
+
