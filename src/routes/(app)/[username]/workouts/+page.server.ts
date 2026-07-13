@@ -5,11 +5,19 @@ import type { Selectable } from 'kysely';
 import type { Insertable } from 'kysely';
 import type { Workout } from '$lib/schema';
 import { dbAttempt, failWith } from '$lib/server/db-utils';
+import { getTenantDb } from '$lib/server/tenant-db';
 
 export type SelectableWorkout = Selectable<Workout>
 
-export const load = async ({ url }: { url: URL }): Promise<PageServerData> => {
+// export const load: PageServerLoad = async ({ locals }) => {
+
+export const load: PageServerLoad = async ({ locals, url }: { locals: Locals; url: URL }): Promise<PageServerData> => {
   const q = url.searchParams.get('q');
+  // const db = locals.db;
+  
+  const userId = Number(locals.user.id);
+
+  const db = getTenantDb(userId);
 
   let query = db.selectFrom('workouts').selectAll().orderBy('createdAt', 'desc');
 

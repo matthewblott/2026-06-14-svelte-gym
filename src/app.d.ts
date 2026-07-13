@@ -6,6 +6,8 @@ declare global {
 		interface Locals {
       session: Session | null;
       user: User | null;
+      db: Kysely<DB> | null
+      bunDb: Database | null
     }
 		// interface PageData {}
 		// interface PageState {}

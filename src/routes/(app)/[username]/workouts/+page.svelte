@@ -2,8 +2,11 @@
   import { resolve } from '$app/paths';
   import PageHeader from '$lib/components/PageHeader.svelte';
   import type { PageData } from './$types';
+  import { createTenantRoutes } from '$lib/routes/tenant';
+
   let { data }: { data: PageData } = $props();
-  import { routes } from '$lib/routes';
+  const routes = createTenantRoutes(data.user.name);
+
 </script>
 
 <PageHeader title="Workouts">
@@ -17,12 +20,12 @@
   <input type="hidden" name="locale" value={navigator.language}>
 </form>
 
-{#if data.workouts.length}
-  {#each data.workouts as workout}
-    <article>
-      <a href={routes.workouts.exercises.list(workout.id)}>{workout.name}</a>
-    </article>
-  {/each}
-{:else}
-  <p>No workouts yet.</p>
-{/if}
+<!-- {#if data.workouts.length} -->
+<!--   {#each data.workouts as workout} -->
+<!--     <article> -->
+<!--       <a href={routes.workouts.exercises.list(workout.id)}>{workout.name}</a> -->
+<!--     </article> -->
+<!--   {/each} -->
+<!-- {:else} -->
+<!--   <p>No workouts yet.</p> -->
+<!-- {/if} -->
