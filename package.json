@@ -29,12 +29,7 @@
 		"vite": "^8.0.16"
 	},
 	"dependencies": {
-<<<<<<< HEAD
-		"better-sqlite3": "^12.11.1",
-||||||| efb4c39
-=======
 		"better-auth": "^1.6.18",
->>>>>>> auth
 		"change-case": "^5.4.4",
 		"kysely": "^0.29.2",
 		"nodemailer": "^9.0.3"
@@ -44,20 +39,7 @@
 		"singularize": true,
 		"camelCase": true,
 		"outFile": "./src/lib/schema.ts",
-<<<<<<< HEAD
-		"url": "./storage/local.sqlite3",
-||||||| efb4c39
-		"url": "./storage/local.sqlite3",
-    "excludePattern": "{goose_db_version,foreign_keys_view,indexes_view,simple_workouts_view,workouts_view,workout_exercises_view}",
-    "overrides": {
-      "columns": {
-        "exercises.exercise_type": "'cardio' | 'weights'",
-        "workout_exercises_view.exercise_type": "'cardio' | 'weights'"
-      }
-    }
-=======
 		"url": "./storage/main.sqlite3",
->>>>>>> auth
 		"excludePattern": "{goose_db_version,foreign_keys_view,indexes_view,simple_workouts_view,workouts_view,workout_exercises_view}",
 		"overrides": {
 			"columns": {
@@ -67,3 +49,4 @@
 		}
 	}
 }
+
