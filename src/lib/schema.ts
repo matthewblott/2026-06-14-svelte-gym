@@ -3,4 +3,70 @@
  * Please do not edit it manually.
  */
 
-export interface DB {}
+import type { ColumnType } from "kysely";
+
+export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
+  ? ColumnType<S, I | undefined, U>
+  : ColumnType<T, T | undefined, T>;
+
+export interface CardioSet {
+  createdAt: Generated<string>;
+  distance: number;
+  duration: string;
+  id: Generated<number | null>;
+  updatedAt: Generated<string>;
+  workoutExerciseId: number;
+}
+
+export interface Exercise {
+  createdAt: Generated<string>;
+  exerciseType: "cardio" | "weights";
+  id: Generated<number | null>;
+  name: string;
+  updatedAt: Generated<string>;
+}
+
+export interface SetsView {
+  createdAt: string | null;
+  distanceOrReps: number | null;
+  durationOrWeight: Buffer | null;
+  exerciseId: number | null;
+  exerciseName: string | null;
+  exerciseType: string | null;
+  updatedAt: string | null;
+  workoutExerciseId: number | null;
+  workoutId: number | null;
+}
+
+export interface WeightSet {
+  createdAt: Generated<string>;
+  id: Generated<number | null>;
+  reps: number;
+  updatedAt: Generated<string>;
+  weight: number;
+  workoutExerciseId: number;
+}
+
+export interface WorkoutExercise {
+  createdAt: Generated<string>;
+  exerciseId: number;
+  id: Generated<number>;
+  updatedAt: Generated<string>;
+  workoutId: number;
+}
+
+export interface Workout {
+  createdAt: Generated<string>;
+  id: Generated<number | null>;
+  name: string;
+  updatedAt: Generated<string>;
+}
+
+export interface DB {
+  cardioSets: CardioSet;
+  exercises: Exercise;
+  setsView: SetsView;
+  weightSets: WeightSet;
+  workoutExercises: WorkoutExercise;
+  workouts: Workout;
+}

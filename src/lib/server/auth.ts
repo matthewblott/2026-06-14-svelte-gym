@@ -1,5 +1,5 @@
 import { betterAuth } from 'better-auth';
-import { emailOTP } from 'better-auth/plugins';
+import { anonymous, emailOTP } from 'better-auth/plugins';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
 import { env } from '$env/dynamic/private';
@@ -41,17 +41,29 @@ export const auth = betterAuth({
     user: {
       create: {
         before: async (user) => {
+          // console.log(`[CREATE USER - before]`);
+          // console.log(user);
           return {
             data: {
               ...user,
-              name: user.name || generateRandomName(),
               // name: user.name || (await generateUniqueRandomName(db)),
+              name: user.name || generateRandomName(),
             },
           };
         },
-        after: async (user) => {
-          const userId = user.id;
-          await createTenantDb(userId); 
+        after: async (user, ctx) => {
+          // const existingSession = await auth.api.getSession({
+          //   headers: ctx.headers,
+          // });
+          //
+          // const existingUser = existingSession?.user;
+          // const isAnonymous = Boolean(Number(existingUser?.isAnonymous));
+          //
+          // if(!isAnonymous) {
+          // }
+
+          const newUserId = user.id;
+          await createTenantDb(newUserId); 
         },
 
       },
@@ -59,6 +71,14 @@ export const auth = betterAuth({
         after: async (user) => {
           const userId = user.id;
           await deleteTenantDb(userId);
+
+          const isAnonymous = Boolean(Number(user.isAnonymous));
+          console.log(`[DELETE USER - after] isAnonymous: ${isAnonymous}  userId: ${userId} userName: ${user.name}`); 
+          // // Don't delete the anonymous user's database here as we may want to reuse it if the account is being linked
+          if(!isAnonymous) {
+            const userId = user.id;
+            await deleteTenantDb(userId);
+          }
         },
       },
     },
@@ -104,16 +124,37 @@ export const auth = betterAuth({
       // otpLength: 6,
       // expiresIn: 300, // seconds
     }),
+    anonymous({
+      emailDomainName: "example.com",
+      // disableDeleteAnonymousUser: true,
+      disableDeleteAnonymousUser: false,
+      generateName: async (ctx) => {
+        // ctx.request      — the raw Request object (headers, etc.)
+        // ctx.headers       — request headers
+        // ctx.context        — AuthContext: db access, config, adapter, etc.
 
+        return `Guest-${crypto.randomUUID().slice(0, 8)}`;
+      },
+      onLinkAccount: async ({ anonymousUser, newUser}, ctx) => {
+        // Delete database created with the new user as there is already a database for this user
+        // await rm(`./storage/tenants/${newUser.user.id}.sqlite3`)
+        
+        await copyAnonymousTenantDb(anonymousUser.user.id, newUser.user.id);
+
+        // if (ctx) {
+        //   await ctx.context.internalAdapter.deleteSessions(anonymousUser.user.id);
+        //   await ctx.context.internalAdapter.deleteUser(anonymousUser.user.id);
+        // }
+
+        // await rm(`./storage/tenants/${anonymousUser.user.id}.sqlite3`)
+      }
+    }),
     // Must be last – handles cookie setting in SvelteKit server actions.
     sveltekitCookies(getRequestEvent),
   ],
 });
 
 function generateRandomName() {
-  // const adjectives = ['Swift', 'Quiet', 'Brave', 'Clever', 'Bright'];
-  // const nouns = ['Fox', 'Otter', 'Falcon', 'Wren', 'Lynx'];
-
   const adjectives = [
     'Swift', 'Quiet', 'Brave', 'Clever', 'Bright', 'Calm', 'Bold', 'Eager',
     'Fierce', 'Gentle', 'Happy', 'Jolly', 'Keen', 'Lively', 'Mighty', 'Nimble',
@@ -143,12 +184,26 @@ function generateRandomName() {
 
 async function createTenantDb(userId: string): Promise<void> {
   await mkdir('./storage/tenants', { recursive: true })
-  await copyFile(
-    './storage/main.sqlite3',
-    `./storage/tenants/${userId}.sqlite3`
-  )
+
+  const targetPath = `./storage/tenants/${userId}.sqlite3`;
+  const target = Bun.file(targetPath);
+
+  if (!(await target.exists())) {
+    await copyFile("./storage/main.sqlite3", targetPath); 
+  }
+
+}
+
+async function copyAnonymousTenantDb(oldUserId: string, newUserId: string) {
+  const targetPath = `./storage/tenants/${newUserId}.sqlite3`;
+  const target = Bun.file(targetPath);
+
+  if (!(await target.exists())) {
+    await copyFile(`./storage/tenants/${oldUserId}.sqlite3`, targetPath); 
+  }
+
 }
 
 async function deleteTenantDb(userId: string): Promise<void> {
-  await rm(`./storage/tenants/${userId}.sqlite3`)
+  await rm(`./storage/tenants/${userId}.sqlite3`, { force: true })
 } 
