@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { resolve } from '$app/paths';
+  import { publicRoutes as routes } from "$lib/routes";
   import PageHeader from '$lib/components/PageHeader.svelte';
 </script>
 
-<PageHeader title="Gym App">
+<PageHeader title="App">
   <div role="group">
-    <a href={resolve('/workouts')} role="button">Workouts</a>
+    <a href={routes.auth.signIn()} role="button">Sign-in</a>
   </div>
 </PageHeader>
