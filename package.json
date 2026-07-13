@@ -5,13 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "bun --bun vite dev",
-		"build": "bun --bun vite build",
-		"db:auth:up": "GOOSE_MIGRATION_DIR=./migrations/auth GOOSE_DBSTRING=./storage/auth.sqlite3 goose up",
-		"db:auth:down": "GOOSE_MIGRATION_DIR=./migrations/auth GOOSE_DBSTRING=./storage/auth.sqlite3 goose down",
-		"db:main:up": "GOOSE_MIGRATION_DIR=./migrations/tenants GOOSE_DBSTRING=./storage/main.sqlite3 goose up",
-		"db:main:down": "GOOSE_MIGRATION_DIR=./migrations/tenants GOOSE_DBSTRING=./storage/main.sqlite3 goose down",
-		"generate:types": "kysely-codegen",
-		"sql": "sqlite3 storage/local.sqlite3"
+		"build": "bun --bun vite build"
 	},
 	"devDependencies": {
 	 	"@sveltejs/adapter-auto": "^7.0.1",
