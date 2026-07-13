@@ -3,6 +3,7 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { createRoutes } from '$lib/routes';
+  import PageHeader from '$lib/components/PageHeader.svelte';
 
   let otp = $state('');
   let email = $state(page.url.searchParams.get('email') ?? '');
@@ -20,11 +21,10 @@
 
     const username = data?.user?.name;
     const routes = createRoutes(username);
-    const route = routes.workouts.list();
+    const route = routes.workouts.index();
 
     goto(route);
   }
-  import PageHeader from '$lib/components/PageHeader.svelte';
 </script>
 
 <PageHeader title="Verify Email">

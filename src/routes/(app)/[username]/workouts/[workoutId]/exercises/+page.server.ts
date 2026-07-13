@@ -1,10 +1,9 @@
 import type { PageServerData, PageServerLoad } from "./$types";
-import { db } from "$lib/server/db";
 
-export const load : PageServerLoad = async ({ params }): Promise<PageServerData> => {
+export const load: PageServerLoad = async ({ params, locals }: { params: Parameters; locals: Locals }): Promise<PageServerData> => {
   const workoutId = Number(params.workoutId);
 
-  let query = db
+  let query = locals.db
     .selectFrom('workoutExercises')
     .innerJoin('exercises', 'exercises.id', 'workoutExercises.exerciseId')
     .select(['workoutId', 'exerciseId', 'name'])

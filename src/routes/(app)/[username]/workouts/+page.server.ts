@@ -1,23 +1,16 @@
 import type { PageServerData, Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
 import type { Selectable } from 'kysely';
 import type { Insertable } from 'kysely';
 import type { Workout } from '$lib/schema';
 import { dbAttempt, failWith } from '$lib/server/db-utils';
-import { getTenantDb } from '$lib/server/tenant-db';
+import { createTenantRoutes } from '$lib/routes/tenant';
 
 export type SelectableWorkout = Selectable<Workout>
 
-// export const load: PageServerLoad = async ({ locals }) => {
-
 export const load: PageServerLoad = async ({ locals, url }: { locals: Locals; url: URL }): Promise<PageServerData> => {
   const q = url.searchParams.get('q');
-  // const db = locals.db;
-  
-  const userId = Number(locals.user.id);
-
-  const db = getTenantDb(userId);
+  const db = locals.db;
 
   let query = db.selectFrom('workouts').selectAll().orderBy('createdAt', 'desc');
 
@@ -31,7 +24,7 @@ export const load: PageServerLoad = async ({ locals, url }: { locals: Locals; ur
 };
 
 export const actions: Actions = {
-  default: async ({ request }) => {
+  default: async ({ request, locals }) => {
     const form = await request.formData();
     const locale = form.get('locale') as string;
     const date = new Date();
@@ -40,7 +33,7 @@ export const actions: Actions = {
     const newWorkout: Insertable<Workout> = { name };
 
     const result = await dbAttempt(
-      db.insertInto('workouts').values(newWorkout).returningAll().executeTakeFirstOrThrow()
+      locals.db.insertInto('workouts').values(newWorkout).returningAll().executeTakeFirstOrThrow()
     );
 
     if (!result.success) {
@@ -48,7 +41,8 @@ export const actions: Actions = {
     }
 
     const workoutId = result.data.id;
-    const route = `/workouts/${workoutId}/exercises/new`;
+    const routes = createTenantRoutes(locals.user.name);
+    const route = routes.workouts.exercises.new({ workoutId }); 
 
     redirect(303, route); 
   },

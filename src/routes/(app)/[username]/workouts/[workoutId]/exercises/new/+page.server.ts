@@ -4,12 +4,12 @@ import type { Actions, PageServerData } from './$types';
 import type { Insertable, Selectable } from 'kysely';
 import type { WorkoutExercise, Exercise } from '$lib/schema';
 import type { PageServerLoad } from '../$types';
-import { routes } from '$lib/routes';
+import { createTenantRoutes } from '$lib/routes/tenant';
 
 export type ExerciseList = Selectable<Exercise>;
 
-export const load : PageServerLoad = async ({ params }): Promise<PageServerData> => {
-  const exercises: ExerciseList[] = await db
+export const load: PageServerLoad = async ({ params, locals }: { params: Parameters; locals: Locals }): Promise<PageServerData> => {
+  const exercises: ExerciseList[] = await locals.db
     .selectFrom('exercises')
     .selectAll()
     .execute();
@@ -20,7 +20,7 @@ export const load : PageServerLoad = async ({ params }): Promise<PageServerData>
 };
 
 export const actions: Actions = {
-  default: async ({ request, params }) => {
+  default: async ({ request, locals }) => {
     const formData = await request.formData();
     const exerciseName = formData.get('exerciseName') as string | null;
     const exerciseType = formData.get('exerciseType') as 'cardio' | 'weights' | null;
@@ -30,21 +30,24 @@ export const actions: Actions = {
     // Create new exercise if no exerciseId was resolved on the client
     if (!exerciseId && exerciseName && exerciseType) {
       const result = await dbAttempt(
-        db
+        locals.db
           .insertInto('exercises')
           .values({ name: exerciseName, exerciseType })
           .returningAll()
           .executeTakeFirstOrThrow()
       );
 
-      if (!result.success) return failWith({ workoutId }, result);
+      if (!result.success) {
+        return failWith({ workoutId }, result);
+      }
+
       exerciseId = result.data.id || 0;
     }
 
     const newWorkoutExercise: Insertable<WorkoutExercise> = { workoutId, exerciseId };
 
     const result = await dbAttempt(
-      db
+      locals.db
         .insertInto('workoutExercises')
         .values(newWorkoutExercise)
         .returningAll()
@@ -54,7 +57,9 @@ export const actions: Actions = {
     if (!result.success) {
       return failWith({ workoutId, exerciseId }, result);
     } 
+    const username = String(locals.user?.name);
+    const routes = createTenantRoutes(username);
 
-    redirect(303, routes.workouts.exercises.list(workoutId));
+    redirect(303, routes.workouts.exercises.index(workoutId));
   },
 };

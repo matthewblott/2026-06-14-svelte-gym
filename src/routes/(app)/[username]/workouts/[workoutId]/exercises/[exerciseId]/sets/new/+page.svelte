@@ -1,7 +1,7 @@
 <script lang="ts">
   import PageHeader from '$lib/components/PageHeader.svelte';
   import type { ActionData, PageData } from './$types';
-  import { routes } from '$lib/routes';
+  import { createTenantRoutes } from '$lib/routes/tenant';
 
   let { form, data }: { form: ActionData, data: PageData } = $props();
 
@@ -9,12 +9,13 @@
   const workoutId = workoutView.workoutId!;
   const exerciseId = workoutView.exerciseId!;
   const workoutExerciseId = workoutView.id!;
+  const routes = createTenantRoutes(data.user.name);
 
-  let backRoute = routes.workouts.exercises.sets.list({ workoutId, exerciseId });
+  let backRoute = routes.workouts.exercises.sets.index({ workoutId, exerciseId });
   let backRouteText = 'Sets'; 
 
   if(data.isFirstSet) {
-    backRoute = routes.workouts.exercises.list(workoutId);
+    backRoute = routes.workouts.exercises.index(workoutId);
     backRouteText = 'Exercises';
   }
 

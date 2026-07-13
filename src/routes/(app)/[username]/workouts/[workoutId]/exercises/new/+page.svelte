@@ -3,9 +3,10 @@
   import PageHeader from '$lib/components/PageHeader.svelte';
   import type { PageData } from './$types';
   import type { ExerciseList } from './+page.server.ts';
-  import { routes } from '$lib/routes'
-
+  import { createTenantRoutes } from '$lib/routes/tenant';
+  
   const { data }: { data: PageData } = $props();
+  const routes = createTenantRoutes(data.user.name);
 
   let exercises = $state<ExerciseList[]>(data.exercises);
   let exerciseName = $state('');
@@ -51,7 +52,7 @@
 
 <PageHeader title="Exercises">
   <div role="group">
-    <a href={routes.workouts.exercises.list(data.workoutId)} role="button">Exercises</a>
+    <a href={routes.workouts.exercises.index(data.workoutId)} role="button">Exercises</a>
     <button form="new-workout-exercise-form" disabled={!canSubmit}>Save</button>
   </div>
 </PageHeader>

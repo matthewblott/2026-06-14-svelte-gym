@@ -5,13 +5,13 @@ import type { Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
 import type { Insertable } from 'kysely';
 import { dbAttempt, failWith } from '$lib/server/db-utils';
-import { routes } from "$lib/routes";
+import { createTenantRoutes } from "$lib/routes/tenant";
 
-export const load : PageServerLoad = async ({ params }): Promise<PageServerData> => {
+export const load : PageServerLoad = async ({ params, locals }): Promise<PageServerData> => {
   const workoutId = Number(params.workoutId);
   const exerciseId = Number(params.exerciseId);
 
-  let query = db
+  let query = locals.db
     .selectFrom('workoutExercises')
     .innerJoin('exercises', 'exercises.id', 'workoutExercises.exerciseId')
     .select([
@@ -26,7 +26,7 @@ export const load : PageServerLoad = async ({ params }): Promise<PageServerData>
 
   const workoutView = await query.executeTakeFirstOrThrow();
 
-  const numberOfSets = await db
+  const numberOfSets = await locals.db
     .selectFrom('setsView')
     .select(eb => eb.fn.countAll().as('count'))
     .where('workoutId', '=', workoutId)
@@ -42,13 +42,15 @@ export const load : PageServerLoad = async ({ params }): Promise<PageServerData>
 };
 
 export const actions: Actions = {
-  default: async ({ request }) => {
+  default: async ({ request, locals }) => {
     const formData = await request.formData();
     const exerciseType = formData.get('exerciseType') as "cardio" | "weights";
     const workoutId = Number(formData.get('workoutId') as string);
     const exerciseId = Number(formData.get('exerciseId') as string);
     const workoutExerciseId = Number(formData.get('workoutExerciseId') as string);
     const isWeights = exerciseType === "weights";
+    const username = String(locals.user?.name);
+    const routes = createTenantRoutes(username)
 
     if(isWeights) {
       const weight = Number(formData.get('weight') as string);
@@ -56,14 +58,14 @@ export const actions: Actions = {
       const newWeightSet: Insertable<WeightSet> = { workoutExerciseId, weight, reps };
 
       const result = await dbAttempt(
-        db.insertInto('weightSets').values(newWeightSet).returningAll().executeTakeFirstOrThrow()
+        locals.db.insertInto('weightSets').values(newWeightSet).returningAll().executeTakeFirstOrThrow()
       );
 
       if (!result.success) {
         return failWith(newWeightSet, result);
       }
-
-      const route = routes.workouts.exercises.sets.list({ workoutId, exerciseId });
+      
+      const route = routes.workouts.exercises.sets.index({ workoutId, exerciseId });
 
       redirect(303, route);
     }
@@ -73,14 +75,14 @@ export const actions: Actions = {
       const newCardioSet: Insertable<CardioSet> = { workoutExerciseId, distance, duration };
 
       const result = await dbAttempt(
-        db.insertInto('cardioSets').values(newCardioSet).returningAll().executeTakeFirstOrThrow()
+        locals.db.insertInto('cardioSets').values(newCardioSet).returningAll().executeTakeFirstOrThrow()
       );
 
       if (!result.success) {
         return failWith(newCardioSet, result);
       }
 
-      const route = routes.workouts.exercises.sets.list({ workoutId, exerciseId });
+      const route = routes.workouts.exercises.sets.index({ workoutId, exerciseId });
 
       redirect(303, route);
 

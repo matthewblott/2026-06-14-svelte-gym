@@ -23,8 +23,6 @@ export const handle: Handle = async ({ event, resolve }) => {
     const { db, bunDb } = getTenantDb(userId);
     event.locals.db = db
     event.locals.bunDb = bunDb; 
-
-    event.locals.db = getTenantDb(Number(session.user.id));
   }
 
   const response = await svelteKitHandler({ event, resolve, auth, building });

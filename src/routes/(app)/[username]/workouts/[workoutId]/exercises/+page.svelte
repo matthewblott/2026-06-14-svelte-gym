@@ -1,13 +1,14 @@
 <script lang="ts">
   import PageHeader from '$lib/components/PageHeader.svelte';
   import type { PageData } from './$types';
+  import { createTenantRoutes } from '$lib/routes/tenant';
   let { data }: { data: PageData } = $props();
-  import { routes } from '$lib/routes';
+  const routes = createTenantRoutes(data.user.name);
 </script>
 
 <PageHeader title="Exercises">
   <div role="group">
-    <a href={routes.workouts.list()} role="button">Workouts</a>
+    <a href={routes.workouts.index()} role="button">Workouts</a>
     <a href={routes.workouts.exercises.new(data.workoutId)} role="button">New</a>
   </div>
 </PageHeader>
@@ -16,7 +17,7 @@
   {#each data.workoutExercises as exercise}
     <article>
       <a href={
-          routes.workouts.exercises.sets.list({
+          routes.workouts.exercises.sets.index({
             workoutId: exercise.workoutId, exerciseId: exercise.exerciseId
           })
         }
@@ -26,5 +27,5 @@
     </article>
   {/each}
 {:else}
-  <p>No workouts yet.</p>
+  <p>No exercises yet.</p>
 {/if}

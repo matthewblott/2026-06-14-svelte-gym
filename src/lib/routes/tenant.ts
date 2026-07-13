@@ -12,29 +12,30 @@ export function createTenantRoutes(username: string) {
       signOut: () => 
         `/${username}/account/sign-out`,
     },
-
-    todos: {
-      index: () => 
-        `/${username}/todos`,
-      new: () => 
-        `/${username}/todos/new`,
-      edit: (id: Id) => 
-        `/${username}/todos/${id}`,
+    settings: {
+      index: () =>
+      `/${username}/settings`,
+      exercises: {
+        index: () =>
+          `/${username}/settings/exercises`,
+        new: () =>
+          `/${username}/settings/exercises/new`,
+        edit: (id: Id) =>
+          `/${username}/settings/exercises/${id}`,
+      }
     },
     workouts: {
-      list: () =>
+      index: () =>
         `/${username}/workouts/`,
-      
-      // routes.workouts.exercises
       exercises: {
-        list: (workoutId: Id) =>
+        index: (workoutId: Id) =>
           `/${username}/workouts/${workoutId}/exercises`,
 
         new: (workoutId: Id) =>
           `/${username}/workouts/${workoutId}/exercises/new`,
 
         sets: {
-          list: ({ workoutId, exerciseId }: {
+          index: ({ workoutId, exerciseId }: {
               workoutId: number;
               exerciseId: number;
             }) =>

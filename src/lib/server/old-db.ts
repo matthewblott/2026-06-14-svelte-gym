@@ -5,21 +5,29 @@ import { type SqliteDatabase } from 'kysely';
 import { type SqliteStatement } from 'kysely';
 import { type DB } from '$lib/schema';
 import type { SQLQueryBindings } from 'bun:sqlite';
+// import { env } from '$env/dynamic/private';
+
+// BunDatabase.setCustomSQLite(`${Bun.env.HOME}/.local/lib/libsqlite3.dylib`);
+// const database = new BunDatabase(env.DATABASE_URL, { create: true, safeIntegers: true });
 
 export function getTenantDb(id: number) {
   const path = `storage/tenants/${id}.sqlite3`;
-  const bunDb = new BunDatabase(path, { create: true, safeIntegers: true });
+  const database = new BunDatabase(path, { create: true, safeIntegers: true });
 
-  bunDb.prepare('PRAGMA journal_mode = WAL').run();
-  bunDb.prepare('PRAGMA foreign_keys = ON').run();
-  bunDb.prepare('PRAGMA trusted_schema = 1').run();
+  database.prepare('PRAGMA journal_mode = WAL').run();
+  database.prepare('PRAGMA foreign_keys = ON').run();
+  database.prepare('PRAGMA trusted_schema = 1').run();
+
+  // const cwd = process.cwd();
+  // const path = `${cwd}/extensions/regexp.dylib`;
+  // database.loadExtension(path);
 
   const adapter: SqliteDatabase = {
     close() {
-      bunDb.close();
+      database.close();
     },
     prepare(sql: string): SqliteStatement {
-      const stmt = bunDb.prepare(sql);
+      const stmt = database.prepare(sql);
       return {
         get reader() {
           return stmt.columnNames.length > 0;
@@ -48,6 +56,6 @@ export function getTenantDb(id: number) {
       }
     },
   });
-
-  return { db, bunDb }; 
+  return db;
 }
+

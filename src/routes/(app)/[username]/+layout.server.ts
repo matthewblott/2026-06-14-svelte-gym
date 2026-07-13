@@ -13,13 +13,5 @@ export const load: LayoutServerLoad = async ({ params, locals }) => {
     throw error(403, 'Not your tenant');
   }
 
-  // Todo: Get the tenant db
-  // locals.db = getTenantDb(params.username); 
-
-  // Actions don't go through the parent layout's load.
-  // So for any +page.server.ts with actions,
-  // re-check locals.session.user.username === params.username at the top of the action too.
-  // It's a couple of lines, but skipping it is the classic way this kind of route-based tenancy gets bypassed.
-
   return { user };
 };

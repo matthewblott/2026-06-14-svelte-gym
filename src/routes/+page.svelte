@@ -3,9 +3,8 @@
   import PageHeader from '$lib/components/PageHeader.svelte';
 </script>
 
-<PageHeader title="Todos App">
+<PageHeader title="App">
   <div role="group">
-<!--     <a href="/workouts" role="button">Workouts</a> -->
     <a href={routes.auth.signIn()} role="button">Sign-in</a>
   </div>
 </PageHeader>
