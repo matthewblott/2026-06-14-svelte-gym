@@ -1,6 +1,6 @@
-import { redirect } from '@sveltejs/kit'; import { db } from '$lib/server/db';
+import { redirect } from '@sveltejs/kit';
 import { dbAttempt, failWith } from '$lib/server/db-utils';
-import type { Actions, PageServerData } from './$types';
+import type { Actions } from './$types';
 import type { Insertable, Selectable } from 'kysely';
 import type { WorkoutExercise, Exercise } from '$lib/schema';
 import type { PageServerLoad } from '../$types';
@@ -8,8 +8,8 @@ import { createTenantRoutes } from '$lib/routes/tenant';
 
 export type ExerciseList = Selectable<Exercise>;
 
-export const load: PageServerLoad = async ({ params, locals }: { params: Parameters; locals: Locals }): Promise<PageServerData> => {
-  const exercises: ExerciseList[] = await locals.db
+export const load: PageServerLoad = async ({ params, locals }) => {
+  const exercises: ExerciseList[] = await locals.db!
     .selectFrom('exercises')
     .selectAll()
     .execute();
@@ -30,7 +30,7 @@ export const actions: Actions = {
     // Create new exercise if no exerciseId was resolved on the client
     if (!exerciseId && exerciseName && exerciseType) {
       const result = await dbAttempt(
-        locals.db
+        locals.db!
           .insertInto('exercises')
           .values({ name: exerciseName, exerciseType })
           .returningAll()
@@ -41,13 +41,13 @@ export const actions: Actions = {
         return failWith({ workoutId }, result);
       }
 
-      exerciseId = result.data.id || 0;
+      exerciseId = Number(result.data.id);
     }
 
     const newWorkoutExercise: Insertable<WorkoutExercise> = { workoutId, exerciseId };
 
     const result = await dbAttempt(
-      locals.db
+      locals.db!
         .insertInto('workoutExercises')
         .values(newWorkoutExercise)
         .returningAll()

@@ -1,11 +1,11 @@
 <script lang="ts">
   import type { PageProps } from './$types';
+  import PageHeader from '$lib/components/PageHeader.svelte';
 
   let { form }: PageProps = $props();
-  let email = $state(form?.email ?? '');
-  let error = $state(form?.error ?? '');
+  let email = $derived(form?.email ?? '');
+  let error = $derived(form?.error ?? '');
 
-  import PageHeader from '$lib/components/PageHeader.svelte';
 </script>
 
 <PageHeader title="Sign in">

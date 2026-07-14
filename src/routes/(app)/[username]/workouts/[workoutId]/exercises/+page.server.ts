@@ -1,9 +1,9 @@
-import type { PageServerData, PageServerLoad } from "./$types";
+import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ params, locals }: { params: Parameters; locals: Locals }): Promise<PageServerData> => {
+export const load: PageServerLoad = async ({ params, locals }) => {
   const workoutId = Number(params.workoutId);
 
-  let query = locals.db
+  let query = locals.db!
     .selectFrom('workoutExercises')
     .innerJoin('exercises', 'exercises.id', 'workoutExercises.exerciseId')
     .select(['workoutId', 'exerciseId', 'name'])
@@ -11,7 +11,5 @@ export const load: PageServerLoad = async ({ params, locals }: { params: Paramet
 
   const workoutExercises = await query.execute();
   
-  console.log(workoutExercises);
   return { workoutExercises, workoutId };
-
 };

@@ -3,7 +3,7 @@
   import type { PageData } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
   let { data }: { data: PageData } = $props();
-  const routes = createTenantRoutes(data.user.name);
+  const routes = $derived(createTenantRoutes(data.user.name));
 </script>
 
 <PageHeader title="Exercises">

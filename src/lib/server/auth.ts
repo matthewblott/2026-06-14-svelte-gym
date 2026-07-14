@@ -15,7 +15,7 @@ export const auth = betterAuth({
     database: {
       generateId: (options) => {
         if (options.model === "user" || options.model === "users") {
-          return undefined; // let SQLite auto-increment
+          return false; // let SQLite auto-increment
         }
         return crypto.randomUUID();
       },
@@ -41,27 +41,14 @@ export const auth = betterAuth({
     user: {
       create: {
         before: async (user) => {
-          // console.log(`[CREATE USER - before]`);
-          // console.log(user);
           return {
             data: {
               ...user,
-              // name: user.name || (await generateUniqueRandomName(db)),
               name: user.name || generateRandomName(),
             },
           };
         },
-        after: async (user, ctx) => {
-          // const existingSession = await auth.api.getSession({
-          //   headers: ctx.headers,
-          // });
-          //
-          // const existingUser = existingSession?.user;
-          // const isAnonymous = Boolean(Number(existingUser?.isAnonymous));
-          //
-          // if(!isAnonymous) {
-          // }
-
+        after: async (user) => {
           const newUserId = user.id;
           await createTenantDb(newUserId); 
         },
@@ -73,8 +60,7 @@ export const auth = betterAuth({
           await deleteTenantDb(userId);
 
           const isAnonymous = Boolean(Number(user.isAnonymous));
-          console.log(`[DELETE USER - after] isAnonymous: ${isAnonymous}  userId: ${userId} userName: ${user.name}`); 
-          // // Don't delete the anonymous user's database here as we may want to reuse it if the account is being linked
+
           if(!isAnonymous) {
             const userId = user.id;
             await deleteTenantDb(userId);
@@ -90,11 +76,11 @@ export const auth = betterAuth({
 
         const transporter = nodemailer.createTransport({
           host: env.SMTP_HOST, 
-          port: env.SMTP_PORT,
+          port: Number(env.SMTP_PORT),
           auth: {
             user: env.SMTP_USER, 
             pass: env.SMTP_PASSWORD
-          }
+          },
         });
 
         const mailOptions = {
@@ -126,30 +112,14 @@ export const auth = betterAuth({
     }),
     anonymous({
       emailDomainName: "example.com",
-      // disableDeleteAnonymousUser: true,
       disableDeleteAnonymousUser: false,
-      generateName: async (ctx) => {
-        // ctx.request      — the raw Request object (headers, etc.)
-        // ctx.headers       — request headers
-        // ctx.context        — AuthContext: db access, config, adapter, etc.
-
+      generateName: async () => {
         return `Guest-${crypto.randomUUID().slice(0, 8)}`;
       },
-      onLinkAccount: async ({ anonymousUser, newUser}, ctx) => {
-        // Delete database created with the new user as there is already a database for this user
-        // await rm(`./storage/tenants/${newUser.user.id}.sqlite3`)
-        
+      onLinkAccount: async ({ anonymousUser, newUser}) => {
         await copyAnonymousTenantDb(anonymousUser.user.id, newUser.user.id);
-
-        // if (ctx) {
-        //   await ctx.context.internalAdapter.deleteSessions(anonymousUser.user.id);
-        //   await ctx.context.internalAdapter.deleteUser(anonymousUser.user.id);
-        // }
-
-        // await rm(`./storage/tenants/${anonymousUser.user.id}.sqlite3`)
       }
     }),
-    // Must be last – handles cookie setting in SvelteKit server actions.
     sveltekitCookies(getRequestEvent),
   ],
 });

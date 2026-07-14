@@ -21,7 +21,7 @@ export function createTenantRoutes(username: string) {
       `/${username}/settings`,
       exercises: {
         index: () =>
-          `/${username}/settings/exercises`,
+          `/${username}/settings/exercises/`,
         new: () =>
           `/${username}/settings/exercises/new`,
         edit: (id: Id) =>

@@ -10,7 +10,7 @@ export const load : PageServerLoad = async ({ params, locals }): Promise<PageSer
   const workoutId = Number(params.workoutId);
   const exerciseId = Number(params.exerciseId);
 
-  let query = locals.db
+  let query = locals.db!
     .selectFrom('setsView')
     .select([
       'workoutExerciseId',
