@@ -16,7 +16,7 @@
   }
 </script>
 
-<PageHeader title="App">
+<PageHeader title="Gym App">
   <div role="group">
     <a href={routes.auth.signIn()} role="button">Sign-in</a>
     <button onclick={signIn}>Continue as guest</button>

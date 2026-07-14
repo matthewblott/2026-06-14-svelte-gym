@@ -1,13 +1,14 @@
 <script lang="ts">
-  import { resolve } from '$app/paths';
   import PageHeader from '$lib/components/PageHeader.svelte';
-  import type { ActionData } from './$types';
-  let { form }: { form: ActionData } = $props();
+  import type { ActionData, PageData } from './$types';
+  let { data, form }: { data: PageData; form: ActionData } = $props();
+  import { createTenantRoutes } from '$lib/routes/tenant';
+  const routes = $derived(createTenantRoutes(data.user.name));
 </script>
 
 <PageHeader title="New Exercise">
   <div role="group">
-    <a href={resolve('/exercises')} role="button">Exercises</a>
+    <a href={routes.settings.exercises.index()} role="button">Exercises</a>
     <button form="new-exercise-form">Save</button>
   </div>
 </PageHeader>

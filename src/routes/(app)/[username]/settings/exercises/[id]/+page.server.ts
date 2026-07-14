@@ -1,14 +1,14 @@
 import { error, redirect } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
 import type { Updateable } from 'kysely';
 import type { Exercise } from '$lib/schema';
 import type { Actions } from './$types';
 import type { PageServerLoad } from './$types';
 import { dbAttempt, failWith } from '$lib/server/db-utils';
+import { createTenantRoutes } from '$lib/routes/tenant';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
   const id = parseInt(params.id);
-  const exercise = await db.selectFrom('exercises').selectAll().where('id', '=', id).executeTakeFirst();
+  const exercise = await locals.db!.selectFrom('exercises').selectAll().where('id', '=', id).executeTakeFirst();
 
   if (!exercise) {
     error(404, 'Exercise not found');
@@ -19,11 +19,11 @@ export const load: PageServerLoad = async ({ params }) => {
 };
 
 export const actions: Actions = {
-  default: async ({ request, params }) => {
+  default: async ({ request, params, locals }) => {
     const id = parseInt(params.id);
     const formData = await request.formData();
     const name = formData.get('name') as string;
-    const exerciseType = formData.get('exerciseType') as string;
+    const exerciseType = formData.get('exerciseType') as "cardio" | "weights";
 
     // Updateable<Exercise> makes every column optional — including
     // non-Generated ones like `name` — since a PATCH-style update only
@@ -31,13 +31,16 @@ export const actions: Actions = {
     const exerciseUpdate: Updateable<Exercise> = { name, exerciseType };
 
     const result = await dbAttempt(
-      db.updateTable('exercises').set(exerciseUpdate).where('id', '=', id).executeTakeFirstOrThrow()
+      locals.db!.updateTable('exercises').set(exerciseUpdate).where('id', '=', id).executeTakeFirstOrThrow()
     );
 
     if (!result.success) {
       return failWith({ name }, result);
     }
+    const username = String(locals.user?.name);
+    const routes = createTenantRoutes(username);
+    const route = routes.settings.exercises.index();
 
-    redirect(303, `/exercises/${id}`);
+    redirect(303, route);
   },
 };

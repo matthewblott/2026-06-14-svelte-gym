@@ -9,7 +9,7 @@
   const workoutId = workoutView.workoutId!;
   const exerciseId = workoutView.exerciseId!;
   const workoutExerciseId = workoutView.id!;
-  const routes = createTenantRoutes(data.user.name);
+  const routes = $derived(createTenantRoutes(data.user.name));
 
   let backRoute = routes.workouts.exercises.sets.index({ workoutId, exerciseId });
   let backRouteText = 'Sets'; 

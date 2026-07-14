@@ -21,7 +21,7 @@
 
     const username = data?.user?.name;
     const routes = createRoutes(username);
-    const route = routes.workouts.index();
+    const route = String(routes.workouts?.index());
 
     goto(route);
   }

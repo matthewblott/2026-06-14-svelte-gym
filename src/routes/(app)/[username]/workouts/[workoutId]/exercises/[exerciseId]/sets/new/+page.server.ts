@@ -1,6 +1,5 @@
 import type { PageServerData, PageServerLoad } from "./$types";
 import type { CardioSet, WeightSet } from "$lib/schema";
-import { db } from "$lib/server/db";
 import type { Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
 import type { Insertable } from 'kysely';
@@ -11,7 +10,7 @@ export const load : PageServerLoad = async ({ params, locals }): Promise<PageSer
   const workoutId = Number(params.workoutId);
   const exerciseId = Number(params.exerciseId);
 
-  let query = locals.db
+  let query = locals.db!
     .selectFrom('workoutExercises')
     .innerJoin('exercises', 'exercises.id', 'workoutExercises.exerciseId')
     .select([
@@ -26,7 +25,7 @@ export const load : PageServerLoad = async ({ params, locals }): Promise<PageSer
 
   const workoutView = await query.executeTakeFirstOrThrow();
 
-  const numberOfSets = await locals.db
+  const numberOfSets = await locals.db!
     .selectFrom('setsView')
     .select(eb => eb.fn.countAll().as('count'))
     .where('workoutId', '=', workoutId)
@@ -58,7 +57,7 @@ export const actions: Actions = {
       const newWeightSet: Insertable<WeightSet> = { workoutExerciseId, weight, reps };
 
       const result = await dbAttempt(
-        locals.db.insertInto('weightSets').values(newWeightSet).returningAll().executeTakeFirstOrThrow()
+        locals.db!.insertInto('weightSets').values(newWeightSet).returningAll().executeTakeFirstOrThrow()
       );
 
       if (!result.success) {
@@ -75,7 +74,7 @@ export const actions: Actions = {
       const newCardioSet: Insertable<CardioSet> = { workoutExerciseId, distance, duration };
 
       const result = await dbAttempt(
-        locals.db.insertInto('cardioSets').values(newCardioSet).returningAll().executeTakeFirstOrThrow()
+        locals.db!.insertInto('cardioSets').values(newCardioSet).returningAll().executeTakeFirstOrThrow()
       );
 
       if (!result.success) {

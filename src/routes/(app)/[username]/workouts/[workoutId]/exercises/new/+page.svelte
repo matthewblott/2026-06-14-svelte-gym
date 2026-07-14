@@ -6,9 +6,9 @@
   import { createTenantRoutes } from '$lib/routes/tenant';
   
   const { data }: { data: PageData } = $props();
-  const routes = createTenantRoutes(data.user.name);
+  const routes = $derived(createTenantRoutes(data.user.name));
 
-  let exercises = $state<ExerciseList[]>(data.exercises);
+  let exercises = $derived<ExerciseList[]>(data.exercises);
   let exerciseName = $state('');
   let exerciseType = $state<'cardio' | 'weights' | ''>('');
   let showSuggestions = $state(false);
@@ -61,12 +61,11 @@
   <input type="hidden" name="workoutId" value={data.workoutId} />
   <input type="hidden" name="exerciseId" value={match?.id ?? ''} />
 
-  <div class="field">
+  <div>
     <label for="exercise-name">Exercise</label>
-    <div class="combobox-wrapper">
+    <div>
       <input
         id="exercise-name"
-        type="text"
         name="exerciseName"
         bind:value={exerciseName}
         oninput={handleInput}
@@ -74,18 +73,18 @@
         onfocus={() => showSuggestions = true}
         placeholder="Search or add new..."
         autocomplete="off"
-      />
+      >
 
       {#if showSuggestions && filteredExercises.length > 0}
-        <ul class="suggestions" role="listbox">
+        <ul>
           {#each filteredExercises as exercise (exercise.id)}
             <li
               role="option"
               aria-selected={exercise.id === match?.id}
               onmousedown={() => selectExercise(exercise)}
             >
-              <span class="exercise-name">{exercise.name}</span>
-              <span class="exercise-type">{exercise.exerciseType}</span>
+              <span>{exercise.name}</span>
+              <span>{exercise.exerciseType}</span>
             </li>
           {/each}
         </ul>
@@ -93,7 +92,7 @@
     </div>
 
     {#if isNewExercise}
-      <p class="hint">New exercise — will be added to the list on save.</p>
+      <p>New exercise — will be added to the list on save.</p>
     {/if}
   </div>
 
