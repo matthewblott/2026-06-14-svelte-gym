@@ -3,11 +3,13 @@
   variables,
   typography,
   layout,
-  spacing
+  spacing,
+  utilities
 ;
 
 @import url('./reset.css') layer(reset);
 @import url('./variables.css') layer(variables);
 @import url('./typography.css') layer(typography);
 @import url('./spacing.css') layer(spacing);
+@import url('./utilities.css') layer(utilities);
 @import url('./layout.css') layer(layout);

@@ -1,17 +1,20 @@
-<script lang="ts">
-  import PageHeader from '$lib/components/PageHeader.svelte';
-  import type { ActionData, PageData } from './$types';
-  let { data, form }: { data: PageData; form: ActionData } = $props();
-  import { createTenantRoutes } from '$lib/routes/tenant';
-  const routes = $derived(createTenantRoutes(data.user.name));
-</script>
-
-<PageHeader title="New Exercise">
+{#snippet header()}
   <div role="group">
     <a href={routes.settings.exercises.index()} role="button">Exercises</a>
     <button form="new-exercise-form">Save</button>
   </div>
-</PageHeader>
+{/snippet}
+
+<script lang="ts">
+  import type { ActionData, PageData } from './$types';
+  let { data, form }: { data: PageData; form: ActionData } = $props();
+  import { createTenantRoutes } from '$lib/routes/tenant';
+  const routes = $derived(createTenantRoutes(data.user.name));
+  import { getPageHeader } from '$lib/components/page-header.svelte';
+  const pageHeader = getPageHeader();
+  pageHeader.title = 'New Exercise';
+  pageHeader.content = header;
+</script>
 
 <form method="POST" id="new-exercise-form">
   {#if form?.error && !form?.field}

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import PageHeader from '$lib/components/PageHeader.svelte';
   import type { ActionData, PageData } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
 
@@ -12,21 +11,25 @@
   const routes = $derived(createTenantRoutes(data.user.name));
 
   let backRoute = routes.workouts.exercises.sets.index({ workoutId, exerciseId });
-  let backRouteText = 'Sets'; 
+  let backRouteText = 'Sets';
 
   if(data.isFirstSet) {
     backRoute = routes.workouts.exercises.index(workoutId);
     backRouteText = 'Exercises';
   }
 
+  import { getPageHeader } from '$lib/components/page-header.svelte';
+  const pageHeader = getPageHeader();
+  pageHeader.title = 'New Set';
+  pageHeader.content = header;
 </script>
 
-<PageHeader title="New Set">
+{#snippet header()}
   <div role="group">
     <a href={backRoute} role="button">{backRouteText}</a>
     <button form="new-set-form">Save</button>
   </div>
-</PageHeader>
+{/snippet}
 
 <form method="POST" id="new-set-form">
   {#if form?.error && !form?.field}
@@ -41,7 +44,7 @@
   {#if workoutView.exerciseType === 'weights' }
 
     <label>
-      Weight 
+      Weight
       <input
         name="weight"
         type="number"
@@ -55,7 +58,7 @@
     </label>
 
     <label>
-      Reps 
+      Reps
       <input
         name="reps"
         type="number"
@@ -85,7 +88,7 @@
     </label>
 
     <label>
-      Duration 
+      Duration
       <input
         name="duration"
         type="time"

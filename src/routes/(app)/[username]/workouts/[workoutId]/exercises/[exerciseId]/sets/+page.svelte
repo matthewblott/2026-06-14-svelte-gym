@@ -1,12 +1,16 @@
 <script lang="ts">
-  import PageHeader from '$lib/components/PageHeader.svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
   import { createTenantRoutes } from '$lib/routes/tenant';
   const routes = $derived(createTenantRoutes(data.user.name));
+
+  import { getPageHeader } from '$lib/components/page-header.svelte';
+  const pageHeader = getPageHeader();
+  pageHeader.title = 'Sets';
+  pageHeader.content = header;
 </script>
 
-<PageHeader title="Sets">
+{#snippet header()}
   <div role="group">
     <a href={routes.workouts.exercises.index(data.workoutId)} role="button">Exercises</a>
     <a href={
@@ -15,18 +19,18 @@
         })
       }
     role="button">
-      New 
+      New
     </a>
   </div>
-</PageHeader>
+{/snippet}
 
 {#if data.sets.length}
   {#each data.sets as set}
     <article>
       {#if set.exerciseType === 'weights'}
-        {set.distanceOrReps} x {set.durationOrWeight} 
+        {set.distanceOrReps} x {set.durationOrWeight}
       {:else}
-        {set.distanceOrReps} in {set.durationOrWeight} 
+        {set.distanceOrReps} in {set.durationOrWeight}
       {/if}
     </article>
   {/each}

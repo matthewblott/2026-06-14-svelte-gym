@@ -1,19 +1,26 @@
+{#snippet header()}
+  <div role="group">
+    <a href={routes.home()} role="button">Home</a>
+    <button form="new-workout-form">New</button>
+  </div>
+{/snippet}
+
 <script lang="ts">
-  import PageHeader from '$lib/components/PageHeader.svelte';
   import type { PageData } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
   let { data }: { data: PageData } = $props();
   const routes = $derived(createTenantRoutes(data.user.name));
+
+  import { getPageHeader } from '$lib/components/page-header.svelte';
+
+  const pageHeader = getPageHeader();
+
+  pageHeader.title = 'Workouts';
+  pageHeader.content = header;
+
 </script>
 
-<PageHeader title="Workouts">
-  <div role="group">
-    <a href={routes.settings.index()} role="button">Settings</a>
-    <button form="new-workout-form">New</button>
-  </div>
-</PageHeader>
-
-<form method="POST" id="new-workout-form">
+<form method="post" id="new-workout-form">
   <input type="hidden" name="locale" value={navigator.language}>
 </form>
 

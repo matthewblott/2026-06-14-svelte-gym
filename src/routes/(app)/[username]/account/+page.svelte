@@ -1,8 +1,19 @@
+{#snippet header()}
+  <div role="group">
+    <a href={routes.home()} role="button">Home</a>
+  </div>
+{/snippet}
+
 <script lang="ts">
-  import PageHeader from '$lib/components/PageHeader.svelte';
   import { authClient } from '$lib/auth-client';
   import { createTenantRoutes } from '$lib/routes/tenant';
   import type { PageData } from './$types';
+  import { getPageHeader } from '$lib/components/page-header.svelte';
+
+  const pageHeader = getPageHeader();
+
+  pageHeader.title = 'Account';
+  pageHeader.content = header;
 
 	let { data }: { data: PageData } = $props();
   let isAnonymous = $state(true); 
@@ -18,19 +29,12 @@
 
 </script>
 
-<PageHeader title="Account">
-  <div role="group">
-    <a href={routes.settings.index()} role="button">Settings</a>
-    <!-- <a href={routes.settings.exercises.new()} role="button">New</a> -->
-  </div>
-</PageHeader>
-
 {#if !isAnonymous}
-  <a href={routes.account.rename()} role="button">Rename Account</a>
-  <a href={routes.account.signOut()} role="button">Sign Out</a>
+  <a href={routes.account.rename()} role="button" class="outline">Rename Account</a>
+  <a href={routes.account.signOut()} role="button" class="outline">Sign Out</a>
 {:else}
-  <a href={routes.account.register()} role="button">Add email address</a>
+  <a href={routes.account.register()} role="button" class="outline">Add email address</a>
 {/if}
 
-<a href={routes.account.delete()} role="button">Delete Account</a>
+<a href={routes.account.delete()} role="button" class="outline danger">Delete Account</a>
 
