@@ -18,14 +18,24 @@ a[role="button"] {
   text-align: center;
 
   &:hover {
-    background: color-mix(in srgb, var(--primary-color), black 10%);
+    background: color-mix(in srgb, var(--color-primary), black 10%);
   }
   
   &:disabled {
     cursor: not-allowed;
-    background: color-mix(in srgb, var(--primary-color), white 70%);
+    background: color-mix(in srgb, var(--color-primary), white 70%);
   }
+  
+  &.outline {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: var(--border-width) solid var(--color-primary);
 
+    &.danger {
+      border-color: var(--color-error);
+      color: var(--color-error);
+    }
+  }
 }
 
 [role="group"] {

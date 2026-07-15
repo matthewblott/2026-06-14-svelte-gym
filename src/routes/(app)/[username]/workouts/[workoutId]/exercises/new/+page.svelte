@@ -1,10 +1,9 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import PageHeader from '$lib/components/PageHeader.svelte';
   import type { PageData } from './$types';
   import type { ExerciseList } from './+page.server.ts';
   import { createTenantRoutes } from '$lib/routes/tenant';
-  
+
   const { data }: { data: PageData } = $props();
   const routes = $derived(createTenantRoutes(data.user.name));
 
@@ -48,22 +47,27 @@
   function handleBlur() {
     setTimeout(() => { showSuggestions = false; }, 150);
   }
+
+  import { getPageHeader } from '$lib/components/page-header.svelte';
+  const pageHeader = getPageHeader();
+  pageHeader.title = 'Exercises';
+  pageHeader.content = header;
 </script>
 
-<PageHeader title="Exercises">
+{#snippet header()}
   <div role="group">
     <a href={routes.workouts.exercises.index(data.workoutId)} role="button">Exercises</a>
     <button form="new-workout-exercise-form" disabled={!canSubmit}>Save</button>
   </div>
-</PageHeader>
+{/snippet}
 
 <form method="POST" use:enhance id="new-workout-exercise-form">
-  <input type="hidden" name="workoutId" value={data.workoutId} />
-  <input type="hidden" name="exerciseId" value={match?.id ?? ''} />
+  <fieldset>
+    <input type="hidden" name="workoutId" value={data.workoutId} />
+    <input type="hidden" name="exerciseId" value={match?.id ?? ''} />
 
-  <div>
-    <label for="exercise-name">Exercise</label>
-    <div>
+    <form-field>
+      <label for="exercise-name">Exercise Name</label>
       <input
         id="exercise-name"
         name="exerciseName"
@@ -87,27 +91,44 @@
               <span>{exercise.exerciseType}</span>
             </li>
           {/each}
+          {#if isNewExercise}
+            <li>New exercise — will be added to the list on save.</li>
+          {/if}
         </ul>
       {/if}
-    </div>
-
-    {#if isNewExercise}
-      <p>New exercise — will be added to the list on save.</p>
-    {/if}
-  </div>
-
-  <fieldset disabled={!isNewExercise && !!match}>
-    <legend>
-      Type
-      {#if isNewExercise}<span class="required">*</span>{/if}
-    </legend>
-    <label>
-      <input type="radio" name="exerciseType" bind:group={exerciseType} value="weights" />
-      Weights
-    </label>
-    <label>
-      <input type="radio" name="exerciseType" bind:group={exerciseType} value="cardio" />
-      Cardio
-    </label>
+    </form-field>
+    <form-field disabled={!isNewExercise && !!match}>
+      <legend>
+        Exercise Type
+        {#if isNewExercise}<span class="required">*</span>{/if}
+      </legend>
+      <label>
+        <input type="radio" name="exerciseType" bind:group={exerciseType} value="weights" />
+        Weights
+      </label>
+      <label>
+        <input type="radio" name="exerciseType" bind:group={exerciseType} value="cardio" />
+        Cardio
+      </label>
+    </form-field>
   </fieldset>
 </form>
+
+<style>
+
+  form-field {
+    ul {
+      border-radius: var(--border-radius-pill);
+      padding: 0.5rem 0.4rem;
+
+      border: 0.05rem solid darkgray;
+      li {
+        padding: 0 0.6rem;
+      }
+      li:hover {
+        background-color: lightyellow; 
+      }
+    }
+  }
+
+</style>

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import PageHeader from '$lib/components/PageHeader.svelte';
   import { authClient as auth } from '$lib/auth-client';
   import { goto, invalidateAll } from '$app/navigation';
   import { page } from '$app/state';
@@ -13,6 +12,11 @@
   let { data }: { data: PageData } = $props();
 
   const routes = $derived(createTenantRoutes(data.user.name));
+
+  import { getPageHeader } from '$lib/components/page-header.svelte';
+  const pageHeader = getPageHeader();
+  pageHeader.title = 'Verify Email';
+  pageHeader.content = header;
 
   async function verify() {
     const { data, error } = await auth.signIn.emailOtp({
@@ -35,14 +39,14 @@
   }
 </script>
 
-<PageHeader title="Verify Email">
+{#snippet header()}
   <div role="group">
     <a href={routes.account.index()} role="button">Account</a>
     <button form="verify-otp">
-      Verify 
+      Verify
     </button>
   </div>
-</PageHeader>
+{/snippet}
 
 <form
   id="verify-otp"
@@ -55,4 +59,3 @@
   <input bind:value={otp} required placeholder="123456">
 
 </form>
-

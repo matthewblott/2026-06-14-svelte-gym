@@ -4,6 +4,6 @@ article {
   border-radius: 0.5rem;
   /* box-shadow: var(--shadow);  */
 
-  border: 0.1rem solid var(--border-color);
+  border: 0.1rem solid var(--color-border);
 
 }

@@ -1,9 +1,16 @@
+{#snippet header()}
+  <div role="group">
+    <button form="verify-otp">
+      Verify 
+    </button>
+  </div>
+{/snippet}
+
 <script lang="ts">
   import { authClient as auth } from '$lib/auth-client';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { createRoutes } from '$lib/routes';
-  import PageHeader from '$lib/components/PageHeader.svelte';
 
   let otp = $state('');
   let email = $state(page.url.searchParams.get('email') ?? '');
@@ -21,19 +28,18 @@
 
     const username = data?.user?.name;
     const routes = createRoutes(username);
-    const route = String(routes.workouts?.index());
+    const route = String(routes.home());
 
     goto(route);
   }
-</script>
 
-<PageHeader title="Verify Email">
-  <div role="group">
-    <button form="verify-otp">
-      Verify 
-    </button>
-  </div>
-</PageHeader>
+  import { getPageHeader } from '$lib/components/page-header.svelte';
+  const pageHeader = getPageHeader();
+
+  pageHeader.title = 'Verify Email';
+  pageHeader.content = header;
+
+</script>
 
 <form
   id="verify-otp"

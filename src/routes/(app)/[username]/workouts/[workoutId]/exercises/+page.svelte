@@ -1,17 +1,21 @@
 <script lang="ts">
-  import PageHeader from '$lib/components/PageHeader.svelte';
   import type { PageData } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
   let { data }: { data: PageData } = $props();
   const routes = $derived(createTenantRoutes(data.user.name));
+
+  import { getPageHeader } from '$lib/components/page-header.svelte';
+  const pageHeader = getPageHeader();
+  pageHeader.title = 'Exercises';
+  pageHeader.content = header;
 </script>
 
-<PageHeader title="Exercises">
+{#snippet header()}
   <div role="group">
     <a href={routes.workouts.index()} role="button">Workouts</a>
     <a href={routes.workouts.exercises.new(data.workoutId)} role="button">New</a>
   </div>
-</PageHeader>
+{/snippet}
 
 {#if data.workoutExercises.length}
   {#each data.workoutExercises as exercise}

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import PageHeader from '$lib/components/PageHeader.svelte';
   import { authClient } from '$lib/auth-client';
   import { createTenantRoutes } from '$lib/routes/tenant';
   import type { PageData } from './$types';
@@ -10,16 +9,19 @@
 
   const routes = $derived(createTenantRoutes(data.user.name));
 
+  import { getPageHeader } from '$lib/components/page-header.svelte';
+  const pageHeader = getPageHeader();
+  pageHeader.title = 'Rename Account';
+  pageHeader.content = header;
 </script>
 
-<PageHeader title="Rename Account">
+{#snippet header()}
   <div role="group">
     <a href={routes.account.index()} role="button">Account</a>
   </div>
-</PageHeader>
+{/snippet}
 
 <form method="post">
-  <input name="name" value={$session.data?.user.name}> 
+  <input name="name" value={$session.data?.user.name}>
   <button>Save</button>
 </form>
-

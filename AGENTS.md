@@ -1,20 +1,25 @@
 # AGENTS.md
 
 ## Runtime & scripts
-- **Bun only.** All scripts use `bun --bun`: `bun dev`, `bun build`, `bun preview`. Never use `npm`/`pnpm`/`yarn`.
-- `bun run check` — typecheck (`svelte-check`).
+- **Bun only.** All scripts use `bun --bun`: `bun dev`, `bun build`. Never use `npm`/`pnpm`/`yarn`.
+- No `check` script in package.json. Use `svelte-check` directly if needed.
+- Use `make-types` from Makefile to regenerate schema types.
 
 ## Database
-- SQLite via `bun:sqlite`, wrapped by Kysely. DB file at `storage/local.sqlite3`.
+- SQLite via `bun:sqlite`, wrapped by Kysely. Main DB file at `storage/main.sqlite3`.
+- Multi-tenant per user: `storage/tenants/{userId}.sqlite3`.
+- Auth DB separate: `storage/auth.sqlite3`.
 - **Manual SQL imports** (raw `db.run()` / `db.all()` calls) are the only way to import pre-seeded data. No manual queries against `goose_db_version` — the table is excluded from kysely-codegen.
-- **Schema types are auto-generated** by `kysely-codegen` from the live DB (see `package.json` kysely-codegen config). After any migration, run:
+- **Schema types auto-generated** by `kysely-codegen` (see `package.json` kysely-codegen config). After any migration, run:
   ```
-  bun run generate:types
+  bun kysely-codegen
   ```
-  This rewrites `src/lib/schema.d.ts`. Do not edit it manually.
+  This rewrites `src/lib/schema.ts`. Do not edit manually.
 
 ## Migrations
-- **Goose** (SQL migrations in `migrations/`). Also verify with Kysely types.
+- **Goose** with separate auth/tenant migrations in `migrations/{auth,tenants}/`.
+- Makefile commands: `make db-reset`, `make db-auth-up`, `make db-main-up`.
+- Verify migrations with Kysely types.
 
 ## Svelte MCP server
 You are able to use the Svelte MCP server, where you have access to comprehensive Svelte 5 and SvelteKit documentation. Here's how to use the available tools effectively:
@@ -36,16 +41,23 @@ Generates a Svelte Playground link with the provided code.
 After completing the code, ask the user if they want a playground link. Only call this tool after user confirmation and NEVER if code was written to files in their project.
 
 ## Route structure
-- `src/routes/workouts/` — workout CRUD (list, detail `[id]`, new).
-- `src/routes/exercises/` — exercise CRUD (list with search, detail `[id]`, new).
+- Routes under `(app)/[username]/` require authentication.
+- `src/routes/(app)/[username]/workouts/` — workout CRUD.
+- `src/routes/(app)/[username]/settings/exercises/` — exercise CRUD.
+- Routes under `(public)/` are publicly accessible.
 
 ## Styles
 - Global styles in `src/lib/assets/styles/index.css`. Imported in `+layout.svelte`.
+- CSS layers: core, components.
 
-## Limitations / known gaps
-- Auth (Better Auth) configured but not wired up.
-- `src/app.d.ts` — `App.Locals` is empty. `App.PageData` / `App.Platform` commented out.
+## Svelte conventions
+- **Svelte 5 with runes forced** (`vite.config.ts` line 11).
+- `.ts` files for server logic, `.svelte` for components.
+- Components use Svelte 5 runes (all components).
+- `experimental: { async: true }` enabled (`vite.config.ts` line 12).
+- No custom error boundary (`App.Error` commented in app.d.ts).
 
-## Code conventions
-- Files: `.ts` (grids), `.svelte` (components + Svelte 5 runes all components).
-- no custom error boundary (`App.Error` commented in app.d.ts).
+## Auth & Database
+- BetterAuth configured and wired in `hooks.server.ts`.
+- Multi-tenant DB: user-specific SQLite files in `storage/tenants/`.
+- Database connections closed in hook response (`event.locals.bunDb?.close()`).

@@ -20,7 +20,8 @@ export const load : PageServerLoad = async ({ params, locals }): Promise<PageSer
       'distanceOrReps',
     ])
     .where('workoutId', '=', workoutId)
-    .where('exerciseId', '=', exerciseId);
+    .where('exerciseId', '=', exerciseId)
+    .orderBy('createdAt', 'desc');
 
   const sets = await query.execute();
   const username = String(locals.user?.name);

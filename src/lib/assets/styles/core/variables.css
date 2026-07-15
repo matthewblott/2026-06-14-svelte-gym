@@ -1,22 +1,25 @@
 :root {
   --font-family: 'Tahoma', sans-serif;
   --font-size: 1.2rem;
-  --text-color: black;
-  --text-color-light: white;
+  --color-text: black;
+  --color-text-light: white;
   
   --color-success: green;
-  --color-error: red;
+  --color-warning: yellow;
+  --color-error: #b86a6b;
 
-  --primary-color: blue;
+  --color-primary: blue;
+
+  --color-border: rgba(0, 0, 0, 0.1);
+
   --border-radius: 0.5rem;
+  --border-radius-pill: 1.5rem;
+
   --spacing-vertical: 1rem;
   --spacing-horizontal: 1rem;
-  --border-radius-pill: 1.5rem;
 
   --shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 
   --border-width: 0.1rem;
-
-  --border-color: rgba(0, 0, 0, 0.1);
 
 }
