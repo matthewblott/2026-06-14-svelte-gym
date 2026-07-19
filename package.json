@@ -4,8 +4,9 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "bun --bun vite dev",
-		"build": "bun --bun vite build"
+		"dev": "bunx --bun vite dev",
+		"buildx": "bunx --bun vite build",
+		"previewx": "bunx --bun vite preview"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^7.0.1",
