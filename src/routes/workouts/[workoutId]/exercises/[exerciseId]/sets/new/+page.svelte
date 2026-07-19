@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ActionData, PageData } from './$types';
-  import { createTenantRoutes } from '$lib/routes/tenant';
+  import { routes } from '$lib/routes/index';
   import { getContext, type Snippet } from 'svelte';
 
   let { form, data }: { form: ActionData, data: PageData } = $props();
@@ -9,7 +9,6 @@
   const workoutId = $derived(workoutView.workoutId!);
   const exerciseId = $derived(workoutView.exerciseId!);
   const workoutExerciseId = $derived(workoutView.id!);
-  const routes = $derived(createTenantRoutes(data.user.name));
 
   let backRoute = $derived(routes.workouts.exercises.sets.index({ workoutId, exerciseId }));
   let backRouteText = $derived('Sets');

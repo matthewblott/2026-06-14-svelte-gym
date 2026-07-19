@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { createTenantRoutes } from '$lib/routes/tenant';
+  import { routes } from '$lib/routes/index';
   import barbell from '$lib/assets/images/icons/barbell-2.svg';
   import cardio from '$lib/assets/images/icons/cardio.svg';
   import cycle from '$lib/assets/images/icons/cycle.svg';
@@ -9,7 +9,6 @@
 
   let { data }: { data: PageData } = $props();
 
-  const routes = $derived(createTenantRoutes(data.user.name));
   const icons = [cycle, runner, cardio, barbell];
   const locale = $state(navigator.language);
 

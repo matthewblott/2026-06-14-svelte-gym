@@ -1,11 +1,9 @@
 <script lang="ts">
-  import type { ActionData, PageData } from './$types';
-  import { createTenantRoutes } from '$lib/routes/tenant';
+  import type { ActionData } from './$types';
+  import { routes } from '$lib/routes/index';
   import { getContext, type Snippet } from 'svelte';
 
-  let { data, form }: { data: PageData; form: ActionData } = $props();
-
-  const routes = $derived(createTenantRoutes(data.user.name));
+  let { form }: { form: ActionData } = $props();
 
   getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
 </script>

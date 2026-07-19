@@ -4,7 +4,7 @@ import type { Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
 import type { Insertable } from 'kysely';
 import { dbAttempt, failWith } from '$lib/server/db-utils';
-import { createTenantRoutes } from "$lib/routes/tenant";
+import { routes } from "$lib/routes/index";
 
 export const load : PageServerLoad = async ({ params, locals }): Promise<PageServerData> => {
   const workoutId = Number(params.workoutId);
@@ -48,8 +48,6 @@ export const actions: Actions = {
     const exerciseId = Number(formData.get('exerciseId') as string);
     const workoutExerciseId = Number(formData.get('workoutExerciseId') as string);
     const isWeights = exerciseType === "weights";
-    const username = String(locals.user?.name);
-    const routes = createTenantRoutes(username)
 
     if(isWeights) {
       const weight = Number(formData.get('weight') as string);
@@ -70,7 +68,9 @@ export const actions: Actions = {
     }
     else {
       const distance = Number(formData.get('distance') as string);
+
       const duration = formData.get('duration') as string;
+
       const newCardioSet: Insertable<CardioSet> = { workoutExerciseId, distance, duration };
 
       const result = await dbAttempt(

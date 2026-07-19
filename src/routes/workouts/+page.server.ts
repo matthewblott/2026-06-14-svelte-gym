@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import { dbAttempt, failWith } from '$lib/server/db-utils';
-import { createTenantRoutes } from '$lib/routes/tenant';
+import { routes } from '$lib/routes/index';
 import type { PageServerData, Actions } from './$types';
 import type { Selectable } from 'kysely';
 import type { Insertable } from 'kysely';
@@ -39,8 +39,6 @@ export const actions: Actions = {
     }
 
     const workoutId = Number(result.data.id);
-    const username = String(locals.user?.name);
-    const routes = createTenantRoutes(username);
     const route = routes.workouts.exercises.new(workoutId); 
 
     redirect(303, route); 

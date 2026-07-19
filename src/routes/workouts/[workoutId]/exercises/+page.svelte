@@ -1,13 +1,11 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { createTenantRoutes } from '$lib/routes/tenant';
+  import { routes } from '$lib/routes/index';
   import barbell from '$lib/assets/images/icons/barbell-2.svg';
   import cardio from '$lib/assets/images/icons/cardio.svg';
   import { getContext, type Snippet } from 'svelte';
 
   let { data }: { data: PageData } = $props();
-
-  const routes = $derived(createTenantRoutes(data.user.name));
 
   getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
 </script>
@@ -23,7 +21,7 @@
 {#if data.workoutExercises.length}
   {#each data.workoutExercises as exercise}
     <article class="pill">
-      <a href="{routes.workouts.exercises.sets.index({ workoutId: exercise.workoutId, exerciseId: exercise.exerciseId})}">
+      <a href="{routes.workouts.exercises.sets.index({ workoutId: Number(exercise.workoutId), exerciseId: Number(exercise.exerciseId)})}">
         <h2>
           {exercise.exerciseName}
         </h2>

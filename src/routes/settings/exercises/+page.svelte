@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { createTenantRoutes } from "$lib/routes/tenant";
+  import { routes } from "$lib/routes/index";
   import { getContext, type Snippet } from "svelte";
   import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();
-
-  const routes = $derived(createTenantRoutes(data.user.name));
 
   getContext<{ set: (s: Snippet | null) => void }>("header").set(header);
 </script>

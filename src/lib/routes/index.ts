@@ -2,7 +2,7 @@ type Id = number;
 
 export const routes = {
     home: () =>
-      ``,
+      `/`,
     settings: {
       index: () =>
       `/settings`,
