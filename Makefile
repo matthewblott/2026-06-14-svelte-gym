@@ -48,3 +48,10 @@ db-tenants-down:
 
 make-types:
 	bun kysely-codegen
+
+# ==============================================================================
+# Hotwire Native 
+# ==============================================================================
+
+hotwire:
+	bunx esbuild src/lib/hotwire/index.ts --bundle --format=iife --outfile=static/hotwire-bridge.js
