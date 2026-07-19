@@ -3,7 +3,7 @@ import { dbAttempt, failWith } from '$lib/server/db-utils';
 import type { Actions } from './$types';
 import type { Insertable, Selectable } from 'kysely';
 import type { WorkoutExercise, Exercise } from '$lib/schema';
-import type { PageServerLoad } from '../$types';
+import type { PageServerLoad } from './$types';
 import { createTenantRoutes } from '$lib/routes/tenant';
 
 export type ExerciseList = Selectable<Exercise>;

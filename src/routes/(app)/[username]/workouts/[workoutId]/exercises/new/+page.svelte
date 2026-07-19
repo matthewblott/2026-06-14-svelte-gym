@@ -3,6 +3,7 @@
   import type { PageData } from './$types';
   import type { ExerciseList } from './+page.server.ts';
   import { createTenantRoutes } from '$lib/routes/tenant';
+  import { getContext, type Snippet } from 'svelte';
 
   const { data }: { data: PageData } = $props();
   const routes = $derived(createTenantRoutes(data.user.name));
@@ -34,6 +35,8 @@
     (!!match || isNewExercise)
   );
 
+  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
+
   function selectExercise(exercise: ExerciseList) {
     exerciseName = exercise.name;
     exerciseType = exercise.exerciseType;
@@ -48,13 +51,10 @@
     setTimeout(() => { showSuggestions = false; }, 150);
   }
 
-  import { getPageHeader } from '$lib/components/page-header.svelte';
-  const pageHeader = getPageHeader();
-  pageHeader.title = 'Exercises';
-  pageHeader.content = header;
 </script>
 
 {#snippet header()}
+  <h1>New Exercise</h1>
   <div role="group">
     <a href={routes.workouts.exercises.index(data.workoutId)} role="button">Exercises</a>
     <button form="new-workout-exercise-form" disabled={!canSubmit}>Save</button>

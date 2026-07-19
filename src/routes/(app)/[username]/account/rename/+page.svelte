@@ -2,6 +2,9 @@
   import { authClient } from '$lib/auth-client';
   import { createTenantRoutes } from '$lib/routes/tenant';
   import type { PageData } from './$types';
+  import { getContext, type Snippet } from 'svelte';
+
+  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
 
   const session = authClient.useSession();
 
@@ -9,13 +12,10 @@
 
   const routes = $derived(createTenantRoutes(data.user.name));
 
-  import { getPageHeader } from '$lib/components/page-header.svelte';
-  const pageHeader = getPageHeader();
-  pageHeader.title = 'Rename Account';
-  pageHeader.content = header;
 </script>
 
 {#snippet header()}
+  <h1>Rename Account</h1>
   <div role="group">
     <a href={routes.account.index()} role="button">Account</a>
   </div>

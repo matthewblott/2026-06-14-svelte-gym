@@ -3,20 +3,17 @@
   import { goto, invalidateAll } from '$app/navigation';
   import { page } from '$app/state';
   import { createRoutes } from '$lib/routes';
+  import { getContext, type Snippet } from 'svelte';
+  import { createTenantRoutes } from '$lib/routes/tenant';
+  import type { PageData } from './$types';
 
   let otp = $state('');
   let email = $state(page.url.searchParams.get('email') ?? '');
-
-  import { createTenantRoutes } from '$lib/routes/tenant';
-  import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 
   const routes = $derived(createTenantRoutes(data.user.name));
 
-  import { getPageHeader } from '$lib/components/page-header.svelte';
-  const pageHeader = getPageHeader();
-  pageHeader.title = 'Verify Email';
-  pageHeader.content = header;
+  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
 
   async function verify() {
     const { data, error } = await auth.signIn.emailOtp({
@@ -40,6 +37,7 @@
 </script>
 
 {#snippet header()}
+  <h1>Verify Email</h1>
   <div role="group">
     <a href={routes.account.index()} role="button">Account</a>
     <button form="verify-otp">

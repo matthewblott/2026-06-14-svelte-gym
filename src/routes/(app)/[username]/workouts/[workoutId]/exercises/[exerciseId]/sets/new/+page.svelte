@@ -1,30 +1,31 @@
 <script lang="ts">
   import type { ActionData, PageData } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
+  import { getContext, type Snippet } from 'svelte';
 
   let { form, data }: { form: ActionData, data: PageData } = $props();
 
-  const workoutView = data.workoutView;
-  const workoutId = workoutView.workoutId!;
-  const exerciseId = workoutView.exerciseId!;
-  const workoutExerciseId = workoutView.id!;
+  const workoutView = $derived(data.workoutView);
+  const workoutId = $derived(workoutView.workoutId!);
+  const exerciseId = $derived(workoutView.exerciseId!);
+  const workoutExerciseId = $derived(workoutView.id!);
   const routes = $derived(createTenantRoutes(data.user.name));
 
-  let backRoute = routes.workouts.exercises.sets.index({ workoutId, exerciseId });
-  let backRouteText = 'Sets';
+  let backRoute = $derived(routes.workouts.exercises.sets.index({ workoutId, exerciseId }));
+  let backRouteText = $derived('Sets');
+  let isFirstSet = $derived(data.isFirstSet);
 
-  if(data.isFirstSet) {
+  if(isFirstSet) {
     backRoute = routes.workouts.exercises.index(workoutId);
     backRouteText = 'Exercises';
   }
 
-  import { getPageHeader } from '$lib/components/page-header.svelte';
-  const pageHeader = getPageHeader();
-  pageHeader.title = 'New Set';
-  pageHeader.content = header;
+  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
+
 </script>
 
 {#snippet header()}
+  <h1>New Set</h1>
   <div role="group">
     <a href={backRoute} role="button">{backRouteText}</a>
     <button form="new-set-form">Save</button>
@@ -106,17 +107,3 @@
   {/if}
 
 </form>
-
-<style>
-  .form-error {
-    color: #b91c1c;
-  }
-  .field-error {
-    display: block;
-    color: #b91c1c;
-    font-size: 0.875rem;
-  }
-  [aria-invalid="true"] {
-    border-color: #b91c1c;
-  }
-</style>
