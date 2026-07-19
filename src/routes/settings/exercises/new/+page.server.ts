@@ -3,7 +3,7 @@ import { redirect } from '@sveltejs/kit';
 import type { Insertable } from 'kysely';
 import type { Exercise } from '$lib/schema';
 import { dbAttempt, failWith } from '$lib/server/db-utils';
-import { createTenantRoutes } from '$lib/routes/tenant';
+import { routes } from '$lib/routes/index';
 
 export const actions: Actions = {
   default: async ({ request, locals }) => {
@@ -20,8 +20,6 @@ export const actions: Actions = {
       return failWith(newExercise, result);
     }
     
-    const username = String(locals.user?.name);
-    const routes = createTenantRoutes(username);
     const route = routes.settings.exercises.index();
 
     redirect(303, route); 

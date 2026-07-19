@@ -4,7 +4,7 @@ import type { Actions } from './$types';
 import type { Insertable, Selectable } from 'kysely';
 import type { WorkoutExercise, Exercise } from '$lib/schema';
 import type { PageServerLoad } from './$types';
-import { createTenantRoutes } from '$lib/routes/tenant';
+import { routes } from '$lib/routes/index';
 
 export type ExerciseList = Selectable<Exercise>;
 
@@ -57,8 +57,6 @@ export const actions: Actions = {
     if (!result.success) {
       return failWith({ workoutId, exerciseId }, result);
     } 
-    const username = String(locals.user?.name);
-    const routes = createTenantRoutes(username);
 
     redirect(303, routes.workouts.exercises.index(workoutId));
   },

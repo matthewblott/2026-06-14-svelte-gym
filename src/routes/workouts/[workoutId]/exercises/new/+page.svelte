@@ -1,12 +1,10 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
   import type { PageData } from './$types';
   import type { ExerciseList } from './+page.server.ts';
-  import { createTenantRoutes } from '$lib/routes/tenant';
+  import { routes } from '$lib/routes/index';
   import { getContext, type Snippet } from 'svelte';
 
   const { data }: { data: PageData } = $props();
-  const routes = $derived(createTenantRoutes(data.user.name));
 
   let exercises = $derived<ExerciseList[]>(data.exercises);
   let exerciseName = $state('');
@@ -61,7 +59,7 @@
   </div>
 {/snippet}
 
-<form method="POST" use:enhance id="new-workout-exercise-form">
+<form method="POST" id="new-workout-exercise-form">
   <fieldset>
     <input type="hidden" name="workoutId" value={data.workoutId} />
     <input type="hidden" name="exerciseId" value={match?.id ?? ''} />
