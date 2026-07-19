@@ -1,0 +1,9 @@
+Workout exercises page
+
+Exercise name
+number of sets
+average for each set
+
+28 x 140
+
+9.33 x 46.67

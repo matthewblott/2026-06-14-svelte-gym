@@ -5,11 +5,13 @@
     "": {
       "name": "svelte-better-auth-otp",
       "dependencies": {
-        "svelte-better-auth-otp": ".",
+        "@hotwired/turbo": "^8.0.23",
+        "@joemasilotti/bridge-components": "^0.13.2",
         "better-auth": "^1.6.18",
         "change-case": "^5.4.4",
         "kysely": "^0.28.17",
         "nodemailer": "^9.0.3",
+        "svelte-better-auth-otp": ".",
       },
       "devDependencies": {
         "@sveltejs/adapter-auto": "^7.0.1",
@@ -56,6 +58,14 @@
     "@emnapi/runtime": ["@emnapi/runtime@1.11.1", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-vgj7R3y3Wgx24IQaGPA/R6YFXLHVMOZ0uVEyIQPaWs+rd1AzfEMXlAC22FYwO1XkKR6NPsq7mUandH8oIRdZFw=="],
 
     "@emnapi/wasi-threads": ["@emnapi/wasi-threads@1.2.2", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-c95qOXkHdydNKhscBTebqEC1CVAZpyqOfVfBzQ1qgzyl3gfeldUjIggDbIZgDKsHLgnsM+igH7TJ/eAasaVuMA=="],
+
+    "@hotwired/hotwire-native-bridge": ["@hotwired/hotwire-native-bridge@1.2.2", "", { "peerDependencies": { "@hotwired/stimulus": "^3.2.2" } }, "sha512-P74kFtXjpY1wV/YneZBOrWJmddLGiKBRj73JB1UgUEOfsM69xpGJbwY0sotFyJgevs2YrBgP9yDNw/uEica2VQ=="],
+
+    "@hotwired/stimulus": ["@hotwired/stimulus@3.2.2", "", {}, "sha512-eGeIqNOQpXoPAIP7tC1+1Yc1yl1xnwYqg+3mzqxyrbE5pg5YFBZcA6YoTiByJB6DKAEsiWtl6tjTJS4IYtbB7A=="],
+
+    "@hotwired/turbo": ["@hotwired/turbo@8.0.23", "", {}, "sha512-GZ7cijxEZ6Ig71u7rD6LHaRv/wcE/hNsc+nEfiWOkLNqUgLOwo5MNGWOy5ZV9ZUDSiQx1no7YxjTNnT4O6//cQ=="],
+
+    "@joemasilotti/bridge-components": ["@joemasilotti/bridge-components@0.13.2", "", { "peerDependencies": { "@hotwired/hotwire-native-bridge": ">=1.2.0", "@hotwired/stimulus": ">=3.2.0" } }, "sha512-did/gKAVUP4bxaWCmWnhcvb+8SJvJQIJ+XuVK+xcP3c3yuHtauD1ZveVQu7GovVor30367BO0greqqr0FHHSjQ=="],
 
     "@jridgewell/gen-mapping": ["@jridgewell/gen-mapping@0.3.13", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.0", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA=="],
 

@@ -1,20 +1,22 @@
+<script lang="ts">
+  import type { ActionData, PageData } from './$types';
+  import { createTenantRoutes } from '$lib/routes/tenant';
+  import { getContext, type Snippet } from 'svelte';
+
+  let { data, form }: { data: PageData; form: ActionData } = $props();
+
+  const routes = $derived(createTenantRoutes(data.user.name));
+
+  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
+</script>
+
 {#snippet header()}
+  <h1>New Exercise</h1>
   <div role="group">
     <a href={routes.settings.exercises.index()} role="button">Exercises</a>
     <button form="new-exercise-form">Save</button>
   </div>
 {/snippet}
-
-<script lang="ts">
-  import type { ActionData, PageData } from './$types';
-  let { data, form }: { data: PageData; form: ActionData } = $props();
-  import { createTenantRoutes } from '$lib/routes/tenant';
-  const routes = $derived(createTenantRoutes(data.user.name));
-  import { getPageHeader } from '$lib/components/page-header.svelte';
-  const pageHeader = getPageHeader();
-  pageHeader.title = 'New Exercise';
-  pageHeader.content = header;
-</script>
 
 <form method="POST" id="new-exercise-form">
   {#if form?.error && !form?.field}

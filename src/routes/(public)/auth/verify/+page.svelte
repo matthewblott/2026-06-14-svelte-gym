@@ -1,16 +1,11 @@
-{#snippet header()}
-  <div role="group">
-    <button form="verify-otp">
-      Verify 
-    </button>
-  </div>
-{/snippet}
-
 <script lang="ts">
   import { authClient as auth } from '$lib/auth-client';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { createRoutes } from '$lib/routes';
+  import { getContext, type Snippet } from 'svelte';
+
+  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
 
   let otp = $state('');
   let email = $state(page.url.searchParams.get('email') ?? '');
@@ -33,13 +28,16 @@
     goto(route);
   }
 
-  import { getPageHeader } from '$lib/components/page-header.svelte';
-  const pageHeader = getPageHeader();
-
-  pageHeader.title = 'Verify Email';
-  pageHeader.content = header;
-
 </script>
+
+{#snippet header()}
+  <h1>Verify Email</h1>
+  <div role="group">
+    <button form="verify-otp">
+      Verify 
+    </button>
+  </div>
+{/snippet}
 
 <form
   id="verify-otp"

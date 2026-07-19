@@ -1,9 +1,23 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.svg';
   import '$lib/assets/styles/index.css';
-  import { createPageHeaderState } from '$lib/components/page-header.svelte.js';
-  let { children } = $props();
-  const pageHeader = createPageHeaderState();
+  import { setContext } from 'svelte';
+  import type { Snippet } from 'svelte';
+  import type { LayoutProps } from './$types';
+
+  let header = $state<Snippet | null>(null);
+
+  setContext('header', {
+    set: (s: Snippet | null) => { header = s; }
+  });
+
+  let { children }: LayoutProps = $props();
+
+  $effect(() => {
+    console.log('layout mounted', location.pathname);
+    return () => console.log('layout destroyed', location.pathname);
+  });
+
 </script>
 
 <svelte:head>
@@ -11,23 +25,10 @@
 </svelte:head>
 
 <header>
-  <h1>{pageHeader.title}</h1>
-  {#if pageHeader.menu.length}
-    <nav>
-      <ul>
-        {#each pageHeader.menu as item}
-          <li>
-            <a href={item.href} aria-current={item.current ? 'page' : undefined}>
-              {item.label}
-            </a>
-          </li>
-        {/each}
-      </ul>
-    </nav>
-  {/if}
-  {#if pageHeader.content}
-    {@const content = pageHeader.content}
-    {@render content()}
+  {#if header}
+    {@render header()}
+  {:else}
+    <h1>Gym App</h1>
   {/if}
 </header>
 

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { PageProps } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
+  import { getContext, type Snippet } from 'svelte';
 
   let { data, form }: PageProps = $props();
   let email = $derived(form?.email ?? '');
@@ -8,20 +9,18 @@
 
   const routes = $derived(createTenantRoutes(data.user.name));
 
-  import { getPageHeader } from '$lib/components/page-header.svelte';
-  const pageHeader = getPageHeader();
-  pageHeader.title = 'Register';
-  pageHeader.content = header;
+  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
 </script>
 
 {#snippet header()}
+  <h1>Register</h1>
   <div role="group">
     <a href={routes.account.index()} role="button">Account</a>
     <button form="send-otp">Send code</button>
   </div>
 {/snippet}
 
-<form method="POST" id="send-otp">
+<form method="post" id="send-otp">
   <input name="email" bind:value={email} placeholder="sally@example.com">
 </form>
 
