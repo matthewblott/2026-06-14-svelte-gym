@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { createTenantRoutes } from '$lib/routes/tenant';
-  import { getContext, type Snippet } from 'svelte';
-  import type { PageData } from './$types';
+  import { createTenantRoutes } from "$lib/routes/tenant";
+  import { getContext, type Snippet } from "svelte";
+  import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();
 
   const routes = $derived(createTenantRoutes(data.user.name));
 
-  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
+  getContext<{ set: (s: Snippet | null) => void }>("header").set(header);
 </script>
 
 {#snippet header()}
@@ -21,7 +21,9 @@
 {#if data.exercises.length}
   {#each data.exercises as exercise}
     <article>
-      <a href={routes.settings.exercises.edit(exercise.id)}>{exercise.name} ({exercise.exerciseType})</a>
+      <a href={routes.settings.exercises.edit(exercise.id)}
+        >{exercise.name} ({exercise.exerciseType})</a
+      >
     </article>
   {/each}
 {:else}
