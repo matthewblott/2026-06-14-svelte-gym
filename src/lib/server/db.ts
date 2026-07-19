@@ -1,7 +1,53 @@
-import { Database } from 'bun:sqlite';
-import { env } from '$env/dynamic/private';
+import { CamelCasePlugin, SqliteDialect } from 'kysely';
+import { Kysely } from 'kysely';
+import { Database as BunDatabase } from 'bun:sqlite';
+import { type SqliteDatabase } from 'kysely';
+import { type SqliteStatement } from 'kysely';
+import { type DB } from '$lib/schema';
+import type { SQLQueryBindings } from 'bun:sqlite';
 
-export const db = new Database(env.DATABASE_URL, { create: true, safeIntegers: true });
+export function getDb() {
+  const path = `storage/main.sqlite3`;
+  const bunDb = new BunDatabase(path, { create: true, safeIntegers: true });
 
-db.prepare('PRAGMA foreign_keys = ON').run();
-db.prepare('PRAGMA trusted_schema = 1').run();
+  bunDb.prepare('PRAGMA journal_mode = WAL').run();
+  bunDb.prepare('PRAGMA foreign_keys = ON').run();
+  bunDb.prepare('PRAGMA trusted_schema = 1').run();
+
+  const adapter: SqliteDatabase = {
+    close() {
+      bunDb.close();
+    },
+    prepare(sql: string): SqliteStatement {
+      const stmt = bunDb.prepare(sql);
+      return {
+        get reader() {
+          return stmt.columnNames.length > 0;
+        },
+        all(parameters: ReadonlyArray<unknown>) {
+          return stmt.all(...parameters as SQLQueryBindings[]) as unknown[];
+        },
+        run(parameters: ReadonlyArray<unknown>) {
+          const result = stmt.run(...parameters as SQLQueryBindings[]);
+          return { changes: result.changes, lastInsertRowid: result.lastInsertRowid };
+        },
+        iterate(parameters: ReadonlyArray<unknown>): IterableIterator<unknown> {
+          return stmt.iterate(...parameters as SQLQueryBindings[]) as IterableIterator<unknown>;
+        },
+      };
+    },
+  };
+
+  const db = new Kysely<DB>({
+    dialect: new SqliteDialect({ database: adapter }),
+    plugins: [new CamelCasePlugin()],
+    log(event) {
+      if (event.level === 'query') {
+        console.log(event.query.sql)
+        console.log(event.query.parameters)
+      }
+    },
+  });
+
+  return { db, bunDb }; 
+}
