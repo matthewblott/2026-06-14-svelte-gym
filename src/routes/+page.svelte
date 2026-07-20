@@ -8,7 +8,7 @@
   <h1>Gym App</h1>
   <div role="group">
     <a href={routes.auth.signIn()} role="button">Sign-in</a>
-    <button form="guest-sign-in">Continue as guest</button>
+    <button form="guest-sign-in" data-controller="bridge--button">Continue as guest</button>
   </div>
 {/snippet}
 
