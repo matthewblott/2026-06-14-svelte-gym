@@ -13,11 +13,6 @@
 
   let { children }: LayoutProps = $props();
 
-  $effect(() => {
-    console.log('layout mounted', location.pathname);
-    return () => console.log('layout destroyed', location.pathname);
-  });
-
 </script>
 
 <svelte:head>
