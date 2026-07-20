@@ -1,0 +1,14 @@
+import { auth } from '$lib/server/auth';
+import { redirect } from '@sveltejs/kit';
+import type { Actions } from './$types';
+
+export const actions: Actions = {
+  default: async ({ request }) => {
+    await auth.api.deleteUser({
+      body: {},
+      headers: request.headers
+    });
+    redirect(303, `/`);
+  },
+};
+

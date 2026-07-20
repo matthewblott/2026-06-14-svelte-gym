@@ -1,4 +1,4 @@
-import { betterAuth } from 'better-auth';
+import { APIError, betterAuth } from 'better-auth';
 import { anonymous, emailOTP } from 'better-auth/plugins';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
@@ -177,3 +177,17 @@ async function copyAnonymousTenantDb(oldUserId: string, newUserId: string) {
 async function deleteTenantDb(userId: string): Promise<void> {
   await rm(`./storage/tenants/${userId}.sqlite3`, { force: true })
 } 
+
+type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };
+
+export async function tryCatch<T>(promise: Promise<T>): Promise<Result<T, APIError>> {
+  try {
+    return { ok: true, value: await promise };
+  } catch (error) {
+    if (error instanceof APIError) {
+      console.log(error);
+      return { ok: false, error };
+    }
+    throw error;
+  }
+}

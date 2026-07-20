@@ -1,16 +1,9 @@
 <script lang="ts">
-  import { authClient } from '$lib/auth-client';
-  import { goto } from '$app/navigation';
   import { getContext, type Snippet } from 'svelte';
   import type { PageData } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
 
   getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
-
-  async function signOut() {
-    await authClient.signOut();
-    goto('/');
-  }
 
   let { data }: { data: PageData } = $props();
 
@@ -25,4 +18,6 @@
   </div>
 {/snippet}
 
-<button onclick={signOut}>Sign out</button>
+<form method="post">
+  <button>Sign out</button>
+</form>

@@ -1,18 +1,16 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { auth, tryCatch } from '$lib/server/auth';
-import { publicRoutes as routes } from '$lib/routes';
+import { createTenantRoutes } from '$lib/routes/tenant';
 
 export const actions: Actions = {
   default: async ({ request }) => {
     const form = await request.formData();
     const email = String(form.get('email')).trim();
+    const otp = String(form.get('otp')).trim();
 
-    const result = await tryCatch(auth.api.sendVerificationOTP({
-      body: {
-        email: email,
-        type: 'sign-in',
-      },
+    const result = await tryCatch(auth.api.signInEmailOTP({
+      body: { email, otp },
       headers: request.headers
     }));
 
@@ -20,9 +18,12 @@ export const actions: Actions = {
       return fail(400, { error: result.error.message });
     }
 
-    const route = `${routes.auth.verify()}?email=${encodeURIComponent(email)}`;
+    const username = result.value.user.name;
+    const routes = createTenantRoutes(username);
+    const route = String(routes.home());
 
-    // Redirect to verify page with email as query parameter
     redirect(303, route);
+
   },
 };
+

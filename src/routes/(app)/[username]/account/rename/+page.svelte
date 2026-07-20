@@ -1,12 +1,9 @@
 <script lang="ts">
-  import { authClient } from '$lib/auth-client';
   import { createTenantRoutes } from '$lib/routes/tenant';
   import type { PageData } from './$types';
   import { getContext, type Snippet } from 'svelte';
 
   getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
-
-  const session = authClient.useSession();
 
   let { data }: { data: PageData } = $props();
 
@@ -22,6 +19,6 @@
 {/snippet}
 
 <form method="post">
-  <input name="name" value={$session.data?.user.name}>
+  <input name="name" value={data?.user.name}>
   <button>Save</button>
 </form>
