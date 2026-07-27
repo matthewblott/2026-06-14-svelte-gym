@@ -21,3 +21,5 @@
     <a href={routes.settings.exercises.index()} role="button">Exercises</a>
   </div>
 {/snippet}
+
+<a href={routes.settings.exercises.index()} data-controller="bridge--button" class="hidden">Exercises</a>

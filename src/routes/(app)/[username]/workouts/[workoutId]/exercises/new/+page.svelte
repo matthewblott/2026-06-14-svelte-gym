@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-  import type { PageData } from './$types';
+  import { applyAction, enhance } from '$app/forms';
+  import type { PageData, SubmitFunction } from './$types';
   import type { ExerciseList } from './+page.server.ts';
   import { createTenantRoutes } from '$lib/routes/tenant';
   import { getContext, type Snippet } from 'svelte';
+    import { goto } from '$app/navigation';
 
   const { data }: { data: PageData } = $props();
   const routes = $derived(createTenantRoutes(data.user.name));
@@ -51,6 +52,27 @@
     setTimeout(() => { showSuggestions = false; }, 150);
   }
 
+	const submissionHandler: SubmitFunction = async ({ action }) => {
+    return async ({ result }) => {
+
+      if (result.type !== 'redirect') {
+        await applyAction(result);
+        return;
+      }
+
+      const url = new URL(result.location, window.location.origin);
+
+      if (!window.HotwireNavigator.canNavigate(url)) {
+        await goto(result.location);
+        return;
+      }
+
+      window.HotwireNavigator.formSubmissionStarted(action);
+      window.HotwireNavigator.visitProposedToLocation(url);
+      window.HotwireNavigator.formSubmissionFinished(action);
+
+    };
+  }
 </script>
 
 <svelte:head>
@@ -67,7 +89,7 @@
 
 <button form="new-workout-exercise-form" disabled={!canSubmit} data-controller="bridge--button" class="hidden">Save</button>
 
-<form method="POST" use:enhance id="new-workout-exercise-form">
+<form method="POST" use:enhance={submissionHandler} id="new-workout-exercise-form">
   <fieldset>
     <input type="hidden" name="workoutId" value={data.workoutId} />
     <input type="hidden" name="exerciseId" value={match?.id ?? ''} />

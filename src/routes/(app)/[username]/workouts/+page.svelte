@@ -1,11 +1,13 @@
 <script lang="ts">
-  import type { PageData } from './$types';
+  import type { PageData, SubmitFunction } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
   import barbell from '$lib/assets/images/icons/barbell-2.svg';
   import cardio from '$lib/assets/images/icons/cardio.svg';
   import cycle from '$lib/assets/images/icons/cycle.svg';
   import runner from '$lib/assets/images/icons/runner.svg';
   import { getContext, type Snippet } from 'svelte';
+    import { applyAction, enhance } from '$app/forms';
+    import { goto } from '$app/navigation';
 
   let { data }: { data: PageData } = $props();
 
@@ -31,6 +33,27 @@
 
   getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
 
+	const submissionHandler: SubmitFunction = async ({ action }) => {
+    return async ({ result }) => {
+
+      if (result.type !== 'redirect') {
+        await applyAction(result);
+        return;
+      }
+
+      const url = new URL(result.location, window.location.origin);
+
+      if (!window.HotwireNavigator.canNavigate(url)) {
+        await goto(result.location);
+        return;
+      }
+
+      window.HotwireNavigator.formSubmissionStarted(action);
+      window.HotwireNavigator.visitProposedToLocation(url);
+      window.HotwireNavigator.formSubmissionFinished(action);
+
+    };
+  }
 </script>
 
 <svelte:head>
@@ -47,7 +70,7 @@
 
 <button form="new-workout-form" data-controller="bridge--button" class="hidden">New</button>
 
-<form method="post" id="new-workout-form">
+<form method="post" id="new-workout-form" use:enhance={submissionHandler}>
   <input type="hidden" name="locale" value={navigator.language}>
 </form>
 

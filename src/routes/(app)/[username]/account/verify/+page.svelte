@@ -2,7 +2,9 @@
   import { page } from '$app/state';
   import { getContext, type Snippet } from 'svelte';
   import { createTenantRoutes } from '$lib/routes/tenant';
-  import type { PageData } from './$types';
+  import type { PageData, SubmitFunction } from './$types';
+    import { applyAction, enhance } from '$app/forms';
+    import { goto } from '$app/navigation';
 
   let otp = $state('');
   let email = $state(page.url.searchParams.get('email') ?? '');
@@ -12,6 +14,27 @@
 
   getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
 
+	const submissionHandler: SubmitFunction = async ({ action }) => {
+    return async ({ result }) => {
+
+      if (result.type !== 'redirect') {
+        await applyAction(result);
+        return;
+      }
+
+      const url = new URL(result.location, window.location.origin);
+
+      if (!window.HotwireNavigator.canNavigate(url)) {
+        await goto(result.location);
+        return;
+      }
+
+      window.HotwireNavigator.formSubmissionStarted(action);
+      window.HotwireNavigator.visitProposedToLocation(url);
+      window.HotwireNavigator.formSubmissionFinished(action);
+
+    };
+  }
 </script>
 
 <svelte:head>
@@ -28,7 +51,7 @@
   </div>
 {/snippet}
 
-<form method="post" id="verify-otp">
+<form method="post" id="verify-otp" use:enhance={submissionHandler}>
   <input type="hidden" name="email" bind:value={email}>
   <input name="otp" bind:value={otp} required placeholder="123456">
 </form>
