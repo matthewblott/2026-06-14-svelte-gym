@@ -14,13 +14,16 @@
 
 </script>
 
+<svelte:head>
+  <title>Gym App</title>  	
+</svelte:head>
+
 {#snippet header()}
   <h1>Gym App</h1>
-  <div role="group">
-    <a href={routes.auth.signIn()} role="button">Sign-in</a>
-    <button form="guest-sign-in" data-controller="bridge--button">Continue as guest</button>
-  </div>
 {/snippet}
+
+<a href={routes.auth.signIn()} role="button" class="outline">Sign-in</a>
+<button form="guest-sign-in" class="outline">Continue as guest</button>
 
 <form method="post" id="guest-sign-in" use:enhance>
 </form>
