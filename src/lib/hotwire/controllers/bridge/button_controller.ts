@@ -1,7 +1,7 @@
 import { BridgeComponent } from "@hotwired/hotwire-native-bridge"
 
 export default class extends BridgeComponent {
-  static component = "sign-in"
+  static component = "button"
 
   connect() {
     super.connect()
@@ -20,9 +20,10 @@ export default class extends BridgeComponent {
     const androidImage = element.bridgeAttribute("android-image")
     const color = element.bridgeAttribute("color")
     const data = {title: element.title, iosImage, androidImage, color}
-
-    this.send(side, data, () => {
-      this.element.click()
+    requestAnimationFrame(() => {
+      this.send(side, data, () => {
+        this.element.click()
+      })
     })
   }
 
@@ -30,4 +31,3 @@ export default class extends BridgeComponent {
     this.send("disconnect")
   }
 }
-

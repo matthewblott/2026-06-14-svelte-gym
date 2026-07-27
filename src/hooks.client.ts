@@ -1,8 +1,5 @@
+// import '$lib/hotwire/index' // Uncomment when not using the shim 
 import { goto } from '$app/navigation';
-import { tick } from 'svelte';
-import '$lib/hotwire/core';
-import { Application } from '@hotwired/stimulus';
-import { controllers } from '@joemasilotti/bridge-components';
 
 const nav = window.HotwireNavigator;
 
@@ -25,10 +22,8 @@ document.addEventListener('click', (event) => {
   nav.visitProposedToLocation(url, { action: 'advance', acceptsStreamResponse: false });
 }, { capture: true });
 
-tick().then(() => {
-	document.dispatchEvent(new Event('turbo:load'));
-});
-
-const application = Application.start();
-
-application.load(controllers);
+// Uncomment when not using the shim
+// import { tick } from 'svelte';
+// tick().then(() => {
+// 	document.dispatchEvent(new Event('turbo:load'));
+// });

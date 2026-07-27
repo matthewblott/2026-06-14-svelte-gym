@@ -26,6 +26,7 @@
   </div>
 {/snippet}
 
+<a href={routes.settings.index()} data-controller="bridge--button" class="hidden" data-bridge-side="left">Settings</a>
 <a href={routes.account.index()} data-controller="bridge--button" class="hidden">Account</a>
 
 <p>
