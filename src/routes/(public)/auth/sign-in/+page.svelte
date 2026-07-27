@@ -25,6 +25,8 @@
   </div>
 {/snippet}
 
+<button form="send-otp" data-controller="bridge--button">Send code</button>
+
 <form method="post" id="send-otp" use:enhance>
   <input name="email" bind:value={email} placeholder="sally@example.com">
 </form>

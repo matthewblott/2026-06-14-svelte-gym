@@ -19,6 +19,9 @@
   </div>
 {/snippet}
 
+    <button form="verify-otp" data-controller="bridge-button">
+      Verify 
+    </button>
 <form method="post" id="verify-otp">
   <input type="hidden" name="email" bind:value={email}>
   <input name="otp" bind:value={otp} required placeholder="123456">

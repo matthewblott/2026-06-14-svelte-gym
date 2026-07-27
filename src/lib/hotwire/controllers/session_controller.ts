@@ -5,32 +5,14 @@ export default class extends BridgeComponent {
 
   connect() {
     super.connect()
-    this.#addButton()
+    const signOut = "signOut"
+    this.send(signOut, {}, () => {
+      this.element.click()
+    })
+
   }
 
   disconnect() {
     super.disconnect()
-    // this.#removeButton()
   }
-
-  #addButton() {
-    const element = this.bridgeElement
-    const side = element.bridgeAttribute("side") || "right"
-    // const iosImage = element.bridgeAttribute("ios-image")
-    // const androidImage = element.bridgeAttribute("android-image")
-    // const color = element.bridgeAttribute("color")
-    // const data = {title: element.title, iosImage, androidImage, color}
-    // const data = {title: element.title}
-    const data = {}
-
-    this.send(side, data, () => {
-      // this.element.click()
-    })
-  }
-
-  // #removeButton() {
-  //   this.send("disconnect")
-  // }
 }
-
-

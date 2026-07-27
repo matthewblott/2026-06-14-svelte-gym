@@ -3147,9 +3147,11 @@
       const androidImage = element.bridgeAttribute("android-image");
       const color = element.bridgeAttribute("color");
       const data = { title: element.title, iosImage, androidImage, color };
-      this.send(side, data, () => {
-        this.element.click();
-      });
+      requestAnimationFrame(() => {
+        this.send(side, data, () => {
+          this.element.click();
+        });
+      })
     }
     #removeButton() {
       this.send("disconnect");
@@ -3491,7 +3493,23 @@
     { identifier: "bridge--toast", controllerConstructor: toast_controller_default }
   ];
 
+  // src/lib/hotwire/controllers/session_controller.ts
+  var session_controller_default = class extends BridgeComponent {
+    static component = "session";
+    connect() {
+      super.connect();
+      const signOut = "signOut";
+      this.send(signOut, {}, () => {
+        this.element.click();
+      });
+    }
+    disconnect() {
+      super.disconnect();
+    }
+  };
+
   // src/entry-bridge.ts
   var application = Application.start();
   application.load(controllers);
+  application.register("session", session_controller_default);
 })();

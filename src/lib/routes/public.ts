@@ -4,6 +4,8 @@ export const publicRoutes = {
       `/auth/sign-in`,
     verify: () => 
       `/auth/verify`,
+    afterSignOut: () => 
+      `/auth/after-sign-out`,
   },
   home: () => `/`,
 } as const;
