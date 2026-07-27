@@ -7,6 +7,10 @@
   getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
 </script>
 
+<svelte:head>
+  <title>Delete Account</title>  	
+</svelte:head>
+
 {#snippet header()}
   <h1>Delete Account</h1>
   <div role="group">

@@ -9,6 +9,13 @@ export const handle: Handle = async ({ event, resolve }) => {
     return new Response('Down for maintenance, back in a moment.', { status: 503 })
   }
 
+  const userAgent = event.request.headers.get('user-agent') ?? '';
+  const isHotwireNative =
+    userAgent.includes('Turbo Native') ||
+    userAgent.includes('Hotwire Native');
+
+  event.locals.isHotwireNative = isHotwireNative; 
+
   const session = await auth.api.getSession({
     headers: event.request.headers,
   });
@@ -25,7 +32,20 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.bunDb = bunDb; 
   }
 
-  const response = await svelteKitHandler({ event, resolve, auth, building });
+  const resolveWithHotwireClass: typeof resolve = (event, opts) =>
+    resolve(event, {
+      ...opts,
+      transformPageChunk: ({ html, done }) => {
+        const transformed = isHotwireNative
+          ? html.replace('<body', '<body class="hotwire-native"')
+          : html;
+        return opts?.transformPageChunk
+          ? opts.transformPageChunk({ html: transformed, done })
+          : transformed;
+      }
+    });
+
+  const response = await svelteKitHandler({ event, resolve: resolveWithHotwireClass, auth, building });
 
   event.locals.bunDb?.close()
 

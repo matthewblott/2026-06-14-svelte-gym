@@ -21,6 +21,10 @@
 
 </script>
 
+<svelte:head>
+  <title>Account</title>  	
+</svelte:head>
+
 {#snippet header()}
   <h1>Account</h1>
   <div role="group">

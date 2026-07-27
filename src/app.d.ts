@@ -11,6 +11,7 @@ declare global {
       user: User | null;
       db: Kysely<DB> | null
       bunDb: Database | null
+      isHotwireNative: boolean
     }
 		// interface PageData {}
 		// interface PageState {}

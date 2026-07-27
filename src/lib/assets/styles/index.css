@@ -1,7 +1,9 @@
 @layer
   core,
   components
+  hotwire-native
 ;
 
-@import url('./components/_components.css') layer(components);
 @import url('./core/_core.css') layer(core);
+@import url('./components/_components.css') layer(components);
+@import url('./hotwire-native.css') layer(hotwire-native);

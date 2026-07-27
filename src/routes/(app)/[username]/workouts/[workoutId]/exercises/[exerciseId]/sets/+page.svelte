@@ -10,8 +10,12 @@
   getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
 </script>
 
+<svelte:head>
+  <title>Exercise Sets</title>  	
+</svelte:head>
+
 {#snippet header()}
-  <h1>Sets</h1>
+  <h1>Exercise Sets</h1>
   <div role="group">
     <a href={routes.workouts.exercises.index(data.workoutId)} role="button">Exercises</a>
     <a href={
@@ -24,6 +28,15 @@
     </a>
   </div>
 {/snippet}
+
+<a href={
+    routes.workouts.exercises.sets.new({
+      workoutId: data.workoutId, exerciseId: data.exerciseId
+    })
+  }
+data-controller="bridge--button" class="hidden">
+  New
+</a>
 
 {#if data.sets.length}
   {#each data.sets as set}

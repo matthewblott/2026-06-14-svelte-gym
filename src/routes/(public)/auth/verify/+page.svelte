@@ -1,7 +1,11 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { getContext, type Snippet } from 'svelte';
-  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
+  // getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
+  const headerCtx = getContext<{ set: (s: Snippet | null) => void }>('header')
+  $effect(() => {
+    headerCtx.set(header);
+  });
   let otp = $state('');
   let email = $state(page.url.searchParams.get('email') ?? '');
 </script>

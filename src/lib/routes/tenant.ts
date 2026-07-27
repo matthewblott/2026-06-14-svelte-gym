@@ -3,7 +3,8 @@ type Id = number;
 export function createTenantRoutes(username: string) {
   return {
     home: () =>
-      `/${username}`,
+      // `/${username}`,
+      `/${username}/home`,
     account: {
       index: () =>
         `/${username}/account`,

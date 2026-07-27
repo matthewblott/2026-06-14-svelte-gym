@@ -24,6 +24,10 @@
 
 </script>
 
+<svelte:head>
+  <title>New Set</title>  	
+</svelte:head>
+
 {#snippet header()}
   <h1>New Set</h1>
   <div role="group">
@@ -31,6 +35,8 @@
     <button form="new-set-form">Save</button>
   </div>
 {/snippet}
+
+<button form="new-set-form" data-controller="bridge--button" class="hidden">Save</button>
 
 <form method="POST" id="new-set-form">
   {#if form?.error && !form?.field}

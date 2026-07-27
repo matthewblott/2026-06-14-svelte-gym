@@ -11,6 +11,10 @@
   getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
 </script>
 
+<svelte:head>
+  <title>{data.exercise.name}</title>  	
+</svelte:head>
+
 {#snippet header()}
   <h1>{data.exercise.name}</h1>
   <div role="group">

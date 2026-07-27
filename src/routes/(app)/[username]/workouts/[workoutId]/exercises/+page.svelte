@@ -4,13 +4,22 @@
   import barbell from '$lib/assets/images/icons/barbell-2.svg';
   import cardio from '$lib/assets/images/icons/cardio.svg';
   import { getContext, type Snippet } from 'svelte';
+  import { page } from '$app/state';
 
   let { data }: { data: PageData } = $props();
 
   const routes = $derived(createTenantRoutes(data.user.name));
+  const headerCtx = getContext<{ set: (s: Snippet | null) => void }>('header')
+  $effect(() => {
+    page.url;
+    headerCtx.set(header);
+  });
 
-  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
 </script>
+
+<svelte:head>
+  <title>Exercises</title>  	
+</svelte:head>
 
 {#snippet header()}
   <h1>Exercises</h1>
@@ -19,6 +28,8 @@
     <a href={routes.workouts.exercises.new(data.workoutId)} role="button">New</a>
   </div>
 {/snippet}
+
+<a href={routes.workouts.exercises.new(data.workoutId)} data-controller="bridge--button" class="hidden">New</a>
 
 {#if data.workoutExercises.length}
   {#each data.workoutExercises as exercise}

@@ -53,6 +53,10 @@
 
 </script>
 
+<svelte:head>
+  <title>New Exercise</title>  	
+</svelte:head>
+
 {#snippet header()}
   <h1>New Exercise</h1>
   <div role="group">
@@ -60,6 +64,8 @@
     <button form="new-workout-exercise-form" disabled={!canSubmit}>Save</button>
   </div>
 {/snippet}
+
+<button form="new-workout-exercise-form" disabled={!canSubmit} data-controller="bridge--button" class="hidden">Save</button>
 
 <form method="POST" use:enhance id="new-workout-exercise-form">
   <fieldset>

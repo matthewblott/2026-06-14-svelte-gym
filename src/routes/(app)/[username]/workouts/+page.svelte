@@ -33,6 +33,10 @@
 
 </script>
 
+<svelte:head>
+  <title>Workouts</title>  	
+</svelte:head>
+
 {#snippet header()}
   <h1>Workouts</h1>
   <div role="group">
@@ -41,13 +45,14 @@
   </div>
 {/snippet}
 
+<button form="new-workout-form" data-controller="bridge--button" class="hidden">New</button>
+
 <form method="post" id="new-workout-form">
   <input type="hidden" name="locale" value={navigator.language}>
 </form>
 
 {#if data.workouts.length}
   {#each data.workouts as workout, i}
-
     <article class="pill">
       <a href={routes.workouts.exercises.index(workout.id)}>
         <h2>

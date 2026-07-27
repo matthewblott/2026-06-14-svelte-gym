@@ -5,6 +5,7 @@ body {
   align-items: center; 
   max-width: 31.25rem;
   margin: 0 auto;
+  padding: 0 0.5rem;
 
   header {
     width: 100%;

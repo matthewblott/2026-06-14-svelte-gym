@@ -4,11 +4,16 @@
   import { setContext } from 'svelte';
   import type { Snippet } from 'svelte';
   import type { LayoutProps } from './$types';
+  import { beforeNavigate } from '$app/navigation';
 
   let header = $state<Snippet | null>(null);
 
   setContext('header', {
     set: (s: Snippet | null) => { header = s; }
+  });
+
+  beforeNavigate(() => {
+    header = null;
   });
 
   let { children }: LayoutProps = $props();
@@ -19,7 +24,7 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<header>
+<header class="hotwire-native-hidden">
   {#if header}
     {@render header()}
   {:else}

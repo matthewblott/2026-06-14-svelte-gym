@@ -1,7 +1,17 @@
 <script lang="ts">
+  import { enhance } from "$app/forms";
+  import { page } from "$app/state";
   import { publicRoutes as routes } from "$lib/routes";
   import { getContext, type Snippet } from 'svelte';
-  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
+
+  // getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
+  const headerCtx = getContext<{ set: (s: Snippet | null) => void }>('header')
+
+  $effect(() => {
+    page.url;
+    headerCtx.set(header);
+  });
+
 </script>
 
 {#snippet header()}
@@ -12,5 +22,5 @@
   </div>
 {/snippet}
 
-<form method="post" id="guest-sign-in">
+<form method="post" id="guest-sign-in" use:enhance>
 </form>

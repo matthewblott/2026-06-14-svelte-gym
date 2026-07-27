@@ -11,6 +11,10 @@
 
 </script>
 
+<svelte:head>
+  <title>Rename Account</title>  	
+</svelte:head>
+
 {#snippet header()}
   <h1>Rename Account</h1>
   <div role="group">

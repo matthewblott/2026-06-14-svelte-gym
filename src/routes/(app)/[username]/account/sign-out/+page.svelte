@@ -11,6 +11,10 @@
 
 </script>
 
+<svelte:head>
+  <title>Sign Out</title>  	
+</svelte:head>
+
 {#snippet header()}
   <h1>Sign Out</h1>
   <div role="group">

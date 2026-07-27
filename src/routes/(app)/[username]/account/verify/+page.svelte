@@ -14,6 +14,10 @@
 
 </script>
 
+<svelte:head>
+  <title>Verify Email</title>  	
+</svelte:head>
+
 {#snippet header()}
   <h1>Verify Email</h1>
   <div role="group">
