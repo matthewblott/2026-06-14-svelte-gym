@@ -39,4 +39,3 @@ export const load : PageServerLoad = async ({ params, locals }): Promise<PageSer
   return { sets, workoutId, exerciseId };
 
 };
-

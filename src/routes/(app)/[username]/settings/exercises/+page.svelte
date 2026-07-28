@@ -39,15 +39,10 @@
 {/if}
 
 <style>
-
   p {
     text-align: center;
   }
-
   article {
-    :hover {
-      /* background-color: lightyellow; */
-    }
     a {
       width: 100%;
       display: flex;
@@ -66,5 +61,4 @@
       }
     }
   }
-
 </style>
