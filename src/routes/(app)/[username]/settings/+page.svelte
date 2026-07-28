@@ -18,9 +18,22 @@
   <h1>Settings</h1>
   <div role="group">
     <a href={routes.home()} role="button">Home</a>
-    <a href={routes.settings.exercises.index()} role="button">Exercises</a>
+    <!-- <a href={routes.settings.exercises.index()} role="button">Exercises</a> -->
   </div>
 {/snippet}
 
 <a href={routes.home()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
-<a href={routes.settings.exercises.index()} data-controller="bridge--button" class="hidden">Exercises</a>
+
+<p>
+  Add more exercises here.
+
+</p>
+<a href={routes.settings.exercises.index()} role="button" class="outline">Exercises</a>
+
+<style>
+
+  p {
+    text-align: center;
+  }
+
+</style>

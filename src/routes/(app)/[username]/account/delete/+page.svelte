@@ -50,3 +50,11 @@
 <form method="post" use:enhance={submissionHandler}>
   <button class="outline danger">Delete Account</button>
 </form>
+
+<style>
+
+  p {
+    text-align: center;
+  }
+
+</style>

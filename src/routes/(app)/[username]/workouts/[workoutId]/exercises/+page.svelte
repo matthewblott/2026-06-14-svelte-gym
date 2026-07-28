@@ -58,9 +58,12 @@
 {/if}
 
 <style>
+  p {
+    text-align: center;
+  }
   article {
     :hover {
-      background-color: lightyellow;
+      /* background-color: lightyellow; */
     }
     a {
       width: 100%;

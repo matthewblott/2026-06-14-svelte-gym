@@ -16,7 +16,7 @@
     header = null;
   });
 
-  let { children }: LayoutProps = $props();
+  let { data, children }: LayoutProps = $props();
 
 </script>
 
@@ -25,7 +25,7 @@
 </svelte:head>
 
 <header class="hotwire-native-hidden">
-  {#if header}
+  {#if header && !data.isHotwireNative}
     {@render header()}
   {:else}
     <h1>Gym App</h1>

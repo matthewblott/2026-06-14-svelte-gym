@@ -1,13 +1,37 @@
 <script lang="ts">
-  import type { ActionData, PageData } from './$types';
+  import type { ActionData, PageData, SubmitFunction } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
   import { getContext, type Snippet } from 'svelte';
+    import { applyAction, enhance } from '$app/forms';
+    import { goto } from '$app/navigation';
 
   let { data, form }: { data: PageData; form: ActionData } = $props();
 
   const routes = $derived(createTenantRoutes(data.user.name));
 
   getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
+
+	const submissionHandler: SubmitFunction = async ({ action }) => {
+    return async ({ result }) => {
+
+      if (result.type !== 'redirect') {
+        await applyAction(result);
+        return;
+      }
+
+      const url = new URL(result.location, window.location.origin);
+
+      if (!window.HotwireNavigator.canNavigate(url)) {
+        await goto(result.location);
+        return;
+      }
+
+      window.HotwireNavigator.formSubmissionStarted(action);
+      window.HotwireNavigator.visitProposedToLocation(url);
+      window.HotwireNavigator.formSubmissionFinished(action);
+
+    };
+  }
 </script>
 
 <svelte:head>
@@ -25,7 +49,7 @@
 <a href={routes.settings.exercises.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Exercises</a>
 <button form="new-exercise-form" data-controller="bridge--button" class="hidden">Save</button>
 
-<form method="POST" id="new-exercise-form">
+<form method="post" use:enhance={submissionHandler} id="new-exercise-form">
   {#if form?.error && !form?.field}
     <p class="form-error">{form.message}</p>
   {/if}

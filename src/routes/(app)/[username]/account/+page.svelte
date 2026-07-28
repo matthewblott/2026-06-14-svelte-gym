@@ -35,11 +35,30 @@
 <a href={routes.home()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
 
 {#if !isAnonymous}
+<p>
+Change the name of your account here.
+</p>
   <a href={routes.account.rename()} role="button" class="outline">Rename Account</a>
+<p>
+
+Sign out from your account here.
+</p>
   <a href={routes.account.signOut()} role="button" class="outline">Sign Out</a>
 {:else}
+<p>
+  Add an email address and you can sign in on other devices. 
+</p>
   <a href={routes.account.register()} role="button" class="outline">Add email address</a>
 {/if}
-
+<p>
+Delete your account here.
+</p>
 <a href={routes.account.delete()} role="button" class="outline danger">Delete Account</a>
 
+<style>
+
+  p {
+    text-align: center;
+  }
+
+</style>

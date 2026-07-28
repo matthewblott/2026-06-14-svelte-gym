@@ -98,7 +98,7 @@
 
   article {
     :hover {
-      background-color: lightyellow;
+      /* background-color: lightyellow; */
     }
     a {
       width: 100%;

@@ -72,6 +72,10 @@ data-controller="bridge--button" class="hidden">
 {/if}
 
 <style>
+
+  p {
+    text-align: center;
+  }
   article {
     padding: 0.5rem 2rem;
     p {
