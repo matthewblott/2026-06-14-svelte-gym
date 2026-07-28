@@ -29,6 +29,7 @@
   </div>
 {/snippet}
 
+<a href={routes.workouts.exercises.index(data.workoutId)} data-controller="bridge--back" class="hidden" data-bridge-side="left">Exercises</a>
 <a href={
     routes.workouts.exercises.sets.new({
       workoutId: data.workoutId, exerciseId: data.exerciseId

@@ -29,6 +29,7 @@
   </div>
 {/snippet}
 
+<a href={routes.workouts.index()} data-controller="bridge--back" data-bridge-side="left" class="hidden">Workouts</a>
 <a href={routes.workouts.exercises.new(data.workoutId)} data-controller="bridge--button" class="hidden">New</a>
 
 {#if data.workoutExercises.length}

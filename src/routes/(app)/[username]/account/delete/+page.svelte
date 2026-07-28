@@ -43,6 +43,8 @@
   </div>
 {/snippet}
 
+<a href={routes.account.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Account</a>
+
 <p>This process cannot be undone. Are you sure you want to delete your account?</p>
 
 <form method="post" use:enhance={submissionHandler}>

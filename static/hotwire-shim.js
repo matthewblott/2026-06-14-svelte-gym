@@ -3063,6 +3063,35 @@
     }
   }
 
+  // src/lib/hotwire/controllers/bridge/back_controller.ts
+  var back_controller_default = class extends BridgeComponent {
+    static component = "back";
+    connect() {
+      super.connect();
+      this.#addButton();
+    }
+    disconnect() {
+      super.disconnect();
+      this.#removeButton();
+    }
+    #addButton() {
+      const element = this.bridgeElement;
+      const side = element.bridgeAttribute("side") || "right";
+      const iosImage = element.bridgeAttribute("ios-image");
+      const androidImage = element.bridgeAttribute("android-image");
+      const color = element.bridgeAttribute("color");
+      const data = { title: element.title, iosImage, androidImage, color };
+      requestAnimationFrame(() => {
+        this.send(side, data, () => {
+          this.element.click();
+        });
+      });
+    }
+    #removeButton() {
+      this.send("disconnect");
+    }
+  };
+
   // src/lib/hotwire/controllers/bridge/button_controller.ts
   var button_controller_default = class extends BridgeComponent {
     static component = "button";
@@ -3111,6 +3140,7 @@
 
   // src/lib/hotwire/index.ts
   var application = Application.start();
+  application.register("bridge--back", back_controller_default);
   application.register("bridge--button", button_controller_default);
   application.register("bridge--session", session_controller_default);
 })();

@@ -22,6 +22,10 @@
   </div>
 {/snippet}
 
+<a href={routes.settings.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Settings</a>
+
+<a href={routes.settings.exercises.new()} data-controller="bridge--back" class="hidden">New</a>
+
 {#if data.exercises.length}
   {#each data.exercises as exercise}
     <article>

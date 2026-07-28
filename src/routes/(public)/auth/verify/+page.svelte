@@ -5,6 +5,7 @@
   import { getContext } from 'svelte';
   import type { SubmitFunction } from '@sveltejs/kit';
   import type { Snippet } from 'svelte';
+  import { publicRoutes } from '$lib/routes';
   const headerCtx = getContext<{ set: (s: Snippet | null) => void }>('header')
   $effect(() => {
     headerCtx.set(header);
@@ -36,15 +37,21 @@
 
 </script>
 
+<svelte:head>
+  <title>Sign in</title>  	
+</svelte:head>
+
 {#snippet header()}
   <h1>Verify Email</h1>
   <div role="group">
+    <a href={publicRoutes.auth.signIn()} role="button">Resend Code</a>
     <button form="verify-otp">
       Verify 
     </button>
   </div>
 {/snippet}
 
+<a href={publicRoutes.auth.signIn()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Resend Code</a>
 <button form="verify-otp" data-controller="bridge--button" class="hidden">Verify</button>
 
 <form method="post" id="verify-otp" use:enhance={submissionHandler}>

@@ -6,8 +6,8 @@
   import cycle from '$lib/assets/images/icons/cycle.svg';
   import runner from '$lib/assets/images/icons/runner.svg';
   import { getContext, type Snippet } from 'svelte';
-    import { applyAction, enhance } from '$app/forms';
-    import { goto } from '$app/navigation';
+  import { applyAction, enhance } from '$app/forms';
+  import { goto } from '$app/navigation';
 
   let { data }: { data: PageData } = $props();
 
@@ -68,6 +68,7 @@
   </div>
 {/snippet}
 
+<a href={routes.home()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
 <button form="new-workout-form" data-controller="bridge--button" class="hidden">New</button>
 
 <form method="post" id="new-workout-form" use:enhance={submissionHandler}>
@@ -118,4 +119,7 @@
     }
   }
 
+  p {
+    text-align: center;
+  }
 </style>

@@ -22,4 +22,5 @@
   </div>
 {/snippet}
 
+<a href={routes.home()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
 <a href={routes.settings.exercises.index()} data-controller="bridge--button" class="hidden">Exercises</a>

@@ -22,6 +22,9 @@
   </div>
 {/snippet}
 
+<a href={routes.settings.exercises.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Exercises</a>
+<button form="new-exercise-form" data-controller="bridge--button" class="hidden">Save</button>
+
 <form method="POST" id="new-exercise-form">
   {#if form?.error && !form?.field}
     <p class="form-error">{form.message}</p>

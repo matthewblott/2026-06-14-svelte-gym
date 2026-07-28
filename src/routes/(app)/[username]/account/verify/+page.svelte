@@ -51,6 +51,9 @@
   </div>
 {/snippet}
 
+<a href={routes.account.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Account</a>
+<button form="verify-otp" data-controller="bridge--button" class="hidden">Verify</button>
+
 <form method="post" id="verify-otp" use:enhance={submissionHandler}>
   <input type="hidden" name="email" bind:value={email}>
   <input name="otp" bind:value={otp} required placeholder="123456">

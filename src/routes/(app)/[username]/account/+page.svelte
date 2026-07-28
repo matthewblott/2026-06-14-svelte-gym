@@ -32,6 +32,8 @@
   </div>
 {/snippet}
 
+<a href={routes.home()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
+
 {#if !isAnonymous}
   <a href={routes.account.rename()} role="button" class="outline">Rename Account</a>
   <a href={routes.account.signOut()} role="button" class="outline">Sign Out</a>

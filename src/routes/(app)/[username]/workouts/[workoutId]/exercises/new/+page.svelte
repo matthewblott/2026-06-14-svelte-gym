@@ -87,6 +87,7 @@
   </div>
 {/snippet}
 
+<a href={routes.workouts.exercises.index(data.workoutId)} data-controller="bridge--back" data-bridge-side="left" class="hidden">Exercises</a>
 <button form="new-workout-exercise-form" disabled={!canSubmit} data-controller="bridge--button" class="hidden">Save</button>
 
 <form method="POST" use:enhance={submissionHandler} id="new-workout-exercise-form">

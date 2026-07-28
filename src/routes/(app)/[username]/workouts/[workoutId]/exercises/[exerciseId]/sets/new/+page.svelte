@@ -59,6 +59,7 @@
   </div>
 {/snippet}
 
+<a href={backRoute} data-controller="bridge--back" data-bridge-side="left" class="hidden">{backRouteText}</a>
 <button form="new-set-form" data-controller="bridge--button" class="hidden">Save</button>
 
 <form method="post" id="new-set-form" use:enhance={submissionHandler}>

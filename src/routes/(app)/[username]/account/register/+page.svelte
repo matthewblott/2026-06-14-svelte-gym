@@ -48,6 +48,9 @@
   </div>
 {/snippet}
 
+<a href={routes.account.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Account</a>
+<button form="send-otp" data-controller="bridge--button" class="hidden">Send code</button>
+
 <form method="post" id="send-otp" use:enhance={submissionHandler}>
   <input name="email" bind:value={email} placeholder="sally@example.com">
 </form>

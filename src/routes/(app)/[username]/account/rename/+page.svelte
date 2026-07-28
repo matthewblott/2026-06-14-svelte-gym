@@ -45,7 +45,9 @@
   </div>
 {/snippet}
 
+<a href={routes.account.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Account</a>
+
 <form method="post" use:enhance={submissionHandler}>
   <input name="name" value={data?.user.name}>
-  <button>Save</button>
+  <button class="outline">Save</button>
 </form>
