@@ -118,7 +118,6 @@
       }
     }
   }
-
   p {
     text-align: center;
   }
