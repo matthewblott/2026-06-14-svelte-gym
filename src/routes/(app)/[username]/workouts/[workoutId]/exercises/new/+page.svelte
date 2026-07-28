@@ -1,14 +1,11 @@
 <script lang="ts">
-  import { applyAction, enhance } from '$app/forms';
-  import type { PageData, SubmitFunction } from './$types';
+  import Form from '$lib/components/Form.svelte';
+  import Header from "$lib/components/Header.svelte";
+  import type { PageData } from './$types';
   import type { ExerciseList } from './+page.server.ts';
   import { createTenantRoutes } from '$lib/routes/tenant';
-  import { getContext, type Snippet } from 'svelte';
-    import { goto } from '$app/navigation';
-
   const { data }: { data: PageData } = $props();
   const routes = $derived(createTenantRoutes(data.user.name));
-
   let exercises = $derived<ExerciseList[]>(data.exercises);
   let exerciseName = $state('');
   let exerciseType = $state<'cardio' | 'weights' | ''>('');
@@ -36,8 +33,6 @@
     (!!match || isNewExercise)
   );
 
-  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
-
   function selectExercise(exercise: ExerciseList) {
     exerciseName = exercise.name;
     exerciseType = exercise.exerciseType;
@@ -51,46 +46,25 @@
   function handleBlur() {
     setTimeout(() => { showSuggestions = false; }, 150);
   }
-
-	const submissionHandler: SubmitFunction = async ({ action }) => {
-    return async ({ result }) => {
-
-      if (result.type !== 'redirect') {
-        await applyAction(result);
-        return;
-      }
-
-      const url = new URL(result.location, window.location.origin);
-
-      if (!window.HotwireNavigator.canNavigate(url)) {
-        await goto(result.location);
-        return;
-      }
-
-      window.HotwireNavigator.formSubmissionStarted(action);
-      window.HotwireNavigator.visitProposedToLocation(url);
-      window.HotwireNavigator.formSubmissionFinished(action);
-
-    };
-  }
 </script>
 
 <svelte:head>
   <title>New Exercise</title>  	
 </svelte:head>
 
-{#snippet header()}
+<Header>
   <h1>New Exercise</h1>
   <div role="group">
     <a href={routes.workouts.exercises.index(data.workoutId)} role="button">Exercises</a>
     <button form="new-workout-exercise-form" disabled={!canSubmit}>Save</button>
   </div>
-{/snippet}
+</Header>
 
 <a href={routes.workouts.exercises.index(data.workoutId)} data-controller="bridge--back" data-bridge-side="left" class="hidden">Exercises</a>
 <button form="new-workout-exercise-form" disabled={!canSubmit} data-controller="bridge--button" class="hidden">Save</button>
 
-<form method="POST" use:enhance={submissionHandler} id="new-workout-exercise-form">
+<Form id="new-workout-exercise-form">
+
   <fieldset>
     <input type="hidden" name="workoutId" value={data.workoutId} />
     <input type="hidden" name="exerciseId" value={match?.id ?? ''} />
@@ -141,10 +115,9 @@
       </label>
     </form-field>
   </fieldset>
-</form>
+</Form>
 
 <style>
-
   form-field {
     ul {
       border-radius: var(--border-radius-pill);
@@ -159,5 +132,4 @@
       }
     }
   }
-
 </style>

@@ -1,9 +1,8 @@
 <script lang="ts">
-  import type { ActionData, PageData, SubmitFunction } from './$types';
+  import Form from '$lib/components/Form.svelte';
+  import Header from "$lib/components/Header.svelte";
+  import type { ActionData, PageData } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
-  import { getContext, type Snippet } from 'svelte';
-    import { applyAction, enhance } from '$app/forms';
-    import { goto } from '$app/navigation';
 
   let { form, data }: { form: ActionData, data: PageData } = $props();
 
@@ -21,48 +20,24 @@
     backRoute = routes.workouts.exercises.index(workoutId);
     backRouteText = 'Exercises';
   }
-
-  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
-
-	const submissionHandler: SubmitFunction = async ({ action }) => {
-    return async ({ result }) => {
-
-      if (result.type !== 'redirect') {
-        await applyAction(result);
-        return;
-      }
-
-      const url = new URL(result.location, window.location.origin);
-
-      if (!window.HotwireNavigator.canNavigate(url)) {
-        await goto(result.location);
-        return;
-      }
-
-      window.HotwireNavigator.formSubmissionStarted(action);
-      window.HotwireNavigator.visitProposedToLocation(url);
-      window.HotwireNavigator.formSubmissionFinished(action);
-
-    };
-  }
 </script>
 
 <svelte:head>
   <title>New Set</title>  	
 </svelte:head>
 
-{#snippet header()}
+<Header>
   <h1>New Set</h1>
   <div role="group">
     <a href={backRoute} role="button">{backRouteText}</a>
     <button form="new-set-form">Save</button>
   </div>
-{/snippet}
+</Header>
 
 <a href={backRoute} data-controller="bridge--back" data-bridge-side="left" class="hidden">{backRouteText}</a>
 <button form="new-set-form" data-controller="bridge--button" class="hidden">Save</button>
 
-<form method="post" id="new-set-form" use:enhance={submissionHandler}>
+<Form id="new-set-form">
   {#if form?.error && !form?.field}
     <p class="form-error">{form.message}</p>
   {/if}
@@ -136,4 +111,4 @@
 
   {/if}
 
-</form>
+</Form>

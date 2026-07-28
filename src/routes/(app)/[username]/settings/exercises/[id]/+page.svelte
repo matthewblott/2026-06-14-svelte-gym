@@ -1,56 +1,29 @@
 <script lang="ts">
-  import type { PageData, SubmitFunction } from './$types';
+  import Form from '$lib/components/Form.svelte';
+  import Header from "$lib/components/Header.svelte";
+  import type { PageData } from './$types';
   import type { ActionData } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
-  import { getContext, type Snippet } from 'svelte';
-    import { applyAction, enhance } from '$app/forms';
-    import { goto } from '$app/navigation';
-
   let { data, form }: { data: PageData, form: ActionData } = $props();
-
   const routes = $derived(createTenantRoutes(data.user.name));
-
-  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
-
-	const submissionHandler: SubmitFunction = async ({ action }) => {
-    return async ({ result }) => {
-
-      if (result.type !== 'redirect') {
-        await applyAction(result);
-        return;
-      }
-
-      const url = new URL(result.location, window.location.origin);
-
-      if (!window.HotwireNavigator.canNavigate(url)) {
-        await goto(result.location);
-        return;
-      }
-
-      window.HotwireNavigator.formSubmissionStarted(action);
-      window.HotwireNavigator.visitProposedToLocation(url);
-      window.HotwireNavigator.formSubmissionFinished(action);
-
-    };
-  }
 </script>
 
 <svelte:head>
   <title>{data.exercise.name}</title>  	
 </svelte:head>
 
-{#snippet header()}
+<Header>
   <h1>{data.exercise.name}</h1>
   <div role="group">
     <a href={routes.settings.exercises.index()} role="button">Exercises</a>
     <button form="exercise-form">Save</button>
   </div>
-{/snippet}
+</Header>
 
 <a href={routes.settings.exercises.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Exercises</a>
 <button form="exercise-form" data-controller="bridge--button" class="hidden">Save</button>
 
-<form method="post" use:enhance={submissionHandler} id="exercise-form">
+<Form id="exercise-form">
   {#if form?.error && !form?.field}
     <p class="form-error">{form.message}</p>
   {/if}
@@ -75,7 +48,7 @@
     </select>
   </label>
 
-</form>
+</Form>
 
 <style>
   .form-error {

@@ -1,33 +1,24 @@
 <script lang="ts">
+  import Header from "$lib/components/Header.svelte";
   import type { PageData } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
   import barbell from '$lib/assets/images/icons/barbell-2.svg';
   import cardio from '$lib/assets/images/icons/cardio.svg';
-  import { getContext, type Snippet } from 'svelte';
-  import { page } from '$app/state';
-
   let { data }: { data: PageData } = $props();
-
   const routes = $derived(createTenantRoutes(data.user.name));
-  const headerCtx = getContext<{ set: (s: Snippet | null) => void }>('header')
-  $effect(() => {
-    page.url;
-    headerCtx.set(header);
-  });
-
 </script>
 
 <svelte:head>
   <title>Exercises</title>  	
 </svelte:head>
 
-{#snippet header()}
+<Header>
   <h1>Exercises</h1>
   <div role="group">
     <a href={routes.workouts.index()} role="button">Workouts</a>
     <a href={routes.workouts.exercises.new(data.workoutId)} role="button">New</a>
   </div>
-{/snippet}
+</Header>
 
 <a href={routes.workouts.index()} data-controller="bridge--back" data-bridge-side="left" class="hidden">Workouts</a>
 <a href={routes.workouts.exercises.new(data.workoutId)} data-controller="bridge--button" class="hidden">New</a>
@@ -62,9 +53,6 @@
     text-align: center;
   }
   article {
-    :hover {
-      /* background-color: lightyellow; */
-    }
     a {
       width: 100%;
       display: flex;
@@ -73,7 +61,6 @@
       align-items: center;
 
       h2 {
-        /* color: var(--color-primary); */
         color: color-mix(in srgb, var(--color-primary), black 30%);
         font-size: xx-large;
       }

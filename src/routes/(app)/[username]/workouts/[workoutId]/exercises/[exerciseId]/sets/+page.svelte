@@ -1,20 +1,16 @@
 <script lang="ts">
+  import Header from "$lib/components/Header.svelte";
   import type { PageData } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
-  import { getContext, type Snippet } from 'svelte';
-
   let { data }: { data: PageData } = $props();
-
   const routes = $derived(createTenantRoutes(data.user.name));
-
-  getContext<{ set: (s: Snippet | null) => void }>('header').set(header);
 </script>
 
 <svelte:head>
   <title>Exercise Sets</title>  	
 </svelte:head>
 
-{#snippet header()}
+<Header>
   <h1>Exercise Sets</h1>
   <div role="group">
     <a href={routes.workouts.exercises.index(data.workoutId)} role="button">Exercises</a>
@@ -27,7 +23,7 @@
       New
     </a>
   </div>
-{/snippet}
+</Header>
 
 <a href={routes.workouts.exercises.index(data.workoutId)} data-controller="bridge--back" class="hidden" data-bridge-side="left">Exercises</a>
 <a href={
@@ -35,7 +31,7 @@
       workoutId: data.workoutId, exerciseId: data.exerciseId
     })
   }
-data-controller="bridge--button" class="hidden">
+  data-controller="bridge--button" class="hidden">
   New
 </a>
 
