@@ -8,7 +8,7 @@ import type { SQLQueryBindings } from 'bun:sqlite';
 
 export function getTenantDb(id: number) {
   const path = `storage/tenants/${id}.sqlite3`;
-  const bunDb = new BunDatabase(path, { create: true, safeIntegers: true });
+  const bunDb = new BunDatabase(path, { create: true, safeIntegers: false });
 
   bunDb.prepare('PRAGMA journal_mode = WAL').run();
   bunDb.prepare('PRAGMA foreign_keys = ON').run();

@@ -7,12 +7,15 @@
   import cardio from '$lib/assets/images/icons/cardio.svg';
   import cycle from '$lib/assets/images/icons/cycle.svg';
   import runner from '$lib/assets/images/icons/runner.svg';
+	import { onMount, untrack } from 'svelte';
+  import { browser } from '$app/environment';
+
+  const locale = $state(browser ? navigator.language : 'en-US');
 
   let { data }: { data: PageData } = $props();
 
   const routes = $derived(createTenantRoutes(data.user.name));
   const icons = [cycle, runner, cardio, barbell];
-  const locale = $state(navigator.language);
 
   const dayFormatter = new Intl.DateTimeFormat(locale, {
     weekday: 'long',
@@ -29,6 +32,36 @@
     minute: '2-digit',
     hour12: false
   });
+
+  let items = $state(untrack(() => data.workouts));
+	let nextCursor = $state(untrack(() => data.nextCursor));
+
+	let loading = $state(false);
+	let sentinel: HTMLElement;
+
+	async function loadMore() {
+		if (loading || !nextCursor) return;
+		loading = true;
+
+    const route = routes.api.workouts.index();
+		const res = await fetch(`${route}?cursor=${encodeURIComponent(nextCursor)}`);
+		const json = await res.json();
+
+		items = [...items, ...json.workouts];
+		nextCursor = json.nextCursor;
+		loading = false;
+	}
+	onMount(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting) loadMore();
+        console.log('intersecting:', entries[0].isIntersecting, 'nextCursor:', nextCursor, 'sentinel:', sentinel);
+			},
+			{ rootMargin: '400px' } // start loading before it's fully visible
+		);
+		observer.observe(sentinel);
+		return () => observer.disconnect();
+	});
 
 </script>
 
@@ -51,23 +84,29 @@
   <input type="hidden" name="locale" value={navigator.language}>
 </Form>
 
-{#if data.workouts.length}
-  {#each data.workouts as workout, i}
-    <article class="pill">
-      <a href={routes.workouts.exercises.index(workout.id)}>
-        <h2>
-          {dayFormatter.format(new Date(workout.createdAt))}          
-        </h2>
-        <h3>
-          {dateFormatter.format(new Date(workout.createdAt))} @
-          {timeFormatter.format(new Date(workout.createdAt))}          
-        </h3>
-        <img src={icons[i % icons.length]} alt={workout.name} width="48" height="48">
-      </a>
-    </article>
-  {/each}
-{:else}
-  <p>No workouts yet.</p>
+{#each items as workout, i}
+  <article class="pill">
+    <a href={routes.workouts.exercises.index(workout.id)}>
+      <h2>
+        {dayFormatter.format(new Date(workout.createdAt))}          
+      </h2>
+      <h3>
+        {dateFormatter.format(new Date(workout.createdAt))} @
+        {timeFormatter.format(new Date(workout.createdAt))}          
+      </h3>
+      <img src={icons[i % icons.length]} alt={workout.name} width="48" height="48">
+    </a>
+  </article>
+{/each}
+
+<div bind:this={sentinel} aria-hidden="true"></div>
+
+{#if loading}
+	<p>Loading…</p>
+{/if}
+
+{#if !nextCursor && items.length}
+	<p>You've reached the end.</p>
 {/if}
 
 <style>

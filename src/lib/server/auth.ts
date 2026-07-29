@@ -6,6 +6,7 @@ import { env } from '$env/dynamic/private';
 import { db } from './db';
 import { copyFile, mkdir, rm } from 'fs/promises'
 import nodemailer from 'nodemailer';
+import { Database } from "bun:sqlite";
 
 export const auth = betterAuth({
 	baseURL: env.BASE_URL,
@@ -165,17 +166,26 @@ async function createTenantDb(userId: string): Promise<void> {
 }
 
 async function copyAnonymousTenantDb(oldUserId: string, newUserId: string) {
+  const sourcePath = `./storage/tenants/${oldUserId}.sqlite3`;
   const targetPath = `./storage/tenants/${newUserId}.sqlite3`;
-  const target = Bun.file(targetPath);
+  const source = new Database(sourcePath);
 
-  if (!(await target.exists())) {
-    await copyFile(`./storage/tenants/${oldUserId}.sqlite3`, targetPath); 
+  try {
+    source.run("PRAGMA wal_checkpoint(TRUNCATE);");
+  } finally {
+    source.close();
   }
 
+  await copyFile(sourcePath, targetPath);
 }
 
 async function deleteTenantDb(userId: string): Promise<void> {
-  await rm(`./storage/tenants/${userId}.sqlite3`, { force: true })
+  const base = `./storage/tenants/${userId}.sqlite3`;
+  await Promise.all([
+    rm(base, { force: true }),
+    rm(`${base}-shm`, { force: true }),
+    rm(`${base}-wal`, { force: true }),
+  ]);
 } 
 
 type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };

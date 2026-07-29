@@ -3,7 +3,6 @@ type Id = number;
 export function createTenantRoutes(username: string) {
   return {
     home: () =>
-      // `/${username}`,
       `/${username}/home`,
     account: {
       index: () =>
@@ -56,6 +55,11 @@ export function createTenantRoutes(username: string) {
         },
       }
     },
-
+    api: {
+      workouts: {
+        index: () =>
+          `/${username}/api/workouts`,
+      }
+    }
   } as const;
 }
