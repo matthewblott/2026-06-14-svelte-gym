@@ -16,12 +16,12 @@
 <Header>
   <h1>Sign in</h1>
   <div role="group">
-    <a href={publicRoutes.home()} role="button">Home</a>
+    <a href={publicRoutes.auth.index()} role="button">Home</a>
     <button form="send-otp">Send code</button>
   </div>
 </Header>
 
-<a href={publicRoutes.home()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
+<a href={publicRoutes.auth.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
 <button form="send-otp" data-controller="bridge--button" class="hidden">Send code</button>
 
 <Form id="send-otp">

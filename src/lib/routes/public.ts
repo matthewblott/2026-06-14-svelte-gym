@@ -1,5 +1,7 @@
 export const publicRoutes = {
   auth: {
+    index: () =>
+      `/auth`,
     signIn: () => 
       `/auth/sign-in`,
     verify: () => 

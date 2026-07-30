@@ -2,7 +2,7 @@
   import { applyAction, enhance } from "$app/forms";
   import { goto } from "$app/navigation";
   import type { Snippet } from "svelte";
-  import type { SubmitFunction } from "./$types";
+  import type { SubmitFunction } from "@sveltejs/kit";
 
 	let props: { id?:string; children?: Snippet } = $props();
 
@@ -20,7 +20,6 @@
         await goto(result.location);
         return;
       }
-
       window.HotwireNavigator.formSubmissionStarted(action);
       window.HotwireNavigator.visitProposedToLocation(url);
       window.HotwireNavigator.formSubmissionFinished(action);

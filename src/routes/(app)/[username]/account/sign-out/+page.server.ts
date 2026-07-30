@@ -8,7 +8,7 @@ export const actions: Actions = {
     await auth.api.signOut({
       headers: request.headers
     });
-    const route = publicRoutes.home();
+    const route = publicRoutes.auth.index();
     redirect(303, route);
   },
 };

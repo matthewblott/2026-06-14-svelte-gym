@@ -55,7 +55,6 @@
 		const observer = new IntersectionObserver(
 			(entries) => {
 				if (entries[0].isIntersecting) loadMore();
-        console.log('intersecting:', entries[0].isIntersecting, 'nextCursor:', nextCursor, 'sentinel:', sentinel);
 			},
 			{ rootMargin: '400px' } // start loading before it's fully visible
 		);
@@ -87,13 +86,15 @@
 {#each items as workout, i}
   <article class="pill">
     <a href={routes.workouts.exercises.index(workout.id)}>
-      <h2>
-        {dayFormatter.format(new Date(workout.createdAt))}          
-      </h2>
-      <h3>
-        {dateFormatter.format(new Date(workout.createdAt))} @
-        {timeFormatter.format(new Date(workout.createdAt))}          
-      </h3>
+      <div>
+        <h2>
+          {dayFormatter.format(new Date(workout.createdAt))}          
+        </h2>
+        <h3>
+          {dateFormatter.format(new Date(workout.createdAt))} @
+          {timeFormatter.format(new Date(workout.createdAt))}          
+        </h3>
+      </div>
       <img src={icons[i % icons.length]} alt={workout.name} width="48" height="48">
     </a>
   </article>
@@ -118,13 +119,17 @@
       padding: 0 2rem;
       align-items: center;
 
-      h2 {
-        color: color-mix(in srgb, var(--color-primary), black 30%);
-        font-size: xx-large;
-      }
-      h3 {
-        font-size: large;
-        color: grey;
+      div {
+        display: flex;
+        flex-direction: column;
+        h2 {
+          color: color-mix(in srgb, var(--color-primary), black 30%);
+          font-size: xx-large;
+        }
+        h3 {
+          font-size: large;
+          color: grey;
+        }
       }
     }
   }

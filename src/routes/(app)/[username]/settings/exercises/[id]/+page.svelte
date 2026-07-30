@@ -29,7 +29,7 @@
   {/if}
 
   <label>
-    Name
+    <span>Name</span>
     <input
       name="name"
       placeholder="Name"
@@ -41,7 +41,7 @@
     {/if}
   </label>
   <label>
-    Type
+    <span>Type</span>
     <select name="exerciseType">
       <option value="weights" selected={data.exercise.exerciseType === 'weights'}>Weights</option>
       <option value="cardio" selected={data.exercise.exerciseType === 'cardio'}>Cardio</option>
@@ -51,6 +51,15 @@
 </Form>
 
 <style>
+  label {
+    span {
+      margin-left: 0.5rem;
+    }
+    input, select {
+      margin-top: 0.5rem;
+    }
+  }
+
   .form-error {
     color: #b91c1c;
   }

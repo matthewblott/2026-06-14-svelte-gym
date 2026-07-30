@@ -27,18 +27,23 @@
   {#each data.workoutExercises as exercise}
     <article class="pill">
       <a href="{routes.workouts.exercises.sets.index({ workoutId: exercise.workoutId, exerciseId: exercise.exerciseId})}">
-        <h2>
-          {exercise.exerciseName}
-        </h2>
+        <div>
+          <h2>
+            {exercise.exerciseName}
+          </h2>
+          {#if exercise.exerciseType === 'weights'}
+            <h3>
+              {exercise.numberOfSets} sets
+            </h3>
+          {:else} 
+            <h3>
+              {exercise.totalDistance} km
+            </h3>
+          {/if}
+        </div>
         {#if exercise.exerciseType === 'weights'}
-          <h3>
-            {exercise.numberOfSets} sets
-          </h3>
           <img src={barbell} width="48" height="48" alt="Barbell">
         {:else} 
-          <h3>
-            {exercise.totalDistance} km
-          </h3>
           <img src={cardio} width="48" height="48" alt="Cardio">
         {/if}
       </a>
@@ -60,14 +65,27 @@
       padding: 0 2rem;
       align-items: center;
 
-      h2 {
-        color: color-mix(in srgb, var(--color-primary), black 30%);
-        font-size: xx-large;
+      div {
+        display: flex;
+        flex-direction: column;
+        h2 {
+          color: color-mix(in srgb, var(--color-primary), black 30%);
+          font-size: xx-large;
+        }
+        h3 {
+          font-size: large;
+          color: grey;
+        }
       }
-      h3 {
-        font-size: xx-large;
-        color: grey;
-      }
+
+      /* h2 { */
+      /*   color: color-mix(in srgb, var(--color-primary), black 30%); */
+      /*   font-size: xx-large; */
+      /* } */
+      /* h3 { */
+      /*   font-size: xx-large; */
+      /*   color: grey; */
+      /* } */
     }
   }
 </style>

@@ -70,54 +70,80 @@
     <input type="hidden" name="exerciseId" value={match?.id ?? ''} />
 
     <form-field>
-      <label for="exercise-name">Exercise Name</label>
-      <input
-        id="exercise-name"
-        name="exerciseName"
-        bind:value={exerciseName}
-        oninput={handleInput}
-        onblur={handleBlur}
-        onfocus={() => showSuggestions = true}
-        placeholder="Search or add new..."
-        autocomplete="off"
-      >
-
-      {#if showSuggestions && filteredExercises.length > 0}
-        <ul>
-          {#each filteredExercises as exercise (exercise.id)}
-            <li
-              role="option"
-              aria-selected={exercise.id === match?.id}
-              onmousedown={() => selectExercise(exercise)}
-            >
-              <span>{exercise.name}</span>
-              <span>{exercise.exerciseType}</span>
-            </li>
-          {/each}
-          {#if isNewExercise}
-            <li>New exercise — will be added to the list on save.</li>
-          {/if}
-        </ul>
-      {/if}
+      <label>
+        <span>Exercise Name</span>
+        <input
+          name="exerciseName"
+          bind:value={exerciseName}
+          oninput={handleInput}
+          onblur={handleBlur}
+          onfocus={() => showSuggestions = true}
+          placeholder="Search or add new..."
+          autocomplete="off"
+        >
+        {#if showSuggestions && filteredExercises.length > 0}
+          <ul>
+            {#each filteredExercises as exercise (exercise.id)}
+              <li
+                role="option"
+                aria-selected={exercise.id === match?.id}
+                onmousedown={() => selectExercise(exercise)}
+              >
+                <span>{exercise.name}</span>
+                <span>{exercise.exerciseType}</span>
+              </li>
+            {/each}
+            {#if isNewExercise}
+              <li class="new-exercise">New exercise — will be added to the list on save.</li>
+            {/if}
+          </ul>
+        {/if}
+      </label>
     </form-field>
     <form-field disabled={!isNewExercise && !!match}>
       <legend>
-        Exercise Type
+        <span>Exercise Type</span>
         {#if isNewExercise}<span class="required">*</span>{/if}
       </legend>
-      <label>
-        <input type="radio" name="exerciseType" bind:group={exerciseType} value="weights" />
-        Weights
-      </label>
-      <label>
-        <input type="radio" name="exerciseType" bind:group={exerciseType} value="cardio" />
-        Cardio
-      </label>
+      <div>
+        <label>
+          <input type="radio" name="exerciseType" bind:group={exerciseType} value="weights">
+          Weights
+        </label>
+        <label>
+          <input type="radio" name="exerciseType" bind:group={exerciseType} value="cardio">
+          Cardio
+        </label>
+      </div>
     </form-field>
   </fieldset>
 </Form>
 
 <style>
+  legend {
+    span {
+      margin-left: 0.5rem;
+    }
+    margin-bottom: 0.25rem;
+  }
+  label {
+    span {
+      margin-left: 0.5rem;
+    }
+    input {
+      margin-top: 0.5rem;
+    }
+  }
+  form-field {
+    div {
+      display: flex;
+      gap: 1rem;
+      border-radius: var(--border-radius-pill);
+      border: 0.05rem solid darkgray;
+      padding: 0.7rem 1.2rem;
+    }
+  }
+
   form-field {
     ul {
       border-radius: var(--border-radius-pill);
@@ -126,9 +152,14 @@
       border: 0.05rem solid darkgray;
       li {
         padding: 0 0.6rem;
-      }
-      li:hover {
-        background-color: lightyellow; 
+
+        &:hover {
+          background-color: lightyellow; 
+        }
+        &.new-exercise {
+          font-style: italic;
+          margin-left: 0.5rem;
+        }
       }
     }
   }

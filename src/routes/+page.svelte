@@ -1,7 +1,14 @@
 <script lang="ts">
-  import { publicRoutes as routes } from "$lib/routes";
-  import Form from '$lib/components/Form.svelte';
+  import { publicRoutes } from "$lib/routes";
   import Header from "$lib/components/Header.svelte";
+  import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
+  
+  onMount(() => {
+    setTimeout(() => {
+     goto(publicRoutes.auth.index());
+    }, 1000) 
+  })
 </script>
 
 <svelte:head>
@@ -12,7 +19,4 @@
   <h1>Gym App</h1>
 </Header>
 
-<a href={routes.auth.signIn()} role="button" class="outline">Sign-in</a>
-<button form="guest-sign-in" class="outline">Continue as guest</button>
-
-<Form id="guest-sign-in" />
+<p>This is the splash page.</p>

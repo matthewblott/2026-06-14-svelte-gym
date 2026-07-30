@@ -28,7 +28,7 @@
   {/if}
 
   <label>
-    Name
+    <span>Name</span>
     <input
       name="name"
       placeholder="Name"
@@ -41,7 +41,7 @@
   </label>
 
   <label>
-    Type
+    <span>Type</span>
     <select name="exerciseType">
       <option value="" disabled selected>Select a type</option>
       <option value="weights">Weights</option>
@@ -54,6 +54,15 @@
 </Form>
 
 <style>
+  label {
+    span {
+      margin-left: 0.5rem;
+    }
+    input, select {
+      margin-top: 0.5rem;
+    }
+  }
+
   .form-error {
     color: #b91c1c;
   }

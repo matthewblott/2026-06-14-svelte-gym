@@ -10,9 +10,6 @@ export type SelectableWorkout = Selectable<Workout>
 const PAGE_SIZE = 5;
 
 export const load = async ({ locals, url }: { locals: App.Locals; url: URL }): Promise<PageServerData> => {
-  // let query = locals.db!.selectFrom('workouts').selectAll().orderBy('createdAt', 'desc');
-  // const workouts: SelectableWorkout[] = await query.execute();
-
 	const cursor = url.searchParams.get('cursor'); // last item's id/createdAt
 
 	let query = locals.db!

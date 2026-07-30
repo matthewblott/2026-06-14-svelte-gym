@@ -3,18 +3,19 @@
   import Header from "$lib/components/Header.svelte";
   import type { ActionData, PageData } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
+  import { untrack } from 'svelte';
 
   let { form, data }: { form: ActionData, data: PageData } = $props();
 
   const workoutView = $derived(data.workoutView);
-  const workoutId = $derived(workoutView.workoutId!);
+  const workoutId = $state(untrack(() => workoutView.workoutId!));
   const exerciseId = $derived(workoutView.exerciseId!);
   const workoutExerciseId = $derived(workoutView.id!);
-  const routes = $derived(createTenantRoutes(data.user.name));
+  const routes = $state(untrack(() => createTenantRoutes(data.user.name)));
 
   let backRoute = $derived(routes.workouts.exercises.sets.index({ workoutId, exerciseId }));
   let backRouteText = $derived('Sets');
-  let isFirstSet = $derived(data.isFirstSet);
+  let isFirstSet = $state(untrack(() => data.isFirstSet));
 
   if(isFirstSet) {
     backRoute = routes.workouts.exercises.index(workoutId);
@@ -80,35 +81,140 @@
   {:else}
 
     <label>
-      Distance
+      <span>Distance</span>
       <input
         name="distance"
         type="number"
+        inputmode="numeric"
         placeholder="Distance"
         value={form?.distance ?? ''}
         aria-invalid={form?.field === 'distance' ? 'true' : undefined}
+        required
       >
       {#if form?.field === 'distance'}
         <span class="field-error">{form.message}</span>
       {/if}
     </label>
-
     <label>
-      Duration
-      <input
-        name="duration"
-        type="time"
-        placeholder="00:00:00"
-        value={form?.reps?? ''}
-        step="1"
-        aria-invalid={form?.field === 'duration' ? 'true' : undefined}
-      >
-
-      {#if form?.field === 'duration'}
-        <span class="field-error">{form.message}</span>
-      {/if}
+      <span>Duration</span>
+      <div class="input-group">
+        <input
+          name="hours"
+          inputmode="numeric"
+          minlength="2"
+          maxlength="2"
+          pattern={"[0-9]{1,2}"}
+          placeholder="HH"
+          value="00" required>
+        <span>:</span>
+        <input
+          name="minutes"
+          inputmode="numeric"
+          minlength="2"
+          maxlength="2"
+          pattern={"[0-9]{1,2}"}
+          placeholder="mm"
+          required>
+        <span>:</span>
+        <input
+          name="seconds"
+          inputmode="numeric"
+          minlength="2"
+          maxlength="2"
+          pattern={"[0-9]{1,2}"}
+          placeholder="ss"
+          required>
+      </div>
     </label>
+
 
   {/if}
 
 </Form>
+
+<style>
+  label {
+    span {
+      margin-left: 0.5rem;
+    }
+    input, div {
+      margin-top: 0.5rem;
+    }
+  }
+
+  .input-group {
+    display: flex;
+    align-items: baseline;
+    border: 1px solid #ccc;
+    border-radius: 999em;
+    overflow: hidden; /* so children respect the rounded corners */
+    padding: 0 8px; /* so the colons don't touch the outer edge */
+
+    &:focus-within {
+      border-color: #4a90e2;
+      box-shadow: 0 0 0 2px rgba(74,144,226,0.2);
+    }
+
+    input {
+      border: none;
+      outline: none;
+      padding: 0;
+      padding-bottom: 0.4rem; 
+      background: transparent;
+      font-size: x-large;
+
+      &:focus {
+        background: #f0f6ff;
+      }
+
+      &::placeholder {
+        color: #bbb;
+      }
+
+      &:first-child {
+        width: 2.5rem;
+        text-align: right;
+        padding: 0;
+        margin: 0;
+      }
+      &:nth-of-type(2) {
+        width: 2.25rem;
+        text-align: right;
+        padding: 0;
+        margin: 0;
+      }
+      &:last-child {
+        width: 2.5rem;
+        padding-left: 0.5rem;
+        text-align: left;
+      }
+    }
+
+    span {
+      /* font-size: x-large; */
+      color: #888;
+      &:first-child {
+        padding: 0;
+        margin: 0;
+      }
+      &:last-child {
+        padding: 0;
+        margin: 0;
+      }
+    }
+  }
+
+  /* Remove arrows from input number fields */
+  /* Chrome, Edge, Safari */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type="number"] {
+    appearance: textfield;
+  }
+
+</style>

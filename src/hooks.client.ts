@@ -1,11 +1,17 @@
 // import '$lib/hotwire/index' // Uncomment when not using the shim 
 import { goto } from '$app/navigation';
+import type { VisitOptions } from '$lib/hotwire/core/types';
 
 const nav = window.HotwireNavigator;
 
-nav.setStartVisitHandler(async (location, restorationId, options) => {
+nav.setStartVisitHandler(async (location: URL, restorationIdentifier: string, options: VisitOptions) => {
   const isSamePage = location.href === window.location.href;
-  await goto(location, { replaceState: options.action === 'replace' });
+
+  goto(location, {
+    invalidateAll: true,
+    replaceState: options?.action === 'replace',
+  });
+
   if (isSamePage) {
     document.dispatchEvent(new Event('native:restore'));
   }
@@ -19,7 +25,9 @@ document.addEventListener('click', (event) => {
   if (!nav.canNavigate(url)) return;
 
   event.preventDefault();
-  nav.visitProposedToLocation(url, { action: 'advance', acceptsStreamResponse: false });
+
+  // nav.visitProposedToLocation(url, { action: 'advance', acceptsStreamResponse: false });
+  nav.visitProposedToLocation(url, { action: 'advance' });
 }, { capture: true });
 
 // Uncomment when not using the shim

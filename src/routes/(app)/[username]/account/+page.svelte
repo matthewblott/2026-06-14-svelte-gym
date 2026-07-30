@@ -3,13 +3,14 @@
   import { authClient } from '$lib/auth-client';
   import { createTenantRoutes } from '$lib/routes/tenant';
   import type { PageData } from './$types';
+    import { untrack } from "svelte";
 
 	let { data }: { data: PageData } = $props();
   let isAnonymous = $state(true); 
 
   const session = authClient.useSession();
   const username = $derived(data.user.name);
-  const routes = $derived(createTenantRoutes(username));
+  const routes = $state(untrack(() => createTenantRoutes(username)));
 
   $effect(() => {
     const user = $session.data?.user;
@@ -30,11 +31,14 @@
 
 <a href={routes.home()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
 
-{#if !isAnonymous}
+{#if !data.isHotwireNative}
   <p>
     Change the name of your account here.
   </p>
   <a href={routes.account.rename()} role="button" class="outline">Rename Account</a>
+{/if}
+
+{#if !isAnonymous}
   <p>
     Sign out from your account here.
   </p>
