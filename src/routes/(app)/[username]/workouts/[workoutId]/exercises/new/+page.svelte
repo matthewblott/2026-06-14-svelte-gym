@@ -90,11 +90,11 @@
                 onmousedown={() => selectExercise(exercise)}
               >
                 <span>{exercise.name}</span>
-                <span>{exercise.exerciseType}</span>
+                <span>({exercise.exerciseType})</span>
               </li>
             {/each}
             {#if isNewExercise}
-              <li class="new-exercise">New exercise — will be added to the list on save.</li>
+              <li class="new-exercise">New exercise (added on save)</li>
             {/if}
           </ul>
         {/if}
