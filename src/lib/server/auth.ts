@@ -8,9 +8,15 @@ import { copyFile, mkdir, rm } from 'fs/promises'
 import nodemailer from 'nodemailer';
 import { Database } from "bun:sqlite";
 
+console.log('AUTH SECRET SET:', !!env.BETTER_AUTH_SECRET);
+console.log('DB SET:', !!db);
+
 export const auth = betterAuth({
-	baseURL: env.BASE_URL,
+	// baseURL: env.BASE_URL,
+	baseURL: 'http://localhost:3000',
 	secret: env.BETTER_AUTH_SECRET,
+  // trustedOrigins: [`${env.BASE_URL}`],
+  trustedOrigins: ['http://localhost:3000'],
   database: db,
   advanced: {
     database: {
