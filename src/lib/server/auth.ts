@@ -6,7 +6,8 @@ import { env } from '$env/dynamic/private';
 import { db } from './db';
 import { copyFile, mkdir, rm } from 'fs/promises'
 import nodemailer from 'nodemailer';
-import { Database } from "bun:sqlite";
+import Database from "better-sqlite3";
+import { existsSync } from 'fs';
 
 export const auth = betterAuth({
 	baseURL: env.BASE_URL,
@@ -157,9 +158,8 @@ async function createTenantDb(userId: string): Promise<void> {
   await mkdir('./storage/tenants', { recursive: true })
 
   const targetPath = `./storage/tenants/${userId}.sqlite3`;
-  const target = Bun.file(targetPath);
 
-  if (!(await target.exists())) {
+  if (!(existsSync(targetPath))) {
     await copyFile("./storage/main.sqlite3", targetPath); 
   }
 
@@ -171,7 +171,7 @@ async function copyAnonymousTenantDb(oldUserId: string, newUserId: string) {
   const source = new Database(sourcePath);
 
   try {
-    source.run("PRAGMA wal_checkpoint(TRUNCATE);");
+    source.pragma("wal_checkpoint(TRUNCATE);");
   } finally {
     source.close();
   }

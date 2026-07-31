@@ -7,9 +7,9 @@ export function getTenantDb(id: number) {
   const path = `storage/tenants/${id}.sqlite3`;
   const bunDb = new Database(path);
 
-  // bunDb.prepare('PRAGMA journal_mode = WAL').run();
-  // bunDb.prepare('PRAGMA foreign_keys = ON').run();
-  // bunDb.prepare('PRAGMA trusted_schema = 1').run();
+  bunDb.pragma('journal_mode = WAL');
+  bunDb.pragma('foreign_keys = ON');
+  bunDb.pragma('trusted_schema = 1');
 
   const dialect = new SqliteDialect({
     database: bunDb
