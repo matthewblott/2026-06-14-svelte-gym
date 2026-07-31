@@ -3,7 +3,7 @@
   import Header from "$lib/components/Header.svelte";
   import type { PageData } from './$types';
   import { createTenantRoutes } from '$lib/routes/tenant';
-  import barbell from '$lib/assets/images/icons/barbell-2.svg';
+  import barbell from '$lib/assets/images/icons/dumbbell.svg';
   import cardio from '$lib/assets/images/icons/cardio.svg';
   import cycle from '$lib/assets/images/icons/cycle.svg';
   import runner from '$lib/assets/images/icons/runner.svg';

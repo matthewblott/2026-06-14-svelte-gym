@@ -6,7 +6,7 @@
   
   onMount(() => {
     setTimeout(() => {
-     goto(publicRoutes.auth.index());
+     goto(publicRoutes.info());
     }, 1000) 
   })
 </script>

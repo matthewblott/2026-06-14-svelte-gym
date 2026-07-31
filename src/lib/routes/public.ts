@@ -8,4 +8,7 @@ export const publicRoutes = {
       `/auth/verify`,
   },
   home: () => `/`,
+  info: () => `/info`,
+  privacy: () => `/privacy`,
+  terms: () => `/terms`,
 } as const;
