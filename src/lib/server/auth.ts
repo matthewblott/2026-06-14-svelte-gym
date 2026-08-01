@@ -2,21 +2,17 @@ import { APIError, betterAuth } from 'better-auth';
 import { anonymous, emailOTP } from 'better-auth/plugins';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
-import { env } from '$env/dynamic/private';
+import { BETTER_AUTH_SECRET, SMTP_HOST, SMTP_PASSWORD, SMTP_PORT, SMTP_USER } from '$env/static/private';
+import { PUBLIC_BASE_URL } from '$env/static/public';
 import { db } from './db';
 import { copyFile, mkdir, rm } from 'fs/promises'
 import nodemailer from 'nodemailer';
 import { Database } from "bun:sqlite";
 
-console.log('AUTH SECRET SET:', !!env.BETTER_AUTH_SECRET);
-console.log('DB SET:', !!db);
-
 export const auth = betterAuth({
-	// baseURL: env.BASE_URL,
-	baseURL: 'http://localhost:3000',
-	secret: env.BETTER_AUTH_SECRET,
-  // trustedOrigins: [`${env.BASE_URL}`],
-  trustedOrigins: ['http://localhost:3000'],
+	baseURL: PUBLIC_BASE_URL,
+	secret: BETTER_AUTH_SECRET,
+  trustedOrigins: [`${PUBLIC_BASE_URL}`],
   database: db,
   advanced: {
     database: {
@@ -82,11 +78,11 @@ export const auth = betterAuth({
         console.log(`[OTP] To: ${email}  Code: ${otp}  Type: ${type}`);
 
         const transporter = nodemailer.createTransport({
-          host: env.SMTP_HOST, 
-          port: Number(env.SMTP_PORT),
+          host: SMTP_HOST, 
+          port: Number(SMTP_PORT),
           auth: {
-            user: env.SMTP_USER, 
-            pass: env.SMTP_PASSWORD
+            user: SMTP_USER, 
+            pass: SMTP_PASSWORD
           },
         });
 

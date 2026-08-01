@@ -5,8 +5,6 @@ import { building } from '$app/environment';
 import { getTenantDb } from '$lib/server/tenant-db';
 
 export const handle: Handle = async ({ event, resolve }) => {
-  console.log(event.url.pathname);
-
   if (process.env.MAINTENANCE_MODE === 'true') {
     return new Response('Down for maintenance, back in a moment.', { status: 503 })
   }
@@ -49,7 +47,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   // console.log('DEBUG building=', building, 'pathname=', event.url.pathname);
 
-  // const response = await svelteKitHandler({ event, resolve: resolveWithHotwireClass, auth, building });
+  const response = await svelteKitHandler({ event, resolve: resolveWithHotwireClass, auth, building });
   // let response;
   // try {
   //   response = await svelteKitHandler({ event, resolve: resolveWithHotwireClass, auth, building });
@@ -57,7 +55,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   //   console.error('AUTH HANDLER ERROR:', err);
   //   throw err;
   // }
-  const response = await svelteKitHandler({ event, resolve: resolveWithHotwireClass, auth, building: false });
+  // const response = await svelteKitHandler({ event, resolve: resolveWithHotwireClass, auth, building: false });
 
   event.locals.bunDb?.close()
 
