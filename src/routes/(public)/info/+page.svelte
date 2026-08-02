@@ -12,12 +12,11 @@
 </Header>
 
 <p>
-  Unless you decide to create an account your records are stored securely for this device only.
+  Unless You choose to create an account, Your records are stored securely and are accessible only from this device.
 </p>
 <p>
-  If you delete the app or clear your data, your records cannot be recovered.
+  If You delete the app or clear its data, Your records cannot be recovered.
 </p>
-
 <p>
   By continuing, you agree to our
   <a href={publicRoutes.terms()}>Terms and Conditions</a> and

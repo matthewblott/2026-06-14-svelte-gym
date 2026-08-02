@@ -3,6 +3,7 @@ import { anonymous, emailOTP } from 'better-auth/plugins';
 import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { getRequestEvent } from '$app/server';
 import { BETTER_AUTH_SECRET, SMTP_HOST, SMTP_PASSWORD, SMTP_PORT, SMTP_USER } from '$env/static/private';
+import { BASE_URL } from '$env/static/private';
 import { PUBLIC_BASE_URL } from '$env/static/public';
 import { db } from './db';
 import { copyFile, mkdir, rm } from 'fs/promises'
@@ -12,7 +13,7 @@ import { Database } from "bun:sqlite";
 export const auth = betterAuth({
 	baseURL: PUBLIC_BASE_URL,
 	secret: BETTER_AUTH_SECRET,
-  trustedOrigins: [`${PUBLIC_BASE_URL}`],
+  trustedOrigins: [`${PUBLIC_BASE_URL}`, `${BASE_URL}`],
   database: db,
   advanced: {
     database: {

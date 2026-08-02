@@ -1,12 +1,8 @@
 {
 	"name": "svelte-better-auth-otp",
 	"private": true,
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"type": "module",
-	"scripts": {
-		"dev": "bun --bun vite dev",
-		"build": "bun --bun vite build"
-	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "^5.5.7",
 		"@sveltejs/kit": "^2.65.1",
