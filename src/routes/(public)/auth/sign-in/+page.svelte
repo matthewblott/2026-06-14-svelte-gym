@@ -22,6 +22,11 @@
 </Header>
 
 <a href={publicRoutes.auth.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
+
+<p>
+  Enter your email address and we’ll send you a code to sign in.
+</p>
+
 <button form="send-otp" data-controller="bridge--button" class="hidden">Send code</button>
 
 <Form id="send-otp">
@@ -32,3 +37,11 @@
   <p role="alert">{error}</p>
 {/if}
 
+<style>
+  p {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+</style>

@@ -83,6 +83,10 @@
   <input type="hidden" name="locale" value={navigator.language}>
 </Form>
 
+{#if items.length === 0}
+	<p>You haven't created any workouts.</p>
+{/if}
+
 {#each items as workout, i}
   <article class="pill">
     <a href={routes.workouts.exercises.index(workout.id)}>
@@ -106,7 +110,7 @@
 	<p>Loading…</p>
 {/if}
 
-{#if !nextCursor && items.length}
+{#if !nextCursor && items.length && items.length > 10}
 	<p>You've reached the end.</p>
 {/if}
 
@@ -134,6 +138,10 @@
     }
   }
   p {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
     text-align: center;
   }
+
 </style>

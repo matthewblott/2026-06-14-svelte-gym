@@ -22,10 +22,22 @@
 </Header>
 
 <a href={publicRoutes.auth.signIn()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Resend Code</a>
+<p>
+  We’ve sent you a code. Enter it below to finish signing in.
+</p>
 <button form="verify-otp" data-controller="bridge--button" class="hidden">Verify</button>
 
 <Form id="verify-otp">
   <input type="hidden" name="email" bind:value={email}>
   <input name="otp" bind:value={otp} required placeholder="123456">
 </Form>
+
+<style>
+  p {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+</style>
 

@@ -81,12 +81,12 @@
   {:else}
 
     <label>
-      <span>Distance</span>
+      <span>Distance in meters</span>
       <input
         name="distance"
         type="number"
         inputmode="numeric"
-        placeholder="Distance"
+        placeholder="Distance (meters)"
         value={form?.distance ?? ''}
         aria-invalid={form?.field === 'distance' ? 'true' : undefined}
         required

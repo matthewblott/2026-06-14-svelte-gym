@@ -43,7 +43,7 @@
           {#if set.exerciseType === 'weights'}
             {set.distanceOrReps}
           {:else}
-            {set.distanceOrReps} metres
+            {set.distanceOrReps} meters
           {/if}
         </span>
         <span>
