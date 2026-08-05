@@ -18,12 +18,16 @@ alter table cardio_sets rename to temp_cardio_sets;
 -- Recreate table with new schema
 create table cardio_sets (
   id integer primary key autoincrement,
-  workout_exercise_id integer not null references exercises(id),
+  workout_exercise_id integer not null references workout_exercises(id),
   distance integer not null check (distance > 0),
-  duration text not null check (
-    duration glob  '[0-2][0-9]:[0-5][0-9]:[0-5][0-9]'
-    and cast(substr(duration, 1, 2) as integer) <= 23
-  ),
+  duration text not null
+    check (
+      length(duration) = 8
+      and duration glob '[0-9][0-9]:[0-9][0-9]:[0-9][0-9]'
+      and cast(substr(duration, 1, 2) as integer) between 0 and 23
+      and cast(substr(duration, 4, 2) as integer) between 0 and 59
+      and cast(substr(duration, 7, 2) as integer) between 0 and 59
+    ),
   created_at text not null default current_timestamp,
   updated_at text not null default current_timestamp
 ) strict;
@@ -93,13 +97,13 @@ alter table cardio_sets rename to temp_cardio_sets;
 
 -- Recreate table with old schema
 create table cardio_sets (
-  id integer primary key autoincrement,
-  workout_exercise_id integer not null references exercises(id),
+  id integer not null primary key autoincrement,
+  workout_exercise_id integer not null references workout_exercises(id),
   distance integer not null check (distance > 0),
-  duration integer not null check (duration> 0),
-  created_at text not null default current_timestamp,
-  updated_at text not null default current_timestamp
-) strict;
+  duration integer not null check (duration > 0),
+  created_at timestamp not null default current_timestamp,
+  updated_at timestamp not null default current_timestamp
+);
 
 -- Restore data (explicit column mapping recommended)
 insert into cardio_sets (

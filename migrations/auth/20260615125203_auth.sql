@@ -1,4 +1,7 @@
+-- ==========================================================================
 -- +goose Up
+-- ==========================================================================
+
 create table user (
   id            integer primary key,
   name          text not null unique
@@ -88,7 +91,10 @@ create table verification (
   updatedAt  text not null default current_timestamp
 ) strict;
 
+-- ==========================================================================
 -- +goose Down
+-- ==========================================================================
+
 drop table verification;
 drop table account;
 drop table session;

@@ -18,7 +18,7 @@ alter table cardio_sets rename to temp_cardio_sets;
 -- Recreate table with new schema
 create table cardio_sets (
   id integer primary key autoincrement,
-  workout_exercise_id integer not null references exercises(id),
+  workout_exercise_id integer not null references workout_exercises(id),
   distance integer not null check (distance > 0),
   duration_seconds integer not null check (duration_seconds > 0),
   created_at text not null default current_timestamp,

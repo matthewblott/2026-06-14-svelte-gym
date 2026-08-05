@@ -10,6 +10,9 @@ import { copyFile, mkdir, rm } from 'fs/promises'
 import nodemailer from 'nodemailer';
 import { Database } from "bun:sqlite";
 
+const REVIEWER_EMAIL = "testuser@coderscoffeehouse.com";
+const REVIEWER_OTP = "123456";
+
 export const auth = betterAuth({
 	baseURL: PUBLIC_BASE_URL,
 	secret: BETTER_AUTH_SECRET,
@@ -75,8 +78,21 @@ export const auth = betterAuth({
   },
   plugins: [
     emailOTP({ 
+      generateOTP: ({ email }) => {
+        if (email === REVIEWER_EMAIL) {
+          return REVIEWER_OTP;
+        }
+        // fall back to default random 6-digit behavior
+        return Math.floor(100000 + Math.random() * 900000).toString();
+      },
       async sendVerificationOTP({ email, otp, type }) { 
         console.log(`[OTP] To: ${email}  Code: ${otp}  Type: ${type}`);
+
+        if (email === REVIEWER_EMAIL) {
+          // Don't actually send an email — reviewer already "knows" the code.
+          // Just log it server-side if you want a record.
+          return;
+        }
 
         const transporter = nodemailer.createTransport({
           host: SMTP_HOST, 
@@ -88,10 +104,10 @@ export const auth = betterAuth({
         });
 
         const mailOptions = {
-          from: "Private Person <hello@skribl.p34k.de>",
-          to: `A Test User <${email}>`,
-          subject: "Hello from Mailtrap",
-          text: `This is a test e-mail message. OTP Code: ${otp}`,
+          from: "Jimlog Admin <jimlog@coderscoffeehouse.com>",
+          to: `A Jimlog User <${email}>`,
+          subject: "Hello from Jimlog",
+          text: `Here is your OTP Code: ${otp}`,
         };
 
         transporter.sendMail(mailOptions, function(error, info){

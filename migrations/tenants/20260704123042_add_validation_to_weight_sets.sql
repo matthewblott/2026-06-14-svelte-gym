@@ -18,7 +18,7 @@ alter table weight_sets rename to temp_weight_sets;
 -- Recreate table with new schema
 create table weight_sets (
   id integer primary key autoincrement,
-  workout_exercise_id integer not null references exercises(id),
+  workout_exercise_id integer not null references workout_exercises(id),
   reps integer not null check (reps > 0),
   weight integer not null check (weight > 0),
   created_at text not null default current_timestamp,
@@ -91,7 +91,7 @@ alter table weight_sets rename to temp_weight_sets;
 -- Recreate table with old schema
 create table weight_sets (
   id integer not null primary key autoincrement,
-  workout_exercise_id integer not null references exercises(id),
+  workout_exercise_id integer not null references workout_exercises(id),
   reps integer not null,
   weight integer not null,
   created_at timestamp not null default current_timestamp,
