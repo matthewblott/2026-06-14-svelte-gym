@@ -26,3 +26,6 @@ vite.config.ts.timestamp-*
 
 # Bun
 bun.lock
+
+# Kysely
+!.kysely-codegenrc.json
