@@ -18,7 +18,9 @@
   </div>
 </Header>
 
-<a href={routes.account.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Account</a>
+{#if !data.isAndroid}
+  <a href={routes.account.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Account</a>
+{/if}
 
 <Form>
   <input name="name" value={data?.user.name}>

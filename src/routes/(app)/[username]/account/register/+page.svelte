@@ -21,7 +21,9 @@
   </div>
 </Header>
 
-<a href={routes.account.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Account</a>
+{#if !data.isAndroid}
+  <a href={routes.account.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Account</a>
+{/if}
 <button form="send-otp" data-controller="bridge--button" class="hidden">Send code</button>
 
 <Form id="send-otp">

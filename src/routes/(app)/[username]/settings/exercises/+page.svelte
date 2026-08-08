@@ -18,8 +18,10 @@
   </div>
 </Header>
 
-<a href={routes.settings.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Settings</a>
-<a href={routes.settings.exercises.new()} data-controller="bridge--back" class="hidden">New</a>
+{#if !data.isAndroid}
+  <a href={routes.settings.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Settings</a>
+{/if}
+<a href={routes.settings.exercises.new()} data-controller="bridge--button" class="hidden">New</a>
 
 {#if data.exercises.length}
   {#each data.exercises as exercise}

@@ -35,7 +35,9 @@
   </div>
 </Header>
 
-<a href={backRoute} data-controller="bridge--back" data-bridge-side="left" class="hidden">{backRouteText}</a>
+{#if !data.isAndroid}
+  <a href={backRoute} data-controller="bridge--back" data-bridge-side="left" class="hidden">{backRouteText}</a>
+{/if}
 <button form="new-set-form" data-controller="bridge--button" class="hidden">Save</button>
 
 <Form id="new-set-form">

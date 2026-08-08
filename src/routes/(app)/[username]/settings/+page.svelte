@@ -16,7 +16,9 @@
     <a href={routes.home()} role="button">Home</a>
   </div>
 </Header>
-<a href={routes.home()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
+{#if !data.isAndroid}
+  <a href={routes.home()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
+{/if}
 
 <p>
   Add more exercises here.

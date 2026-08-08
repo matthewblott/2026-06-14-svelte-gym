@@ -3,7 +3,7 @@
   import { authClient } from '$lib/auth-client';
   import { createTenantRoutes } from '$lib/routes/tenant';
   import type { PageData } from './$types';
-    import { untrack } from "svelte";
+  import { untrack } from "svelte";
 
 	let { data }: { data: PageData } = $props();
   let isAnonymous = $state(true); 
@@ -29,7 +29,9 @@
   </div>
 </Header>
 
-<a href={routes.home()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
+{#if !data.isAndroid}
+  <a href={routes.home()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
+{/if}
 
 {#if !data.isHotwireNative}
   <p>

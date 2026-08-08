@@ -3,8 +3,7 @@
   import Header from "$lib/components/Header.svelte";
   import { publicRoutes } from '$lib/routes';
   import type { PageProps } from './$types';
-
-  let { form }: PageProps = $props();
+  let { data, form }: PageProps = $props();
   let email = $derived(form?.email ?? '');
   let error = $derived(form?.error ?? '');
 </script>
@@ -21,7 +20,9 @@
   </div>
 </Header>
 
-<a href={publicRoutes.auth.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
+{#if !data.isAndroid}
+  <a href={publicRoutes.auth.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
+{/if}
 
 <p>
   Enter your email address and we’ll send you a code to sign in.

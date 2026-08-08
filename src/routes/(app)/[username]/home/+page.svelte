@@ -18,7 +18,12 @@
   </div>
 </Header>
 
-<a href={routes.settings.index()} data-controller="bridge--button" class="hidden" data-bridge-side="left">Settings</a>
+{#if data.isAndroid}
+  <a href={routes.settings.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Settings</a>
+{:else}
+  <a href={routes.settings.index()} data-controller="bridge--button" class="hidden" data-bridge-side="left">Settings</a>
+{/if}
+
 <a href={routes.account.index()} data-controller="bridge--button" class="hidden">Account</a>
 
 <p>

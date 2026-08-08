@@ -14,7 +14,10 @@ export const handle: Handle = async ({ event, resolve }) => {
     userAgent.includes('Turbo Native') ||
     userAgent.includes('Hotwire Native');
 
+  const isAndroid = isHotwireNative && userAgent.includes('Android');
+
   event.locals.isHotwireNative = isHotwireNative; 
+  event.locals.isAndroid = isAndroid;
 
   const session = await auth.api.getSession({
     headers: event.request.headers,
@@ -45,17 +48,7 @@ export const handle: Handle = async ({ event, resolve }) => {
       }
     });
 
-  // console.log('DEBUG building=', building, 'pathname=', event.url.pathname);
-
   const response = await svelteKitHandler({ event, resolve: resolveWithHotwireClass, auth, building });
-  // let response;
-  // try {
-  //   response = await svelteKitHandler({ event, resolve: resolveWithHotwireClass, auth, building });
-  // } catch (err) {
-  //   console.error('AUTH HANDLER ERROR:', err);
-  //   throw err;
-  // }
-  // const response = await svelteKitHandler({ event, resolve: resolveWithHotwireClass, auth, building: false });
 
   event.locals.bunDb?.close()
 

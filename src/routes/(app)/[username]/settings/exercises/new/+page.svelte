@@ -19,7 +19,9 @@
   </div>
 </Header>
 
-<a href={routes.settings.exercises.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Exercises</a>
+{#if !data.isAndroid}
+  <a href={routes.settings.exercises.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Exercises</a>
+{/if}
 <button form="new-exercise-form" data-controller="bridge--button" class="hidden">Save</button>
 
 <Form id="new-exercise-form">

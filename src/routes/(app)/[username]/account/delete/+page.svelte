@@ -18,7 +18,9 @@
   </div>
 </Header>
 
-<a href={routes.account.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Account</a>
+{#if !data.isAndroid}
+  <a href={routes.account.index()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Account</a>
+{/if}
 
 <p>This process cannot be undone. Are you sure you want to delete your account?</p>
 

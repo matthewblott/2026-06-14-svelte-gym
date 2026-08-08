@@ -60,7 +60,9 @@
   </div>
 </Header>
 
-<a href={routes.workouts.exercises.index(data.workoutId)} data-controller="bridge--back" data-bridge-side="left" class="hidden">Exercises</a>
+{#if !data.isAndroid}
+  <a href={routes.workouts.exercises.index(data.workoutId)} data-controller="bridge--back" data-bridge-side="left" class="hidden">Exercises</a>
+{/if}
 <button form="new-workout-exercise-form" disabled={!canSubmit} data-controller="bridge--button" class="hidden">Save</button>
 
 <Form id="new-workout-exercise-form">

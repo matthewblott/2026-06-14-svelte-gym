@@ -76,7 +76,10 @@
   </div>
 </Header>
 
-<a href={routes.home()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
+{#if !data.isAndroid}
+  <a href={routes.home()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Home</a>
+{/if}
+
 <button form="new-workout-form" data-controller="bridge--button" class="hidden">New</button>
 
 <Form id="new-workout-form">

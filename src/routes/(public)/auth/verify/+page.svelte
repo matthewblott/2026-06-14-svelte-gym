@@ -3,6 +3,9 @@
   import Header from "$lib/components/Header.svelte";
   import { page } from '$app/state';
   import { publicRoutes } from '$lib/routes';
+  import type { PageProps } from './$types';
+  let { data }: PageProps = $props();
+
   let otp = $state('');
   let email = $state(page.url.searchParams.get('email') ?? '');
 </script>
@@ -21,7 +24,10 @@
   </div>
 </Header>
 
-<a href={publicRoutes.auth.signIn()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Resend Code</a>
+{#if !data.isAndroid}
+  <a href={publicRoutes.auth.signIn()} data-controller="bridge--back" class="hidden" data-bridge-side="left">Resend Code</a>
+{/if}
+
 <p>
   We’ve sent you a code. Enter it below to finish signing in.
 </p>
